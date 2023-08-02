@@ -18,15 +18,15 @@ export default function Home() {
   };
 
   return (
-    <form className="flex flex-col px-40 gap-4" onSubmit={onSubmit}>
+    <form className="flex flex-col px-40 py-32 gap-4 bg-sky-200 rounded-xl" onSubmit={onSubmit}>
       <label htmlFor="username" className="text-left">
         Username
       </label>
-      <input id="username" type="text" className="pl-3" />
+      <input id="username" type="text" className="pl-3 border border-black" />
       <label htmlFor="password" className="text-left">
         Password
       </label>
-      <input id="password" type="password" className="pl-3" />
+      <input id="password" type="password" className="pl-3 border border-black" />
       <button
         type="submit"
         className="mr-auto border border-black p-2 hover:scale-110"
