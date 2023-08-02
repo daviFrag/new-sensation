@@ -1,9 +1,11 @@
+'use client'
+
 import React from "react";
 import RedirectButton from "./RedirectButton";
 
 export default function Start() {
   // TODO API
-  const username = "Federica";
+  const username = localStorage.getItem('username');
   return (
     <>
       <h2 className="text-white">Buongiorno {username}</h2>

@@ -14,6 +14,7 @@ export default function Home() {
     const password = event.target.password.value;
     // TODO API
     console.log(username, password);
+    localStorage.setItem('username', username);
     router.push("/select");
   };
 
