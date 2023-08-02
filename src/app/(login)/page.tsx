@@ -14,7 +14,7 @@ export default function Home() {
     const password = event.target.password.value;
     // TODO API
     console.log(username, password);
-    router.push("/start");
+    router.push("/select");
   };
 
   return (
@@ -29,7 +29,7 @@ export default function Home() {
       <input id="password" type="password" className="pl-3 border border-black" />
       <button
         type="submit"
-        className="mr-auto border border-black p-2 hover:scale-110"
+        className="mr-auto border border-black p-2 hover:scale-110 ease-in-out duration-100"
       >
         Login
       </button>
