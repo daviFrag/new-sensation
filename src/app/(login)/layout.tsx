@@ -5,7 +5,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-orange-400 h-screen relative">
       <Ellipse />
-      <header className="flex justify-between px-20 py-10 bg-transparent relative">
+      <header className="flex justify-between px-20 py-10 bg-transparent absolute left-0 top-0 w-full">
         <h1 className="text-white text-4xl">SMARTER: the Rulebook</h1>
         <button className="bg-orange-100 p-4 text-2xl hover:bg-orange-200 hover:scale-110 ease-in-out duration-100">
           Torna su Smartgame
