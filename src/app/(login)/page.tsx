@@ -8,18 +8,23 @@ export default function Home() {
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    // @ts-expect-error
-    const username = event.target.username.value;
-    // @ts-expect-error
-    const password = event.target.password.value;
+    const target = event.target as typeof event.target & {
+      username: { value: string };
+      password: { value: string };
+    };
+    const username = target.username.value;
+    const password = target.password.value;
     // TODO API
     console.log(username, password);
-    localStorage.setItem('username', username);
+    localStorage.setItem("username", username);
     router.push("/select");
   };
 
   return (
-    <form className="flex flex-col px-40 py-32 gap-4 bg-sky-200 rounded-xl" onSubmit={onSubmit}>
+    <form
+      className="flex flex-col px-40 py-32 gap-4 bg-sky-200 rounded-xl"
+      onSubmit={onSubmit}
+    >
       <label htmlFor="username" className="text-left">
         Username
       </label>
@@ -27,7 +32,11 @@ export default function Home() {
       <label htmlFor="password" className="text-left">
         Password
       </label>
-      <input id="password" type="password" className="pl-3 border border-black" />
+      <input
+        id="password"
+        type="password"
+        className="pl-3 border border-black"
+      />
       <button
         type="submit"
         className="mr-auto border border-black p-2 hover:scale-110 ease-in-out duration-100"
