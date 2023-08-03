@@ -1,21 +1,22 @@
-'use client'
+"use client";
 
 import React from "react";
 import RedirectButton from "./RedirectButton";
+import { links } from "@/utils/links";
 
 export default function Start() {
   // TODO API
-  const username = localStorage.getItem('username');
+  const username = localStorage.getItem("username");
   return (
     <>
       <h2 className="text-white">Buongiorno {username}</h2>
-      <RedirectButton text="Crea regole" redirect_link="create" />
-      <RedirectButton text="Le mie regole" redirect_link="rules" />
-      <RedirectButton
-        text="I miei elementi di gioco"
-        redirect_link="elements"
-      />
-      <RedirectButton text="I miei giochi" redirect_link="games" />
+      {Object.keys(links).map((link) => (
+        <RedirectButton
+          text={links[link as keyof typeof links]}
+          redirect_link={link}
+          key={link}
+        />
+      ))}
     </>
   );
 }
