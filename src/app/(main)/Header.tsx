@@ -23,7 +23,7 @@ export default function Header({ text }: { text: string }) {
   return (
     <>
       {showMenu && (
-        <aside className="flex flex-col gap-10 bg-sky-600 text-4xl text-white absolute t-0 l-0 h-screen w-2/6">
+        <aside className="flex flex-col gap-10 bg-sky-600 text-4xl text-white absolute t-0 l-0 h-screen w-2/7">
           <div className="h-32 flex items-center px-10">
             <button
               onClick={() => setShowMenu(false)}
@@ -59,7 +59,7 @@ export default function Header({ text }: { text: string }) {
         >
           <Hamburger />
         </button>
-        <h1 className="ml-10">{text}</h1>
+        {!showMenu && <h1 className="ml-10">{text}</h1>}
         <h2 className="ml-auto">Smarter: the Rulebook</h2>
       </header>
     </>
