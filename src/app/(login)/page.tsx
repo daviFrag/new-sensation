@@ -9,8 +9,8 @@ export default function Home() {
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     const target = event.target as typeof event.target & {
-      username: { value: string };
-      password: { value: string };
+      username: HTMLInputElement;
+      password: HTMLInputElement;
     };
     const username = target.username.value;
     const password = target.password.value;
