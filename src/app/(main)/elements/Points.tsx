@@ -83,7 +83,7 @@ export default function Points({ points }: { points: Point[] }) {
           type="submit"
           className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
         >
-          Carica nuovo badge
+          Carica nuovo punto
         </button>
       </form>
     </section>
