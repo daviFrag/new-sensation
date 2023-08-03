@@ -19,9 +19,9 @@ export function Table({ children }: { children: React.ReactNode }) {
 }
 
 export function ThCell({ children }: { children: React.ReactNode }) {
-  return <th className="border border-gray-500 bg-sky-300">{children}</th>;
+  return <th className="border border-gray-500 bg-sky-300 py-5 text-left px-2">{children}</th>;
 }
 
 export function TdCell({ children }: { children: React.ReactNode }) {
-  return <td className="border border-gray-500 bg-sky-100">{children}</td>;
+  return <td className="border border-gray-500 bg-sky-100 px-2">{children}</td>;
 }
