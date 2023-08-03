@@ -19,8 +19,7 @@ export default function Points({ points }: { points: Point[] }) {
     const name = target.name.value;
     const quantity = target.quantity.value;
     // TODO API
-
-    console.log({ name, quantity });
+    alert(JSON.stringify({ name, quantity }));
   };
 
   return (

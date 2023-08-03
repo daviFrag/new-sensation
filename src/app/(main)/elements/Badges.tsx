@@ -25,10 +25,10 @@ export default function Badges({ badges }: { badges: Badge[] }) {
     // TODO API
     if (image) {
       toBase64(image).then((image_b64) =>
-        console.log({ name, description, image_b64 })
+        alert(JSON.stringify({ name, description, image_b64 }))
       );
     } else {
-      console.log({ name, description });
+      alert(JSON.stringify({ name, description }));
     }
   };
 

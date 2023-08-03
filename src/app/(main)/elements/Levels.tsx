@@ -27,7 +27,7 @@ export default function Levels({
     const game = target.game.value;
     const name = target.name.value;
     // TODO API
-    console.log({ n, game, name });
+    alert(JSON.stringify({ n, game, name }));
   };
 
   const experienceSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
@@ -39,7 +39,7 @@ export default function Levels({
     const n = target.n.value;
     const name = target.name.value;
     // TODO API
-    console.log({ n, name });
+    alert(JSON.stringify({ n, name }));
   };
 
   return (
