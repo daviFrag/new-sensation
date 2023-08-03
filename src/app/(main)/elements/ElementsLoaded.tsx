@@ -2,6 +2,7 @@ import React from "react";
 import { Badge, ExerciseLevel, ExperienceLevel, Point } from "./types";
 import Badges from "./Badges";
 import { SectionDescription, SectionTitle } from "./utils";
+import Points from "./Points";
 
 export default function ElementsLoaded(props: {
   badges: Badge[];
@@ -14,13 +15,7 @@ export default function ElementsLoaded(props: {
   return (
     <main className="px-10">
       <Badges badges={badges} />
-      <section>
-        <SectionTitle>Punti</SectionTitle>
-        <SectionDescription>
-          Definisci i PUNTI da assegnare allo studente nella categoria{" "}
-          {`"punti esperienza"`}
-        </SectionDescription>
-      </section>
+      <Points points={points} />
       <section>
         <SectionTitle>Livelli</SectionTitle>
         <SectionDescription>
