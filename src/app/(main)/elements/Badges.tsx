@@ -38,70 +38,70 @@ export default function Badges({ badges }: { badges: Badge[] }) {
       <SectionDescription>
         Definisci i RICONOSCIMENTI presenti nella categoria {`"badge"`}
       </SectionDescription>
-      <div>
-        <TableTitle>Badge</TableTitle>
-        <Table>
-          <colgroup>
-            <col span={1} className="w-1/4" />
-            <col span={1} className="w-2/4" />
-            <col span={1} className="w-1/4" />
-          </colgroup>
-          <thead>
-            <tr>
-              <ThCell>Nome</ThCell>
-              <ThCell>Descrizione</ThCell>
-              <ThCell>Immagine</ThCell>
-            </tr>
-          </thead>
-          <tbody>
-            {badges.map((badge) => (
-              <tr key={badge.name}>
-                <TdCell>{badge.name}</TdCell>
-                <TdCell>{badge.description}</TdCell>
-                <TdCell>
-                  <div className="w-10 h-10 relative mx-auto">
-                    <Image src={badge.image} alt={badge.name} layout="fill" />
-                  </div>
-                </TdCell>
-              </tr>
-            ))}
-            <tr>
+
+      <TableTitle>Badge</TableTitle>
+      <Table>
+        <colgroup>
+          <col span={1} className="w-1/4" />
+          <col span={1} className="w-2/4" />
+          <col span={1} className="w-1/4" />
+        </colgroup>
+        <thead>
+          <tr>
+            <ThCell>Nome</ThCell>
+            <ThCell>Descrizione</ThCell>
+            <ThCell>Immagine</ThCell>
+          </tr>
+        </thead>
+        <tbody>
+          {badges.map((badge) => (
+            <tr key={badge.name}>
+              <TdCell>{badge.name}</TdCell>
+              <TdCell>{badge.description}</TdCell>
               <TdCell>
+                <div className="w-10 h-10 relative mx-auto">
+                  <Image src={badge.image} alt={badge.name} layout="fill" />
+                </div>
+              </TdCell>
+            </tr>
+          ))}
+          <tr>
+            <TdCell>
+              <input
+                type="text"
+                placeholder="Inserisci il nome del badge"
+                id="name"
+                form="badge-form"
+                className="w-full bg-sky-100"
+              />
+            </TdCell>
+            <TdCell>
+              <input
+                type="text"
+                placeholder="Inserisci una descrizione (es. Raccogli 8 ghiande...)"
+                id="description"
+                form="badge-form"
+                className="w-full bg-sky-100"
+              />
+            </TdCell>
+            <TdCell>
+              <label>
+                Carica immagine
                 <input
-                  type="text"
-                  placeholder="Inserisci il nome del badge"
-                  id="name"
+                  type="file"
+                  // accept="image/png, image/gif, image/jpeg"
+                  accept="image/jpeg"
+                  placeholder="Carica immagine"
+                  id="image"
                   form="badge-form"
                   className="w-full bg-sky-100"
                 />
-              </TdCell>
-              <TdCell>
-                <input
-                  type="text"
-                  placeholder="Inserisci una descrizione (es. Raccogli 8 ghiande...)"
-                  id="description"
-                  form="badge-form"
-                  className="w-full bg-sky-100"
-                />
-              </TdCell>
-              <TdCell>
-                <label>
-                  Carica immagine
-                  <input
-                    type="file"
-                    // accept="image/png, image/gif, image/jpeg"
-                    accept="image/jpeg"
-                    placeholder="Carica immagine"
-                    id="image"
-                    form="badge-form"
-                    className="w-full bg-sky-100"
-                  />
-                </label>
-              </TdCell>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
+              </label>
+            </TdCell>
+          </tr>
+        </tbody>
+      </Table>
+
       <form
         id="badge-form"
         onSubmit={badgeSubmit}
