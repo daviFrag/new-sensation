@@ -1,15 +1,20 @@
 "use client";
 
+import Controller from "@/svg/Controller";
+import Docs from "@/svg/Docs";
 import Hamburger from "@/svg/Hamburger";
+import Joystick from "@/svg/Joystick";
+import Plus from "@/svg/Plus";
+import Question from "@/svg/Question";
 import { links } from "@/utils/links";
 import React, { useState } from "react";
 
 const links_svgs = {
-  create: <Hamburger />,
-  rules: <Hamburger />,
-  elements: <Hamburger />,
-  games: <Hamburger />,
-  tutorial: <Hamburger />,
+  create: <Plus />,
+  rules: <Docs />,
+  elements: <Controller />,
+  games: <Joystick />,
+  tutorial: <Question />,
 } as const;
 
 export default function Header({ text }: { text: string }) {
@@ -18,7 +23,7 @@ export default function Header({ text }: { text: string }) {
   return (
     <>
       {showMenu && (
-        <aside className="flex flex-col gap-10 bg-sky-600 text-6xl text-white absolute t-0 l-0 h-screen w-3/6">
+        <aside className="flex flex-col gap-10 bg-sky-600 text-4xl text-white absolute t-0 l-0 h-screen w-2/6">
           <div className="h-32 flex items-center px-10">
             <button
               onClick={() => setShowMenu(false)}
@@ -38,7 +43,7 @@ export default function Header({ text }: { text: string }) {
                     : ""
                 } hover:bg-orange-300 ease-in-out duration-75`}
               >
-                <div className="h-20">
+                <div className="h-12">
                   {links_svgs[link as keyof typeof links]}
                 </div>
                 {links[link as keyof typeof links]}
