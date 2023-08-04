@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "../Header";
 import { links } from "@/utils/links";
-import { rules, vocabularies, blocks } from "./rules";
 import RulesLoaded from "./RulesLoaded";
+import { rules, vocabularies, blocks } from "@/utils/rules";
 
 export default function Rules() {
   // TODO API
@@ -10,7 +10,7 @@ export default function Rules() {
   return (
     <>
       <Header text={links.rules} />
-      <RulesLoaded rules={rules} vocabularies={vocabularies} blocks={blocks}/>
+      <RulesLoaded rules={rules} vocabularies={vocabularies} blocks={blocks} />
     </>
   );
 }

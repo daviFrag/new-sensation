@@ -1,4 +1,4 @@
-import { Block, Rule } from "./types";
+import { Block, Rule } from "./BlockRuleTypes";
 
 function convertBlockToString(block: Block | undefined): string {
   if (!block) return "";
