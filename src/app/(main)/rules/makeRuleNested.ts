@@ -20,6 +20,7 @@ export function makeRuleNested(sequetial_object: RuleUnnested): Rule {
   if (!new_while_arr || !new_when_arr) throw new Error("empty when or while");
 
   const new_sequential_object: Rule = {
+    id: sequetial_object.id,
     when: new_when_arr,
     while: new_while_arr,
     do: new_do_arr,
