@@ -43,7 +43,7 @@ export default function Header({ text }: { text: string }) {
                     : ""
                 } hover:bg-orange-300 ease-in-out duration-75`}
               >
-                <div className="h-12">
+                <div className="h-12 w-12">
                   {links_svgs[link as keyof typeof links]}
                 </div>
                 {links[link as keyof typeof links]}
