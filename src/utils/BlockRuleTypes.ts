@@ -12,7 +12,7 @@ export type Block = {
 };
 
 export type Rule = {
-  id: string;
+  id?: string;
   when: Block;
   while: Block;
   do: Block[];
@@ -20,7 +20,7 @@ export type Rule = {
 };
 
 export type RuleUnnested = {
-  id: string;
+  id?: string;
   when: Block[];
   while: Block[];
   do: Block[];
