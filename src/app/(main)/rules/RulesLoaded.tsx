@@ -17,7 +17,7 @@ export default function RulesLoaded(props: {
       <div className="w-11/12 mx-auto text-4xl py-5">
         {vocabularies.map((v) => (
           <label key={v} className="flex gap-5">
-            <input type="checkbox" value={v} className="scale-150" />
+            <input type="checkbox" value={v} className="scale-150  -z-10" />
             {v}
           </label>
         ))}
