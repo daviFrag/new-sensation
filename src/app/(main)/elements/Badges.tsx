@@ -12,6 +12,7 @@ import Image from "next/image";
 import { toBase64 } from "@/utils/toBase64";
 import Pen from "@/svg/Pen";
 import Bin from "@/svg/Bin";
+import PlusRound from "@/svg/PlusRound";
 
 const badgeSubmit: (
   setBadgeModifying: (s: string) => void,
@@ -62,7 +63,7 @@ function BadgeRow({
       </TdCell>
       <td>
         <div className="flex items-center">
-          <div onClick={() => setBadgeModifying(badge.name)}>
+          <div onClick={() => setBadgeModifying(badge.name)} className="h-16 hover:scale-110">
             <Pen />
           </div>
           <div
@@ -70,6 +71,7 @@ function BadgeRow({
               // TODO API
               alert(`Delete badge: ${badge.name}`);
             }}
+            className="h-16 hover:scale-110"
           >
             <Bin />
           </div>
@@ -129,13 +131,13 @@ function ModifyBadgeRow({
         <form
           id={form_id}
           onSubmit={badgeSubmit(setBadgeModifying, badge?.name)}
-          className="m-2"
+          className="m-2 flex items-center"
         >
           <button
             type="submit"
-            className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
+            className="h-16 hover:scale-110"
           >
-            {badge ? "Modifica badge" : "Crea nuovo badge"}
+            <PlusRound />
           </button>
         </form>
       </td>

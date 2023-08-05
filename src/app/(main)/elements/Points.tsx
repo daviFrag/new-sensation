@@ -10,6 +10,7 @@ import {
 } from "./utils";
 import Pen from "@/svg/Pen";
 import Bin from "@/svg/Bin";
+import PlusRound from "@/svg/PlusRound";
 
 const pointSubmit: (
   setPointModifying: (s: string) => void,
@@ -47,7 +48,7 @@ function PointRow({
       <TdCell>{point.quantity}</TdCell>
       <td>
         <div className="flex items-center">
-          <div onClick={() => setPointModifying(point.name)}>
+          <div onClick={() => setPointModifying(point.name)} className="h-16 hover:scale-110">
             <Pen />
           </div>
           <div
@@ -55,6 +56,7 @@ function PointRow({
               // TODO API
               alert(`Delete point: ${point.name}`);
             }}
+            className="h-16 hover:scale-110"
           >
             <Bin />
           </div>
@@ -102,13 +104,10 @@ function ModifyPointRow({
         <form
           id={form_id}
           onSubmit={pointSubmit(setPointModifying, point?.name)}
-          className="m-2"
+          className="m-2 flex items-center"
         >
-          <button
-            type="submit"
-            className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
-          >
-            {point ? "Modifica punto" : "Crea nuovo punto"}
+          <button type="submit" className="h-16 hover:scale-110">
+            <PlusRound />
           </button>
         </form>
       </td>

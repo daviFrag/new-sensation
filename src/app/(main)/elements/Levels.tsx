@@ -10,6 +10,7 @@ import {
 } from "./utils";
 import Pen from "@/svg/Pen";
 import Bin from "@/svg/Bin";
+import PlusRound from "@/svg/PlusRound";
 
 const exerciseSubmit: (
   setExerciseLevelModifying: (s: string) => void,
@@ -73,7 +74,10 @@ function ExerciseLevelRow({
       <TdCell>{level.name}</TdCell>
       <td>
         <div className="flex items-center">
-          <div onClick={() => setExerciseLevelModifying(level.name)}>
+          <div
+            onClick={() => setExerciseLevelModifying(level.name)}
+            className="h-16 hover:scale-110"
+          >
             <Pen />
           </div>
           <div
@@ -81,6 +85,7 @@ function ExerciseLevelRow({
               // TODO API
               alert(`Delete level: ${level.name}`);
             }}
+            className="h-16 hover:scale-110"
           >
             <Bin />
           </div>
@@ -103,7 +108,10 @@ function ExperienceLevelRow({
       <TdCell>{level.name}</TdCell>
       <td>
         <div className="flex items-center">
-          <div onClick={() => setExperienceLevelModifying(level.name)}>
+          <div
+            onClick={() => setExperienceLevelModifying(level.name)}
+            className="h-16 hover:scale-110"
+          >
             <Pen />
           </div>
           <div
@@ -111,6 +119,7 @@ function ExperienceLevelRow({
               // TODO API
               alert(`Delete level: ${level.name}`);
             }}
+            className="h-16 hover:scale-110"
           >
             <Bin />
           </div>
@@ -169,15 +178,10 @@ function ModifyExerciseLevelRow({
         <form
           id={form_id}
           onSubmit={exerciseSubmit(setExerciseLevelModifying)}
-          className="m-2"
+          className="m-2 flex items-center"
         >
-          <button
-            type="submit"
-            className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
-          >
-            {level
-              ? "Modifica livello esercizio"
-              : "Carica nuovo livello esercizio"}
+          <button type="submit" className="h-16 hover:scale-110">
+            <PlusRound />
           </button>
         </form>
       </td>
@@ -223,15 +227,10 @@ function ModifyExperienceLevelRow({
         <form
           id={form_id}
           onSubmit={experienceSubmit(setExperienceLevelModifying)}
-          className="m-2"
+          className="m-2 flex items-center"
         >
-          <button
-            type="submit"
-            className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
-          >
-            {level
-              ? "Modifica livello esperienza"
-              : "Carica nuovo livello esperienza"}
+          <button type="submit" className="h-16 hover:scale-110">
+            <PlusRound />
           </button>
         </form>
       </td>
