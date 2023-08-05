@@ -21,7 +21,15 @@ export default function CreateLoaded(props: {
           </label>
         ))}
       </div>
-      <CreateRuleMenu blocks={blocks} vocabularies={vocabularies} />
+      <CreateRuleMenu
+        blocks={blocks}
+        vocabularies={vocabularies}
+        confirm_button_text="Crea regola"
+        doSomethingWithRule={(rule) => {
+          // TODO API
+          alert(JSON.stringify(rule, null, 2));
+        }}
+      />
     </main>
   );
 }

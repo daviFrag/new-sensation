@@ -1,6 +1,7 @@
 import {
   Block,
   BlockScope,
+  Rule,
   RuleUnnested,
   Vocabulary,
 } from "@/utils/BlockRuleTypes";
@@ -10,8 +11,11 @@ import React, { useState } from "react";
 export default function CreateRuleMenu(props: {
   vocabularies: Vocabulary[];
   blocks: Block[];
+  confirm_button_text: string;
+  doSomethingWithRule: (rule: Rule) => void;
 }) {
-  const { vocabularies, blocks } = props;
+  const { vocabularies, blocks, confirm_button_text, doSomethingWithRule } =
+    props;
 
   const [whileArray, setWhileArray] = useState<Block[]>([]);
   const [whenArray, setWhenArray] = useState<Block[]>([]);
@@ -163,14 +167,14 @@ export default function CreateRuleMenu(props: {
           </div>
         </div>
       </div>
-      <div className="w-11/12 mx-auto flex justify-end px-10">
+      <div className="w-11/12 ml-auto flex justify-end gap-10">
         <button
           onClick={() => {
             setWhenArray([]);
             setWhileArray([]);
             setDoArray([]);
           }}
-          className="text-white bg-red-500 p-5 rounded text-3xl m-5"
+          className="text-white bg-red-500 p-5 rounded text-3xl my-5"
         >
           Reset
         </button>
@@ -183,12 +187,16 @@ export default function CreateRuleMenu(props: {
               scope: "SELECTOR",
             };
 
-            const rule = makeRuleNested(rule_unnested);
-            alert(JSON.stringify(rule, null, 2));
+            try {
+              const rule = makeRuleNested(JSON.parse(JSON.stringify(rule_unnested)));
+              doSomethingWithRule(rule);
+            } catch (e) {
+              alert(e);
+            }
           }}
-          className="text-white bg-sky-500 p-5 rounded text-3xl m-5"
+          className="text-white bg-sky-500 p-5 rounded text-3xl my-5"
         >
-          Crea regola
+          {confirm_button_text}
         </button>
       </div>
     </div>
