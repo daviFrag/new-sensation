@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ExerciseLevel, ExperienceLevel } from "./types";
 import {
   SectionDescription,
@@ -8,16 +8,16 @@ import {
   TdCell,
   ThCell,
 } from "./utils";
+import Pen from "@/svg/Pen";
+import Bin from "@/svg/Bin";
 
-export default function Levels({
-  exercise_levels,
-  experience_levels,
-}: {
-  exercise_levels: ExerciseLevel[];
-  experience_levels: ExperienceLevel[];
-}) {
-  const exerciseSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+const exerciseSubmit: (
+  setExerciseLevelModifying: (s: string) => void,
+  level_to_modify?: string
+) => React.FormEventHandler<HTMLFormElement> =
+  (setExerciseLevelModifying, level_to_modify) => (event) => {
     event.preventDefault();
+
     const target = event.target as typeof event.target & {
       n: HTMLInputElement;
       game: HTMLInputElement;
@@ -26,21 +26,229 @@ export default function Levels({
     const n = target.n.value;
     const game = target.game.value;
     const name = target.name.value;
+
     // TODO API
+    // TODO differientate between modify and new level (level_to_modify)
     alert(JSON.stringify({ n, game, name }));
+
+    setExerciseLevelModifying("");
+    // @ts-expect-error
+    target.reset();
   };
 
-  const experienceSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+const experienceSubmit: (
+  setExperienceLevelModifying: (s: string) => void,
+  level_to_modify?: string
+) => React.FormEventHandler<HTMLFormElement> =
+  (setExperienceLevelModifying, level_to_modify) => (event) => {
     event.preventDefault();
+
     const target = event.target as typeof event.target & {
       n: HTMLInputElement;
       name: HTMLInputElement;
     };
     const n = target.n.value;
     const name = target.name.value;
+
     // TODO API
+    // TODO differientate between modify and new level (level_to_modify)
     alert(JSON.stringify({ n, name }));
+
+    setExperienceLevelModifying("");
+    // @ts-expect-error
+    target.reset();
   };
+
+function ExerciseLevelRow({
+  level,
+  setExerciseLevelModifying,
+}: {
+  level: ExerciseLevel;
+  setExerciseLevelModifying: (level_name: string) => void;
+}) {
+  return (
+    <tr>
+      <TdCell>{level.n}</TdCell>
+      <TdCell>{level.game}</TdCell>
+      <TdCell>{level.name}</TdCell>
+      <td>
+        <div className="flex items-center">
+          <div onClick={() => setExerciseLevelModifying(level.name)}>
+            <Pen />
+          </div>
+          <div
+            onClick={() => {
+              // TODO API
+              alert(`Delete level: ${level.name}`);
+            }}
+          >
+            <Bin />
+          </div>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function ExperienceLevelRow({
+  level,
+  setExperienceLevelModifying,
+}: {
+  level: ExperienceLevel;
+  setExperienceLevelModifying: (level_name: string) => void;
+}) {
+  return (
+    <tr>
+      <TdCell>{level.n}</TdCell>
+      <TdCell>{level.name}</TdCell>
+      <td>
+        <div className="flex items-center">
+          <div onClick={() => setExperienceLevelModifying(level.name)}>
+            <Pen />
+          </div>
+          <div
+            onClick={() => {
+              // TODO API
+              alert(`Delete level: ${level.name}`);
+            }}
+          >
+            <Bin />
+          </div>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function ModifyExerciseLevelRow({
+  level,
+  setExerciseLevelModifying,
+}: {
+  level?: ExerciseLevel;
+  setExerciseLevelModifying: (level_name: string) => void;
+}) {
+  const form_id = level ? "modify-exercise-form" : "new-exercise-form";
+
+  return (
+    <tr>
+      <TdCell>
+        <input
+          type="number"
+          defaultValue={level?.n}
+          placeholder="1,2,3,..."
+          id="n"
+          form={form_id}
+          className="w-full bg-sky-100"
+          min={0}
+          required
+        />
+      </TdCell>
+      <TdCell>
+        <input
+          type="text"
+          defaultValue={level?.game}
+          placeholder="Per quale gioco?"
+          id="game"
+          form={form_id}
+          className="w-full bg-sky-100"
+          required
+        />
+      </TdCell>
+      <TdCell>
+        <input
+          type="text"
+          defaultValue={level?.name}
+          placeholder="Come si chiama il livello? (es. Livello 1, Livello base, ...)"
+          id="name"
+          form={form_id}
+          className="w-full bg-sky-100"
+          required
+        />
+      </TdCell>
+      <td>
+        <form
+          id={form_id}
+          onSubmit={exerciseSubmit(setExerciseLevelModifying)}
+          className="m-2"
+        >
+          <button
+            type="submit"
+            className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
+          >
+            {level
+              ? "Modifica livello esercizio"
+              : "Carica nuovo livello esercizio"}
+          </button>
+        </form>
+      </td>
+    </tr>
+  );
+}
+
+function ModifyExperienceLevelRow({
+  level,
+  setExperienceLevelModifying,
+}: {
+  level?: ExperienceLevel;
+  setExperienceLevelModifying: (level_name: string) => void;
+}) {
+  const form_id = level ? "modify-experience-form" : "new-experience-form";
+
+  return (
+    <tr>
+      <TdCell>
+        <input
+          type="number"
+          defaultValue={level?.n}
+          placeholder="1,2,3,..."
+          id="n"
+          form={form_id}
+          className="w-full bg-sky-100"
+          min={0}
+          required
+        />
+      </TdCell>
+      <TdCell>
+        <input
+          type="text"
+          defaultValue={level?.name}
+          placeholder="Come si chiama il livello? (es. Boyscout, Primi passi, Principianti, ...)"
+          id="name"
+          form={form_id}
+          className="w-full bg-sky-100"
+          required
+        />
+      </TdCell>
+      <td>
+        <form
+          id={form_id}
+          onSubmit={experienceSubmit(setExperienceLevelModifying)}
+          className="m-2"
+        >
+          <button
+            type="submit"
+            className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
+          >
+            {level
+              ? "Modifica livello esperienza"
+              : "Carica nuovo livello esperienza"}
+          </button>
+        </form>
+      </td>
+    </tr>
+  );
+}
+
+export default function Levels({
+  exercise_levels,
+  experience_levels,
+}: {
+  exercise_levels: ExerciseLevel[];
+  experience_levels: ExperienceLevel[];
+}) {
+  const [exercise_level_modifying, setExerciseLevelModifying] = useState("");
+  const [experience_level_modifying, setExperienceLevelModifying] =
+    useState("");
 
   return (
     <section>
@@ -53,126 +261,80 @@ export default function Levels({
       <TableTitle>Livelli esercizio</TableTitle>
       <Table>
         <colgroup>
-          <col span={1} className="w-1/4" />
-          <col span={1} className="w-1/4" />
-          <col span={1} className="w-2/4" />
+          <col span={1} className="w-3/12" />
+          <col span={1} className="w-3/12" />
+          <col span={1} className="w-5/12" />
+          <col span={1} className="w-1/12" />
         </colgroup>
         <thead>
           <tr>
             <ThCell>N livello</ThCell>
             <ThCell>Gioco</ThCell>
             <ThCell>Nome</ThCell>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {exercise_levels.map((level) => (
-            <tr key={level.name}>
-              <TdCell>{level.n}</TdCell>
-              <TdCell>{level.game}</TdCell>
-              <TdCell>{level.name}</TdCell>
-            </tr>
-          ))}
-          <tr>
-            <TdCell>
-              <input
-                type="number"
-                placeholder="1,2,3,..."
-                id="n"
-                form="exercise-form"
-                className="w-full bg-sky-100"
-                min={0}
+          {exercise_levels.map((level) => {
+            if (exercise_level_modifying === level.name)
+              return (
+                <ModifyExerciseLevelRow
+                  setExerciseLevelModifying={setExerciseLevelModifying}
+                  level={level}
+                />
+              );
+
+            return (
+              <ExerciseLevelRow
+                key={level.name}
+                level={level}
+                setExerciseLevelModifying={setExerciseLevelModifying}
               />
-            </TdCell>
-            <TdCell>
-              <input
-                type="text"
-                placeholder="Per quale gioco?"
-                id="game"
-                form="exercise-form"
-                className="w-full bg-sky-100"
-              />
-            </TdCell>
-            <TdCell>
-              <input
-                type="text"
-                placeholder="Come si chiama il livello? (es. Livello 1, Livello base, ...)"
-                id="name"
-                form="exercise-form"
-                className="w-full bg-sky-100"
-              />
-            </TdCell>
-          </tr>
+            );
+          })}
+          <ModifyExerciseLevelRow
+            setExerciseLevelModifying={setExerciseLevelModifying}
+          />
         </tbody>
       </Table>
-
-      <form
-        id="exercise-form"
-        onSubmit={exerciseSubmit}
-        className="text-3xl my-4 mx-auto w-9/12"
-      >
-        <button
-          type="submit"
-          className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
-        >
-          Carica nuovo livello esercizio
-        </button>
-      </form>
 
       <TableTitle>Livelli esperienza</TableTitle>
       <Table>
         <colgroup>
-          <col span={1} className="w-1/4" />
-          <col span={1} className="w-3/4" />
+          <col span={1} className="w-3/12" />
+          <col span={1} className="w-8/12" />
+          <col span={1} className="w-1/12" />
         </colgroup>
         <thead>
           <tr>
             <ThCell>N livello</ThCell>
             <ThCell>Nome</ThCell>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {experience_levels.map((level) => (
-            <tr key={level.name}>
-              <TdCell>{level.n}</TdCell>
-              <TdCell>{level.name}</TdCell>
-            </tr>
-          ))}
-          <tr>
-            <TdCell>
-              <input
-                type="number"
-                placeholder="1,2,3,..."
-                id="n"
-                form="experience-form"
-                className="w-full bg-sky-100"
-                min={0}
+          {experience_levels.map((level) => {
+            if (experience_level_modifying === level.name)
+              return (
+                <ModifyExperienceLevelRow
+                  setExperienceLevelModifying={setExperienceLevelModifying}
+                  level={level}
+                />
+              );
+
+            return (
+              <ExperienceLevelRow
+                key={level.name}
+                level={level}
+                setExperienceLevelModifying={setExperienceLevelModifying}
               />
-            </TdCell>
-            <TdCell>
-              <input
-                type="text"
-                placeholder="Come si chiama il livello? (es. Boyscout, Primi passi, Principianti, ...)"
-                id="name"
-                form="experience-form"
-                className="w-full bg-sky-100"
-              />
-            </TdCell>
-          </tr>
+            );
+          })}
+          <ModifyExperienceLevelRow
+            setExperienceLevelModifying={setExperienceLevelModifying}
+          />
         </tbody>
       </Table>
-
-      <form
-        id="experience-form"
-        onSubmit={experienceSubmit}
-        className="text-3xl my-4 mx-auto w-9/12"
-      >
-        <button
-          type="submit"
-          className="bg-sky-300 rounded-lg p-3 hover:bg-sky-400 duration-75 ease-in-out"
-        >
-          Carica nuovo livello esperienza
-        </button>
-      </form>
     </section>
   );
 }

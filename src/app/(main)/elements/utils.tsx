@@ -11,12 +11,12 @@ export function SectionDescription({
 }
 
 export function TableTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-3xl font-bold my-4 mx-auto w-9/12">{children}</h3>;
+  return <h3 className="text-3xl font-bold my-4 mx-auto w-10/12">{children}</h3>;
 }
 
 export function Table({ children }: { children: React.ReactNode }) {
   return (
-    <table className="text-2xl my-4 mx-auto w-9/12 table-fixed">
+    <table className="text-2xl my-4 mx-auto w-10/12 table-fixed">
       {children}
     </table>
   );
