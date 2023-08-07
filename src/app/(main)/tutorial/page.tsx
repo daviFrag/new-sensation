@@ -6,7 +6,7 @@ export default function Tutorial() {
   return (
     <>
       <Header text={links.tutorial} />
-      <main>tutorial</main>
+      <main>TODO</main>
     </>
   );
 }

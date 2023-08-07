@@ -6,7 +6,7 @@ export default function Games() {
   return (
     <>
       <Header text={links.games} />
-      <main>games</main>
+      <main>TODO</main>
     </>
   );
 }
