@@ -10,8 +10,7 @@ import DocumentPlus from "@/svg/DocumentPlus";
 
 export default function Rules() {
   // TODO API
-  // const rules: Rule[] = myrules;
-  const rules: Rule[] = [];
+  const rules: Rule[] = myrules;
 
   return (
     <>
