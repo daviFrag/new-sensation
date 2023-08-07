@@ -14,7 +14,10 @@ export default function CreateLoaded(props: {
       <h1 className="w-11/12 mx-auto text-5xl font-semibold pt-12 pb-5">
         Regole
       </h1>
-      <VocabularyFilter vocabularies={vocabularies} onChange={() => {}} />
+      <VocabularyFilter
+        vocabularies={vocabularies}
+        onChange={(choice) => console.log(choice)}
+      />
       <CreateRuleMenu
         blocks={blocks}
         vocabularies={vocabularies}
