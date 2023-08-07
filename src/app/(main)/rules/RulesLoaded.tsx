@@ -4,6 +4,7 @@ import { convertRuleToString } from "@/utils/convertRuleToString";
 import Pen from "@/svg/Pen";
 import Bin from "@/svg/Bin";
 import CreateRuleMenu from "../create/CreateRuleMenu";
+import VocabularyFilter from "./VocabularyFilter";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -18,14 +19,7 @@ export default function RulesLoaded(props: {
       <h1 className="w-11/12 mx-auto text-5xl font-semibold pt-12 pb-5">
         Regole
       </h1>
-      <div className="w-11/12 mx-auto text-4xl py-5">
-        {vocabularies.map((v) => (
-          <label key={v} className="flex gap-5">
-            <input type="checkbox" value={v} className="scale-150  -z-10" />
-            {v}
-          </label>
-        ))}
-      </div>
+      <VocabularyFilter vocabularies={vocabularies} onChange={() => {}} />
       <div className="w-11/12 mx-auto">
         {rules.map((r) => (
           <div
