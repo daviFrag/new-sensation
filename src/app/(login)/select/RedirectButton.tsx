@@ -9,11 +9,10 @@ export default function RedirectButton({
 }) {
   return (
     <a
-      href={redirect_link}
+      href={`./${redirect_link}`}
       className=" hover:scale-110 ease-in-out duration-100"
     >
       <button
-        // onClick={() => router.push(redirect_link)}
         className="bg-white m-4 mx-auto text-sky-800 w-2/4 text-3xl p-2 rounded-xl"
       >
         {text}

@@ -31,7 +31,7 @@ export default function Rules() {
             Crea nuove regole per far giocare i tuoi studenti con Smarter and
             SmartGame
           </p>
-          <a href="create">
+          <a href="./create">
             <button className="bg-sky-400 text-4xl text-white px-10 py-5 ease-in-out duration-75 hover:bg-sky-500 rounded-xl">
               {links.create}
             </button>

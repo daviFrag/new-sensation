@@ -17,7 +17,7 @@ export default function Home() {
     // TODO API
     console.log(username, password);
     localStorage.setItem("username", username);
-    router.push("/select");
+    router.push("./select");
   };
 
   return (
