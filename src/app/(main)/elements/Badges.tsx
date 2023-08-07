@@ -63,7 +63,7 @@ function BadgeRow({
       </TdCell>
       <td>
         <div className="flex items-center">
-          <div onClick={() => setBadgeModifying(badge.name)} className="h-16 hover:scale-110">
+          <div onClick={() => setBadgeModifying(badge.name)} className="h-16 aspect-square hover:scale-110">
             <Pen />
           </div>
           <div
@@ -71,7 +71,7 @@ function BadgeRow({
               // TODO API
               alert(`Delete badge: ${badge.name}`);
             }}
-            className="h-16 hover:scale-110"
+            className="h-16 aspect-square hover:scale-110"
           >
             <Bin />
           </div>
@@ -135,7 +135,7 @@ function ModifyBadgeRow({
         >
           <button
             type="submit"
-            className="h-16 hover:scale-110"
+            className="h-16 aspect-square hover:scale-110"
           >
             <PlusRound />
           </button>
