@@ -41,7 +41,7 @@ export default function Home() {
         type="submit"
         className="mr-auto border border-black p-2 hover:scale-110 ease-in-out duration-100 bg-sky-500"
       >
-        Login
+        LOGIN
       </button>
     </form>
   );
