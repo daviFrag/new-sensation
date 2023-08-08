@@ -1,7 +1,7 @@
 import { Vocabulary } from "@/utils/BlockRuleTypes";
 import React, { useEffect } from "react";
 
-type VocabularyChoice = "SMARTER" | "SMARTER and SmartGame";
+type VocabularyChoice = "SMARTER" | "SMARTER e SmartGame";
 
 function VocabularyFilterHardCoded(props: {
   vocabularies: Vocabulary[];
@@ -11,7 +11,7 @@ function VocabularyFilterHardCoded(props: {
   const necessary_vocabulary_1 = "SMARTER";
   const necessary_vocabulary_2 = "SmartGame";
   const choice_vocabulary_1: VocabularyChoice = "SMARTER";
-  const choice_vocabulary_2: VocabularyChoice = "SMARTER and SmartGame";
+  const choice_vocabulary_2: VocabularyChoice = "SMARTER e SmartGame";
 
   useEffect(() => {
     const first_radio = document.getElementById(choice_vocabulary_1) as HTMLInputElement;
