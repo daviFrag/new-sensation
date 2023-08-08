@@ -1,5 +1,5 @@
 import { Vocabulary } from "@/utils/BlockRuleTypes";
-import React from "react";
+import React, { useEffect } from "react";
 
 type VocabularyChoice = "SMARTER" | "SMARTER and SmartGame";
 
@@ -13,6 +13,12 @@ function VocabularyFilterHardCoded(props: {
   const choice_vocabulary_1: VocabularyChoice = "SMARTER";
   const choice_vocabulary_2: VocabularyChoice = "SMARTER and SmartGame";
 
+  useEffect(() => {
+    const first_radio = document.getElementById(choice_vocabulary_1) as HTMLInputElement;
+    first_radio.checked = true;
+    onChange(choice_vocabulary_1);
+  }, [])
+
   if (
     !vocabularies.includes(necessary_vocabulary_1) ||
     !vocabularies.includes(necessary_vocabulary_2)
@@ -24,7 +30,7 @@ function VocabularyFilterHardCoded(props: {
     );
 
   return (
-    <div className="w-11/12 mx-auto text-4xl py-5">
+    <div className="w-11/12 mx-auto text-4xl py-5 flex gap-10">
       <label className="flex gap-5">
         <input
           type="radio"
@@ -33,7 +39,6 @@ function VocabularyFilterHardCoded(props: {
           value={choice_vocabulary_1}
           className="scale-150 -z-10"
           onChange={(e) => onChange(e.target.value as VocabularyChoice)}
-          defaultChecked
         />
         {choice_vocabulary_1}
       </label>
