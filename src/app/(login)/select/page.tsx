@@ -3,8 +3,12 @@
 import React, { useEffect, useState } from "react";
 import RedirectButton from "./RedirectButton";
 import { links } from "@/utils/links";
+import Logout from "@/svg/Logout";
+import { useRouter } from "next/navigation";
 
 export default function Start() {
+  const router = useRouter();
+
   // TODO API
   // const username = localStorage.getItem("username");
   // ? use client not working, problems with localstorage and pre rendering
@@ -23,6 +27,17 @@ export default function Start() {
           key={link}
         />
       ))}
+
+      <button
+        className="absolute bottom-0 right-0 m-10 w-20 aspect-square bg-orange-100 hover:bg-orange-200 hover:scale-110 ease-in-out duration-100 rounded-xl p-2"
+        onClick={() => {
+          // TODO API
+          localStorage.removeItem("username");
+          router.push("/");
+        }}
+      >
+        <Logout />
+      </button>
     </>
   );
 }
