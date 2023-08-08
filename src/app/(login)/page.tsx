@@ -28,14 +28,14 @@ export default function Home() {
       <label htmlFor="username" className="text-left">
         Username
       </label>
-      <input id="username" type="text" className="pl-3 border border-black" />
+      <input id="username" type="text" className="pl-3 border border-black text-black" />
       <label htmlFor="password" className="text-left">
         Password
       </label>
       <input
         id="password"
         type="password"
-        className="pl-3 border border-black"
+        className="pl-3 border border-black text-black"
       />
       <button
         type="submit"
