@@ -23,7 +23,10 @@ export default function Header({ text }: { text: string }) {
   return (
     <>
       {showMenu && (
-        <aside className="flex flex-col gap-10 bg-sky-600 text-4xl text-white absolute t-0 l-0 h-screen w-2/7">
+        <aside
+          className="flex flex-col gap-10 text-4xl text-white absolute t-0 l-0 h-screen w-2/7"
+          style={{ backgroundColor: "#146AB9" }}
+        >
           <div className="h-32 flex items-center px-10">
             <button
               onClick={() => setShowMenu(false)}
@@ -46,20 +49,23 @@ export default function Header({ text }: { text: string }) {
                 <div className="h-12 w-12">
                   {links_svgs[link as keyof typeof links]}
                 </div>
-                {links[link as keyof typeof links]}
+                <p className="uppercase">{links[link as keyof typeof links]}</p>
               </a>
             ))}
           </nav>
         </aside>
       )}
-      <header className="h-32 bg-sky-600 w-full flex items-center px-10 text-6xl text-white">
+      <header
+        className="h-32 w-full flex items-center px-10 text-6xl text-white"
+        style={{ backgroundColor: "#146AB9" }}
+      >
         <button
           onClick={() => setShowMenu(true)}
           className="h-20 aspect-square"
         >
           <Hamburger />
         </button>
-        {!showMenu && <h1 className="ml-10">{text}</h1>}
+        {!showMenu && <h1 className="ml-10 uppercase">{text}</h1>}
         <h2 className="ml-auto">Smarter: the Rulebook</h2>
       </header>
     </>

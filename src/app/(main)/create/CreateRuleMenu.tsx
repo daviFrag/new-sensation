@@ -149,7 +149,7 @@ export default function CreateRuleMenu(props: {
     <div className="w-11/12 mx-auto">
       <div className="flex gap-10">
         <div className="w-4/12">
-          <h2 className="text-4xl py-5">Eventi</h2>
+          <h2 className="text-4xl py-5">Evento</h2>
           <div className="border border-black h-96 text-3xl p-3 overflow-y-scroll">
             QUANDO {whenArrayToText()}
           </div>
@@ -174,9 +174,10 @@ export default function CreateRuleMenu(props: {
             setWhileArray([]);
             setDoArray([]);
           }}
-          className="text-white bg-red-500 p-5 rounded text-3xl my-5"
+          className="text-white p-5 rounded text-3xl my-5 uppercase"
+          style={{ backgroundColor: "#D73E3E" }}
         >
-          Reset
+          Annulla
         </button>
         <button
           onClick={() => {
@@ -188,13 +189,16 @@ export default function CreateRuleMenu(props: {
             };
 
             try {
-              const rule = makeRuleNested(JSON.parse(JSON.stringify(rule_unnested)));
+              const rule = makeRuleNested(
+                JSON.parse(JSON.stringify(rule_unnested))
+              );
               doSomethingWithRule(rule);
             } catch (e) {
               alert(e);
             }
           }}
-          className="text-white bg-sky-500 p-5 rounded text-3xl my-5"
+          className="text-white bg-sky-500 p-5 rounded text-3xl my-5 uppercase"
+          style={{ backgroundColor: "#146AB9" }}
         >
           {confirm_button_text}
         </button>
