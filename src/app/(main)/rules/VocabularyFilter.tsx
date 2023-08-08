@@ -33,6 +33,7 @@ function VocabularyFilterHardCoded(props: {
           value={choice_vocabulary_1}
           className="scale-150 -z-10"
           onChange={(e) => onChange(e.target.value as VocabularyChoice)}
+          defaultChecked
         />
         {choice_vocabulary_1}
       </label>
