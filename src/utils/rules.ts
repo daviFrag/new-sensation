@@ -2,7 +2,7 @@ import { makeRuleNested } from "./makeRuleNested";
 import { RuleUnnested } from "./BlockRuleTypes";
 
 export const vocabularies_obj = {
-  smarter: "Smarter",
+  smarter: "SMARTER",
   smartgame: "SmartGame",
 } as const;
 

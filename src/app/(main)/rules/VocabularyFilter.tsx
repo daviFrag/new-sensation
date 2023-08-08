@@ -1,17 +1,17 @@
 import { Vocabulary } from "@/utils/BlockRuleTypes";
 import React from "react";
 
-type VocabularyChoice = "Smarter" | "Smarter and Smartgame";
+type VocabularyChoice = "SMARTER" | "SMARTER and SmartGame";
 
 function VocabularyFilterHardCoded(props: {
   vocabularies: Vocabulary[];
   onChange: (choice: VocabularyChoice) => void;
 }) {
   const { vocabularies, onChange } = props;
-  const necessary_vocabulary_1 = "Smarter";
+  const necessary_vocabulary_1 = "SMARTER";
   const necessary_vocabulary_2 = "SmartGame";
-  const choice_vocabulary_1: VocabularyChoice = "Smarter";
-  const choice_vocabulary_2: VocabularyChoice = "Smarter and Smartgame";
+  const choice_vocabulary_1: VocabularyChoice = "SMARTER";
+  const choice_vocabulary_2: VocabularyChoice = "SMARTER and SmartGame";
 
   if (
     !vocabularies.includes(necessary_vocabulary_1) ||

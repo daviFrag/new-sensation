@@ -28,7 +28,7 @@ export default function Rules() {
           </div>
           <h2 className="font-bold text-6xl mb-10">Nessuna regola creata</h2>
           <p className="text-4xl mb-10">
-            Crea nuove regole per far giocare i tuoi studenti con Smarter and
+            Crea nuove regole per far giocare i tuoi studenti con SMARTER and
             SmartGame
           </p>
           <a href="./create">
