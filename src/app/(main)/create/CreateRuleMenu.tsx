@@ -86,7 +86,7 @@ export default function CreateRuleMenu(props: {
     if (!whileArray.length)
       return getSelectOfBlocks(
         getBlocksByScope("STATE"),
-        "quale circostanza sta avvenendo?",
+        "quale circostanza sta occorrendo?",
         setWhileArray
       );
 
@@ -106,7 +106,7 @@ export default function CreateRuleMenu(props: {
       case "LOGIC":
         elem = getSelectOfBlocks(
           getBlocksByScope("STATE"),
-          "quale circostanza sta avvenendo?",
+          "quale circostanza sta occorrendo?",
           setWhileArray
         );
         break;
