@@ -13,7 +13,7 @@ export default function RedirectButton({
       className=" hover:scale-110 ease-in-out duration-100"
     >
       <button
-        className="bg-white m-4 mx-auto text-sky-800 w-2/4 text-3xl p-2 rounded-xl"
+        className="bg-white m-2 mx-auto text-sky-800 w-2/4 text-3xl p-2 rounded-xl"
       >
         {text}
       </button>
