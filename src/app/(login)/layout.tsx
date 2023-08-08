@@ -3,7 +3,7 @@ import React from "react";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-orange-400 h-screen relative overflow-hidden">
+    <div className="bg-orange-400 h-screen relative">
       <Ellipse />
       <header className="flex justify-between px-20 py-10 bg-transparent absolute left-0 top-0 w-full">
         <h1 className="text-white text-4xl">SMARTER: the Rulebook</h1>
