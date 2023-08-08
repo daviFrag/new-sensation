@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <form
-      className="flex flex-col px-40 py-32 gap-4 bg-sky-200 rounded-xl"
+      className="flex flex-col px-40 py-32 gap-4 rounded-xl text-white"
       onSubmit={onSubmit}
     >
       <label htmlFor="username" className="text-left">
@@ -39,7 +39,7 @@ export default function Home() {
       />
       <button
         type="submit"
-        className="mr-auto border border-black p-2 hover:scale-110 ease-in-out duration-100"
+        className="mr-auto border border-black p-2 hover:scale-110 ease-in-out duration-100 bg-sky-500"
       >
         Login
       </button>
