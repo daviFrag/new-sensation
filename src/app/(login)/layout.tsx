@@ -3,20 +3,24 @@ import React from "react";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-orange-400 h-screen relative">
-      <Ellipse />
-      <header className="flex justify-between px-20 py-10 bg-transparent absolute left-0 top-0 w-full">
-        <h1 className="text-white text-4xl">SMARTER: the Rulebook</h1>
-        <button
-          className="bg-orange-100 p-4 text-2xl hover:bg-orange-200 hover:scale-110 ease-in-out duration-100 rounded-xl"
-          style={{ color: "#0E599D" }}
-        >
-          TORNA SU SMARTGAME
-        </button>
-      </header>
-      <main className="absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 h-2/4 w-2/4 text-3xl flex flex-col justify-center text-center">
-        {children}
-      </main>
+    <div className="relative  overflow-hidden">
+      <div className="absolute top-0 left-0 -z-40 w-full pr-32 bg-orange-400">
+        <Ellipse />
+      </div>
+      <div className="h-screen relative flex flex-col items-center overflow-scroll">
+        <header className="flex justify-between px-20 py-10 bg-transparent w-full">
+          <h1 className="text-white text-4xl">SMARTER: the Rulebook</h1>
+          <button
+            className="bg-orange-100 p-4 text-2xl hover:bg-orange-200 hover:scale-110 ease-in-out duration-100 rounded-xl"
+            style={{ color: "#0E599D" }}
+          >
+            TORNA SU SMARTGAME
+          </button>
+        </header>
+        <main className="w-1/2 h-full text-3xl text-center flex flex-col justify-center">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
