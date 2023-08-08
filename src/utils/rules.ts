@@ -28,13 +28,13 @@ export const blocks_obj = {
   ON_LEFT: {
     name: "ON_LEFT",
     scope: "STATE",
-    text: "a sinistra e' presente una tessera",
+    text: "a sinistra è presente una tessera",
     vocabulary: vocabularies_obj.smarter,
   },
   ON_RIGHT: {
     name: "ON_RIGHT",
     scope: "STATE",
-    text: "a destra e' presente una tessera",
+    text: "a destra è presente una tessera",
     vocabulary: vocabularies_obj.smarter,
   },
   SYMBOL_CARD: {
