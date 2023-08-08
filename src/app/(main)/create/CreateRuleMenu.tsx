@@ -43,7 +43,8 @@ export default function CreateRuleMenu(props: {
           });
         }}
         value=""
-        className="bg-sky-400 text-white p-2"
+        className="text-white p-2"
+        style={{ backgroundColor: "#73B9F9" }}
       >
         <option>{std_text}</option>
         {blocks.map((b) => (
