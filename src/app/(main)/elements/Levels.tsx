@@ -254,7 +254,7 @@ export default function Levels({
       <SectionTitle>Livelli</SectionTitle>
       <SectionDescription>
         Definisci i LIVELLI presenti nelle categorie {`"livelli esercizio"`} e{" "}
-        {`"livelli esperienza"`}
+        {`"livelli esperienza"`}.
       </SectionDescription>
 
       <TableTitle>Livelli esercizio</TableTitle>

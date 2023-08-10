@@ -123,7 +123,7 @@ export default function Points({ points }: { points: Point[] }) {
       <SectionTitle>Punti</SectionTitle>
       <SectionDescription>
         Definisci i PUNTI da assegnare allo studente nella categoria{" "}
-        {`"punti esperienza"`}
+        {`"punti esperienza"`}.
       </SectionDescription>
 
       <TableTitle>Punti esperienza (ghiande)</TableTitle>

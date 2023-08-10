@@ -152,7 +152,7 @@ export default function Badges({ badges }: { badges: Badge[] }) {
     <section>
       <SectionTitle>Riconoscimenti</SectionTitle>
       <SectionDescription>
-        Definisci i RICONOSCIMENTI presenti nella categoria {`"badge"`}
+        Definisci i RICONOSCIMENTI presenti nella categoria {`"badge"`}.
       </SectionDescription>
 
       <TableTitle>Badge</TableTitle>
