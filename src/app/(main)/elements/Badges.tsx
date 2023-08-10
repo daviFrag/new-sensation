@@ -96,7 +96,7 @@ function ModifyBadgeRow({
         <input
           type="text"
           defaultValue={badge?.name}
-          placeholder="Inserisci il nome del badge"
+          placeholder="Inserisci il nome del badge."
           id="name"
           form={form_id}
           className="w-full bg-sky-100"
