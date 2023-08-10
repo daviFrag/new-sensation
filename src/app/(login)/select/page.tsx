@@ -36,7 +36,7 @@ export default function Start() {
           router.push("/");
         }}
       >
-        <Logout />
+        <Logout color="black"/>
       </button>
     </>
   );

@@ -1,13 +1,13 @@
 import React from "react";
 
-export default function Logout() {
+export default function Logout({ color }: { color: "black" | "white" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth={1.5}
-      stroke="#0E599D"
+      stroke={color === "black" ? "#0E599D" : "white"}
       className="w-6 h-6"
     >
       <path
