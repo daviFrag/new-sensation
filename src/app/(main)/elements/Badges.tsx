@@ -99,7 +99,8 @@ function ModifyBadgeRow({
           placeholder="Inserisci il nome del badge."
           id="name"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           required
         />
       </TdCell>
@@ -109,7 +110,8 @@ function ModifyBadgeRow({
           placeholder="Inserisci una descrizione (es. Raccogli 8 ghiande...)"
           id="description"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           required
         />
       </TdCell>
@@ -123,7 +125,8 @@ function ModifyBadgeRow({
             placeholder="Carica immagine"
             id="image"
             form={form_id}
-            className="w-full bg-sky-100"
+            className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           />
         </label>
       </TdCell>

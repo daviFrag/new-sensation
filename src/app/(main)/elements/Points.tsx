@@ -84,7 +84,8 @@ function ModifyPointRow({
           placeholder="Per cosa viene assegnato? (es Esercizi livello 1...)"
           id="name"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           required
         />
       </TdCell>
@@ -95,7 +96,8 @@ function ModifyPointRow({
           placeholder="Quanti punti vengono assegnati?"
           id="quantity"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           min={0}
           required
         />

@@ -147,7 +147,8 @@ function ModifyExerciseLevelRow({
           placeholder="1,2,3,..."
           id="n"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           min={0}
           required
         />
@@ -159,7 +160,8 @@ function ModifyExerciseLevelRow({
           placeholder="Per quale gioco?"
           id="game"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           required
         />
       </TdCell>
@@ -170,7 +172,8 @@ function ModifyExerciseLevelRow({
           placeholder="Come si chiama il livello? (es. Livello 1, Livello base, ...)"
           id="name"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           required
         />
       </TdCell>
@@ -207,7 +210,8 @@ function ModifyExperienceLevelRow({
           placeholder="1,2,3,..."
           id="n"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           min={0}
           required
         />
@@ -219,7 +223,8 @@ function ModifyExperienceLevelRow({
           placeholder="Come si chiama il livello? (es. Boyscout, Primi passi, Principianti, ...)"
           id="name"
           form={form_id}
-          className="w-full bg-sky-100"
+          className="w-full"
+          style={{ backgroundColor: "#E6F0F9" }}
           required
         />
       </TdCell>
