@@ -1,11 +1,14 @@
-import Ellipse from "@/svg/Ellipse";
+import Subtract from "@/svg/Subtract";
 import React from "react";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative  overflow-hidden">
-      <div className="absolute top-0 left-0 -z-40 w-full pr-32 bg-orange-400">
-        <Ellipse />
+    <div className="relative overflow-hidden">
+      <div
+        className="absolute top-0 right-0 h-screen w-screen -z-40 flex justify-end"
+        style={{ backgroundColor: "#146AB9" }}
+      >
+        <Subtract />
       </div>
       <div className="h-screen relative flex flex-col items-center overflow-scroll">
         <header className="flex justify-between px-10 py-5 bg-transparent w-full">
