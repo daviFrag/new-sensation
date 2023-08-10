@@ -9,6 +9,9 @@ export default function Subtract() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="h-full"
+      style={{
+        transform: "scale(200%)",
+      }}
     >
       <g filter="url(#filter0_d_402_8)">
         <path
