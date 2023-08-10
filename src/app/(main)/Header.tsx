@@ -20,7 +20,7 @@ const links_svgs = {
 function SideMenu({ text, hideMenu }: { text: string; hideMenu: () => void }) {
   return (
     <aside
-      className="flex flex-col gap-10 text-4xl text-white absolute t-0 l-0 h-screen w-2/7"
+      className="flex flex-col gap-10 text-4xl text-white h-screen w-2/7 fixed top-0 left-0 z-20"
       style={{ backgroundColor: "#146AB9" }}
     >
       <div className="h-32 flex items-center px-10">
@@ -56,7 +56,7 @@ export default function Header({ text }: { text: string }) {
       {showMenu && <SideMenu text={text} hideMenu={() => setShowMenu(false)} />}
 
       <header
-        className="h-32 w-full flex items-center px-10 text-6xl text-white fixed top-0 left-0"
+        className="h-32 w-full flex items-center px-10 text-6xl text-white fixed top-0 left-0 z-10"
         style={{ backgroundColor: "#146AB9" }}
       >
         <button
