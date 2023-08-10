@@ -28,7 +28,7 @@ export function ThCell({ children }: { children: React.ReactNode }) {
   return (
     <th
       className="border border-gray-500 py-5 text-left px-2"
-      style={{ backgroundColor: "#73B9F9" }}
+      style={{ backgroundColor: "#87C4FD" }}
     >
       {children}
     </th>
