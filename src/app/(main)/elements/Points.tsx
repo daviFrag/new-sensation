@@ -48,7 +48,7 @@ function PointRow({
       <TdCell>{point.quantity}</TdCell>
       <td>
         <div className="flex items-center">
-          <div onClick={() => setPointModifying(point.name)} className="h-16 aspect-square hover:scale-110">
+          <div onClick={() => setPointModifying(point.name)} className="h-10 aspect-square hover:scale-110">
             <Pen />
           </div>
           <div
@@ -56,7 +56,7 @@ function PointRow({
               // TODO API
               alert(`Delete point: ${point.name}`);
             }}
-            className="h-16 aspect-square hover:scale-110"
+            className="h-10 aspect-square hover:scale-110"
           >
             <Bin />
           </div>
@@ -108,7 +108,7 @@ function ModifyPointRow({
           onSubmit={pointSubmit(setPointModifying, point?.name)}
           className="m-2 flex items-center"
         >
-          <button type="submit" className="h-16 aspect-square hover:scale-110">
+          <button type="submit" className="h-10 aspect-square hover:scale-110">
             <PlusRound />
           </button>
         </form>

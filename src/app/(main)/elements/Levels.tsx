@@ -76,7 +76,7 @@ function ExerciseLevelRow({
         <div className="flex items-center">
           <div
             onClick={() => setExerciseLevelModifying(level.name)}
-            className="h-16 aspect-square hover:scale-110"
+            className="h-10 aspect-square hover:scale-110"
           >
             <Pen />
           </div>
@@ -85,7 +85,7 @@ function ExerciseLevelRow({
               // TODO API
               alert(`Delete level: ${level.name}`);
             }}
-            className="h-16 aspect-square hover:scale-110"
+            className="h-10 aspect-square hover:scale-110"
           >
             <Bin />
           </div>
@@ -110,7 +110,7 @@ function ExperienceLevelRow({
         <div className="flex items-center">
           <div
             onClick={() => setExperienceLevelModifying(level.name)}
-            className="h-16 aspect-square hover:scale-110"
+            className="h-10 aspect-square hover:scale-110"
           >
             <Pen />
           </div>
@@ -119,7 +119,7 @@ function ExperienceLevelRow({
               // TODO API
               alert(`Delete level: ${level.name}`);
             }}
-            className="h-16 aspect-square hover:scale-110"
+            className="h-10 aspect-square hover:scale-110"
           >
             <Bin />
           </div>
@@ -183,7 +183,7 @@ function ModifyExerciseLevelRow({
           onSubmit={exerciseSubmit(setExerciseLevelModifying)}
           className="m-2 flex items-center"
         >
-          <button type="submit" className="h-16 aspect-square hover:scale-110">
+          <button type="submit" className="h-10 aspect-square hover:scale-110">
             <PlusRound />
           </button>
         </form>
@@ -234,7 +234,7 @@ function ModifyExperienceLevelRow({
           onSubmit={experienceSubmit(setExperienceLevelModifying)}
           className="m-2 flex items-center"
         >
-          <button type="submit" className="h-16 aspect-square hover:scale-110">
+          <button type="submit" className="h-10 aspect-square hover:scale-110">
             <PlusRound />
           </button>
         </form>
