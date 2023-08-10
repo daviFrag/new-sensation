@@ -5,6 +5,7 @@ import Pen from "@/svg/Pen";
 import Bin from "@/svg/Bin";
 import CreateRuleMenu from "../create/CreateRuleMenu";
 import VocabularyFilter from "./VocabularyFilter";
+import Copy from "@/svg/Copy";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -27,19 +28,32 @@ export default function RulesLoaded(props: {
         {rules.map((r) => (
           <div
             key={r.id}
-            className="text-2xl border border-black p-3 flex flex-col"
+            className="text-2xl border border-black p-3 flex flex-col mb-1 rounded"
           >
             <div className=" flex justify-between">
               <p className="w-10/12">{convertRuleToString(r)}</p>
               <div className="w-1/12 flex">
-                <div onClick={() => setRuleModify(r.id!)}>
+                <div
+                  onClick={() => setRuleModify(r.id!)}
+                  className="cursor-pointer duration-75 ease-in-out hover:scale-110"
+                >
                   <Pen />
+                </div>
+                <div
+                  onClick={() => {
+                    // TODO API
+                    alert(`Copied rule with id: ${r.id}`);
+                  }}
+                  className="cursor-pointer duration-75 ease-in-out hover:scale-110"
+                >
+                  <Copy />
                 </div>
                 <div
                   onClick={() => {
                     // TODO API
                     alert(`Delete rule with id: ${r.id}`);
                   }}
+                  className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
                   <Bin />
                 </div>
