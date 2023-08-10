@@ -1,5 +1,5 @@
 export function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-4xl font-bold my-4 mx-10">{children}</h2>;
+  return <h2 className="text-3xl font-bold my-4 mx-10">{children}</h2>;
 }
 
 export function SectionDescription({
@@ -7,18 +7,18 @@ export function SectionDescription({
 }: {
   children: React.ReactNode;
 }) {
-  return <p className="text-3xl my-4 mx-10">{children}</p>;
+  return <p className="text-2xl my-4 mx-10">{children}</p>;
 }
 
 export function TableTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-3xl font-bold my-4 mx-auto w-10/12">{children}</h3>
+    <h3 className="text-2xl font-bold my-4 mx-auto w-10/12">{children}</h3>
   );
 }
 
 export function Table({ children }: { children: React.ReactNode }) {
   return (
-    <table className="text-2xl my-4 mx-auto w-10/12 table-fixed">
+    <table className="text-xl my-4 mx-auto w-10/12 table-fixed">
       {children}
     </table>
   );
