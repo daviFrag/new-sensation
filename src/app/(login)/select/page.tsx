@@ -33,7 +33,7 @@ export default function Start() {
         onClick={() => {
           // TODO API
           localStorage.removeItem("username");
-          router.push("/");
+          router.push("./");
         }}
       >
         <Logout color="black"/>

@@ -52,7 +52,7 @@ function SideMenu({ text, hideMenu }: { text: string; hideMenu: () => void }) {
           onClick={() => {
             // TODO API
             localStorage.removeItem("username");
-            router.push("/");
+            router.push("./");
           }}
         >
           <div className="h-12 w-12">
