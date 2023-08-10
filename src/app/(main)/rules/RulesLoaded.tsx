@@ -92,6 +92,7 @@ export default function RulesLoaded(props: {
                     )}`
                   );
                 }}
+                extraDoOnReset={() => setRuleModify("")}
               />
             )}
           </div>

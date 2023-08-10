@@ -13,9 +13,15 @@ export default function CreateRuleMenu(props: {
   blocks: Block[];
   confirm_button_text: string;
   doSomethingWithRule: (rule: Rule) => void;
+  extraDoOnReset?: () => void;
 }) {
-  const { vocabularies, blocks, confirm_button_text, doSomethingWithRule } =
-    props;
+  const {
+    vocabularies,
+    blocks,
+    confirm_button_text,
+    doSomethingWithRule,
+    extraDoOnReset,
+  } = props;
 
   const [whileArray, setWhileArray] = useState<Block[]>([]);
   const [whenArray, setWhenArray] = useState<Block[]>([]);
@@ -174,6 +180,7 @@ export default function CreateRuleMenu(props: {
             setWhenArray([]);
             setWhileArray([]);
             setDoArray([]);
+            if (extraDoOnReset) extraDoOnReset();
           }}
           className="text-white p-5 rounded text-3xl my-5 uppercase"
           style={{ backgroundColor: "#D73E3E" }}
