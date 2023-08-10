@@ -153,28 +153,28 @@ export default function CreateRuleMenu(props: {
   }
 
   return (
-    <div className="w-11/12 mx-auto">
+    <div className="w-11/12 mx-auto flex flex-col">
       <div className="flex gap-10">
         <div className="w-4/12">
-          <h2 className="text-4xl py-5">Evento</h2>
-          <div className="border border-black h-96 text-3xl p-3 overflow-y-scroll">
+          <h2 className="text-2xl py-5">Evento</h2>
+          <div className="border border-black rounded-xl h-full text-xl p-3">
             QUANDO {whenArrayToText()}
           </div>
         </div>
         <div className="w-4/12">
-          <h2 className="text-4xl py-5">Stato</h2>
-          <div className="border border-black h-96 text-3xl p-3 overflow-y-scroll">
+          <h2 className="text-2xl py-5">Stato</h2>
+          <div className="border border-black rounded-xl h-full text-xl p-3">
             MENTRE {whileArrayToText()}
           </div>
         </div>
         <div className="w-4/12">
-          <h2 className="text-4xl py-5">Azione</h2>
-          <div className="border border-black h-96 text-3xl p-3 overflow-y-scroll">
+          <h2 className="text-2xl py-5">Azione</h2>
+          <div className="border border-black rounded-xl h-full text-xl p-3">
             ALLORA {doArrayToText()}
           </div>
         </div>
       </div>
-      <div className="w-11/12 ml-auto flex justify-end gap-10">
+      <div className="w-11/12 ml-auto flex justify-end gap-10 mt-20">
         <button
           onClick={() => {
             setWhenArray([]);
@@ -182,7 +182,7 @@ export default function CreateRuleMenu(props: {
             setDoArray([]);
             if (extraDoOnReset) extraDoOnReset();
           }}
-          className="text-white p-5 rounded text-3xl my-5 uppercase"
+          className="text-white p-5 rounded text-xl my-5 uppercase"
           style={{ backgroundColor: "#D73E3E" }}
         >
           Annulla
@@ -205,7 +205,7 @@ export default function CreateRuleMenu(props: {
               alert(e);
             }
           }}
-          className="text-white bg-sky-500 p-5 rounded text-3xl my-5 uppercase"
+          className="text-white bg-sky-500 p-5 rounded text-2xl my-5 uppercase"
           style={{ backgroundColor: "#146AB9" }}
         >
           {confirm_button_text}

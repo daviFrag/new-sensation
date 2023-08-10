@@ -11,7 +11,7 @@ export default function CreateLoaded(props: {
 
   return (
     <main>
-      <h1 className="w-11/12 mx-auto text-5xl font-semibold pt-12 pb-5">
+      <h1 className="w-11/12 mx-auto text-3xl font-semibold pt-12 pb-5">
         Crea una nuova regola
       </h1>
       <VocabularyFilter

@@ -24,13 +24,13 @@ function VocabularyFilterHardCoded(props: {
     !vocabularies.includes(necessary_vocabulary_2)
   )
     return (
-      <div className="w-11/12 mx-auto text-4xl py-5">
+      <div className="w-11/12 mx-auto text-2xl py-5">
         NOT THE NECESSARY VOCABULARIES FOR SMARTER
       </div>
     );
 
   return (
-    <div className="w-11/12 mx-auto text-4xl py-5 flex gap-10">
+    <div className="w-11/12 mx-auto text-2xl py-5 flex gap-10">
       <label className="flex gap-5">
         <input
           type="radio"
@@ -65,7 +65,7 @@ export default function VocabularyFilter(props: {
   const { vocabularies, onChange } = props;
 
   /* return (
-    <div className="w-11/12 mx-auto text-4xl py-5">
+    <div className="w-11/12 mx-auto text-2xl py-5">
       {vocabularies.map((v) => (
         <label key={v} className="flex gap-5">
           <input type="checkbox" value={v} className="scale-150 -z-10" />

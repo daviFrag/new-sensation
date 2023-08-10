@@ -27,7 +27,7 @@ export default function RulesLoaded(props: {
 
   return (
     <main>
-      <h1 className="w-11/12 mx-auto text-5xl font-semibold pt-12 pb-5">
+      <h1 className="w-11/12 mx-auto text-3xl font-semibold pt-10 pb-4">
         Regole
       </h1>
       <VocabularyFilter
