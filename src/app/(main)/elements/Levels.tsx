@@ -265,14 +265,14 @@ export default function Levels({
       <TableTitle>Livelli esercizio</TableTitle>
       <Table>
         <colgroup>
+          <col span={1} className="w-2/12" />
           <col span={1} className="w-3/12" />
-          <col span={1} className="w-3/12" />
-          <col span={1} className="w-5/12" />
+          <col span={1} className="w-6/12" />
           <col span={1} className="w-1/12" />
         </colgroup>
         <thead>
           <tr>
-            <ThCell>N livello</ThCell>
+            <ThCell>N° livello</ThCell>
             <ThCell>Gioco</ThCell>
             <ThCell>Nome</ThCell>
             <th></th>
@@ -311,7 +311,7 @@ export default function Levels({
         </colgroup>
         <thead>
           <tr>
-            <ThCell>N livello</ThCell>
+            <ThCell>N° livello</ThCell>
             <ThCell>Nome</ThCell>
             <th></th>
           </tr>
