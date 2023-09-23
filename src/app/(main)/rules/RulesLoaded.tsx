@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Block, Rule, Vocabulary } from "@/utils/BlockRuleTypes";
 import { convertRuleToString } from "@/utils/convertRuleToString";
 import Pen from "@/svg/Pen";
@@ -6,6 +6,7 @@ import Bin from "@/svg/Bin";
 import CreateRuleMenu from "../create/CreateRuleMenu";
 import VocabularyFilter from "./VocabularyFilter";
 import Copy from "@/svg/Copy";
+import CreateGameModal from "./CreateGameModal";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -13,9 +14,13 @@ export default function RulesLoaded(props: {
   blocks: Block[];
 }) {
   const { rules, vocabularies, blocks } = props;
+
+  const modal = useRef<HTMLDialogElement>(null);
+
   const [rule_modify, setRuleModify] = useState("");
   const [rule_keyword_searched, setRuleKeywordSearched] = useState("");
   const [selected_rules_ids, setSelectedRulesIds] = useState<string[]>([]);
+
   function newRuleInSelectedRules(rule_id: string) {
     setSelectedRulesIds((prev_rules_ids) => {
       if (prev_rules_ids.includes(rule_id)) {
@@ -57,6 +62,9 @@ export default function RulesLoaded(props: {
             backgroundColor: !selected_rules_ids.length ? "#7E7B7B" : "#146AB9",
           }}
           disabled={!selected_rules_ids.length}
+          onClick={() => {
+            if (modal.current) modal.current?.showModal();
+          }}
         >
           Raggruppa
         </button>
@@ -122,6 +130,7 @@ export default function RulesLoaded(props: {
           </div>
         ))}
       </div>
+      <CreateGameModal modal={modal} />
     </main>
   );
 }
