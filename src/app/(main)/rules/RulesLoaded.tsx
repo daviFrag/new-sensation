@@ -15,6 +15,16 @@ export default function RulesLoaded(props: {
   const { rules, vocabularies, blocks } = props;
   const [rule_modify, setRuleModify] = useState("");
   const [rule_keyword_searched, setRuleKeywordSearched] = useState("");
+  const [selected_rules_ids, setSelectedRulesIds] = useState<string[]>([]);
+  function newRuleInSelectedRules(rule_id: string) {
+    setSelectedRulesIds((prev_rules_ids) => {
+      if (prev_rules_ids.includes(rule_id)) {
+        return prev_rules_ids.filter((r) => r !== rule_id);
+      } else {
+        return [...prev_rules_ids, rule_id].sort();
+      }
+    });
+  }
 
   function filterSearchedRules(rules: Rule[]): Rule[] {
     if (!rule_keyword_searched) return rules;
@@ -34,13 +44,22 @@ export default function RulesLoaded(props: {
         vocabularies={vocabularies}
         onChange={(choice) => console.log(choice)}
       />
-      <div className="w-11/12 mx-auto my-5">
+      <div className="w-11/12 mx-auto my-5 flex justify-between">
         <input
           placeholder="Cerca..."
           className="w-1/4 rounded bg-gray-200 p-2"
           value={rule_keyword_searched}
           onChange={(e) => setRuleKeywordSearched(e.target.value)}
         />
+        <button
+          className="uppercase text-white py-3 px-7 text-2xl rounded-2xl"
+          style={{
+            backgroundColor: !selected_rules_ids.length ? "#7E7B7B" : "#146AB9",
+          }}
+          disabled={!selected_rules_ids.length}
+        >
+          Raggruppa
+        </button>
       </div>
       <div className="w-11/12 mx-auto">
         {filterSearchedRules(rules).map((r) => (
@@ -49,6 +68,11 @@ export default function RulesLoaded(props: {
             className="text-2xl border border-black p-3 flex flex-col mb-2 rounded"
           >
             <div className=" flex justify-between">
+              <input
+                type="checkbox"
+                className="scale-150"
+                onClick={() => newRuleInSelectedRules(r.id!)}
+              />
               <p className="w-10/12">{convertRuleToString(r)}</p>
               <div className="w-1/12 flex">
                 <div
