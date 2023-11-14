@@ -1,8 +1,22 @@
-export type UserInterface = {
-  username: string;
-};
+import { UserInterface, UserWithJwtInterface } from "./User";
+import {
+  BlockJson,
+  BlockMetadata,
+  ParamMetadata,
+  RuleJson,
+  TaskInfo,
+  TaskJson,
+  VocabularyMetadata,
+} from "./ApiSchemas";
 
-export type UserWithJwtInterface = {
-  user: UserInterface;
-  access_token: string;
+export type {
+  UserInterface,
+  UserWithJwtInterface,
+  BlockJson,
+  BlockMetadata,
+  ParamMetadata,
+  RuleJson,
+  TaskInfo,
+  TaskJson,
+  VocabularyMetadata,
 };
