@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
@@ -65,6 +65,7 @@ export default function useApiQuery<T>(
 
   useEffect(() => {
     console.log(`fetched key ${query_key}`);
+    console.log(data)
 
     // * If api failed, we inform the user
     // * we need to check fetch_status, otherwise the error may be caused by an old cached error

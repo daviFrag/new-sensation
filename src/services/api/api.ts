@@ -1,13 +1,13 @@
-import { getLocalStorageUserWithJwt } from '../auth/localStorageService';
-import backend_url from './backend_url';
+import { getLocalStorageUserWithJwt } from "../auth/localStorageService";
+import backend_url from "./backend_url";
 
 export interface ApiResult<T> {
-  status: 'success';
+  status: "success";
   data: T;
 }
 
 export interface ApiError {
-  status: 'fail' | 'error';
+  status: "error";
   message: string;
   code: number;
 }
@@ -29,18 +29,18 @@ export class ApiException extends Error {
  */
 async function apiCall<T>(
   uri: string,
-  method = 'get',
+  method = "get",
   data?: any,
   requires_auth = true
-) {
+): Promise<ApiResponse<T>> {
   try {
     const url = `${backend_url}${uri}`;
 
     const token = requires_auth
       ? getLocalStorageUserWithJwt().access_token
-      : '';
+      : "";
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
 
     if (token) {
@@ -54,17 +54,21 @@ async function apiCall<T>(
       body,
     });
 
-    const response_json: ApiResponse<T> = await response.json();
-    if (response_json.status !== 'success') {
-      response_json.code = response.status;
+    const response_json: T = await response.json();
+    if (response.status !== 200) {
+      return {
+        status: "error",
+        message: "Risposta negativa dal server",
+        code: response.status,
+      };
     }
 
-    return response_json;
+    return { status: "success", data: response_json };
   } catch (e: any) {
     const message: string = e.message;
     console.error(message);
     const error_json: ApiError = {
-      status: 'error',
+      status: "error",
       message,
       code: 0,
     };
@@ -80,7 +84,7 @@ async function apiCall<T>(
  * @returns A promise that resolves to a generic type T.
  */
 export function apiPost<T>(uri: string, data: object, requires_auth = true) {
-  return apiCall<T>(uri, 'post', data, requires_auth);
+  return apiCall<T>(uri, "post", data, requires_auth);
 }
 
 /**
@@ -93,7 +97,7 @@ export function apiPost<T>(uri: string, data: object, requires_auth = true) {
  * @returns A promise that resolves to a generic type T.
  */
 export function apiGet<T>(uri: string, requires_auth = true) {
-  return apiCall<T>(uri, 'get', null, requires_auth);
+  return apiCall<T>(uri, "get", null, requires_auth);
 }
 
 /**
@@ -106,7 +110,7 @@ export function apiGet<T>(uri: string, requires_auth = true) {
  * call.
  */
 export function apiDelete<T>(uri: string, requires_auth = true) {
-  return apiCall<T>(uri, 'delete', null, requires_auth);
+  return apiCall<T>(uri, "delete", null, requires_auth);
 }
 
 /**
@@ -119,76 +123,5 @@ export function apiDelete<T>(uri: string, requires_auth = true) {
  * @returns A promise that resolves to a generic type T.
  */
 export function apiPut<T>(uri: string, data: object) {
-  return apiCall<T>(uri, 'put', data);
-}
-
-/**
- * It makes a POST request to the given uri with the given data, and returns a promise that resolves to
- * the response data
- * @param {string} uri - The uri to call.
- * @param {object} data - The data to send to the server.
- * @returns A promise that resolves to a generic type T.
- */
-export async function apiPostPDF(
-  uri: string,
-  data: object,
-  filename: string,
-  download: boolean
-): Promise<ApiResponse<string>> {
-  const method = 'post';
-  try {
-    const url = `${backend_url}${uri}`;
-
-    const token = getLocalStorageUserWithJwt().access_token;
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    if (token !== null) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const body = data ? JSON.stringify(data) : undefined;
-    const response = await fetch(url, {
-      method,
-      headers,
-      body,
-    });
-    if (response.status !== 200) {
-      const response_json: ApiResponse<any> = await response.json();
-      if (response_json.status !== 'success') {
-        response_json.code = response.status;
-      }
-
-      return response_json;
-    }
-
-    const blob = new Blob([await response.blob()], { type: 'application/pdf' });
-
-    const link = window.URL.createObjectURL(blob);
-
-    if (download) {
-      const hyperlinik = document.createElement('a');
-      hyperlinik.href = link;
-      hyperlinik.download = `Judo in Cloud - ${filename} [${new Date().getHours()}-${new Date().getMinutes()}].pdf`;
-      document.body.appendChild(hyperlinik);
-      hyperlinik.click();
-      document.body.removeChild(hyperlinik);
-    }
-
-    const success: ApiResult<string> = {
-      status: 'success',
-      data: link,
-    };
-    return success;
-  } catch (e: any) {
-    const message: string = e.message;
-    console.error(message);
-    const error_json: ApiError = {
-      status: 'error',
-      message,
-      code: 0,
-    };
-    return error_json;
-  }
+  return apiCall<T>(uri, "put", data);
 }
