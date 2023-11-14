@@ -1,0 +1,65 @@
+### create vocabulary
+
+POST http://localhoost:8080/api/vocabularies HTTP/1.1
+content-type: application/json
+
+{
+	"name": "SmarterVocabulary",
+	"vocabularyUrl": "jar:file:vocabularies/smarter-vocabulary-1.0-SNAPSHOT-shaded.jar!/",
+	"rootPackageName": "com.vocabularies.smarter"
+}
+
+### get vocabularies
+
+GET http://localhoost:8080/api/vocabularies
+
+### get single vocabulary
+
+GET http://localhoost:8080/api/vocabularies/6553e57e01f5cf2da4f8938b
+
+### create task
+
+POST http://localhoost:8080/api/tasks HTTP/1.1
+content-type: application/json
+
+{
+	"name": "Task SmarterVocabulary v2",
+	"vocabularies": [
+		"655336102e6bff18a037071f"
+	]
+}
+
+### get tasks
+
+GET http://localhoost:8080/api/tasks
+
+### create rule of task
+
+POST http://localhoost:8080/api/tasks/6553e62401f5cf2da4f8938c/rules HTTP/1.1
+content-type: application/json
+
+{
+	"name": "rule 2",
+	"condition": {
+		"name": "OnLeftBlock",
+		"vocabulary": "655336102e6bff18a037071f",
+		"params": [
+			{
+				"name": "IsNumberBlock",
+				"vocabulary": "655336102e6bff18a037071f",
+				"params": []
+			}
+		]
+	},
+	"actions": [
+		{
+			"name": "HelloWorldBlock",
+			"vocabulary": "655336102e6bff18a037071f",
+			"params": []
+		}
+	]
+}
+
+### get rules of task
+
+GET http://localhoost:8080/api/tasks/6553e62401f5cf2da4f8938c/rules
