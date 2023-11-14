@@ -1,7 +1,8 @@
 "use client";
 
+import { setLocalStorageUserWithJwt } from "@/services/auth/localStorageService";
 import { useRouter } from "next/navigation";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useContext } from "react";
 
 export default function Home() {
   const router = useRouter();
@@ -15,8 +16,8 @@ export default function Home() {
     const username = target.username.value;
     const password = target.password.value;
     // TODO API
-    console.log(username, password);
-    localStorage.setItem("username", username);
+    const access_token = "MYJWT";
+    setLocalStorageUserWithJwt({ user: { username }, access_token });
     router.push("./select");
   };
 
@@ -28,7 +29,11 @@ export default function Home() {
       <label htmlFor="username" className="text-left">
         Username
       </label>
-      <input id="username" type="text" className="pl-3 border border-black text-black" />
+      <input
+        id="username"
+        type="text"
+        className="pl-3 border border-black text-black"
+      />
       <label htmlFor="password" className="text-left">
         Password
       </label>

@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteLocalStorageUserWithJwt } from "@/services/auth/localStorageService";
 import Controller from "@/svg/Controller";
 import Docs from "@/svg/Docs";
 import Hamburger from "@/svg/Hamburger";
@@ -51,7 +52,7 @@ function SideMenu({ text, hideMenu }: { text: string; hideMenu: () => void }) {
           className="flex items-center gap-2 w-full px-10 py-3 hover:bg-orange-300 ease-in-out duration-75 mt-auto cursor-pointer"
           onClick={() => {
             // TODO API
-            localStorage.removeItem("username");
+            deleteLocalStorageUserWithJwt();
             router.push("./");
           }}
         >
