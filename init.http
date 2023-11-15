@@ -15,7 +15,7 @@ GET http://localhoost:8080/api/vocabularies
 
 ### get single vocabulary
 
-GET http://localhoost:8080/api/vocabularies/6553e57e01f5cf2da4f8938b
+GET http://localhoost:8080/api/vocabularies/6554ffe010da383f7fcdbf2d
 
 ### create task
 
@@ -25,7 +25,7 @@ content-type: application/json
 {
 	"name": "Task SmarterVocabulary v2",
 	"vocabularies": [
-		"655336102e6bff18a037071f"
+		"6554ffe010da383f7fcdbf2d"
 	]
 }
 
@@ -35,18 +35,18 @@ GET http://localhoost:8080/api/tasks
 
 ### create rule of task
 
-POST http://localhoost:8080/api/tasks/6553e62401f5cf2da4f8938c/rules HTTP/1.1
+POST http://localhoost:8080/api/tasks/6554ffee10da383f7fcdbf2e/rules HTTP/1.1
 content-type: application/json
 
 {
 	"name": "rule 2",
 	"condition": {
 		"name": "OnLeftBlock",
-		"vocabulary": "655336102e6bff18a037071f",
+		"vocabulary": "6554ffe010da383f7fcdbf2d",
 		"params": [
 			{
 				"name": "IsNumberBlock",
-				"vocabulary": "655336102e6bff18a037071f",
+				"vocabulary": "6554ffe010da383f7fcdbf2d",
 				"params": []
 			}
 		]
@@ -54,7 +54,7 @@ content-type: application/json
 	"actions": [
 		{
 			"name": "HelloWorldBlock",
-			"vocabulary": "655336102e6bff18a037071f",
+			"vocabulary": "6554ffe010da383f7fcdbf2d",
 			"params": []
 		}
 	]
@@ -62,4 +62,4 @@ content-type: application/json
 
 ### get rules of task
 
-GET http://localhoost:8080/api/tasks/6553e62401f5cf2da4f8938c/rules
+GET http://localhoost:8080/api/tasks/6554ffee10da383f7fcdbf2e/rules

@@ -12,13 +12,13 @@ export type VocabularyMetadata = {
   name: string;
   vocabularyUrl: string;
   rootPackageName: string;
-  blockMetadata: BlockMetadata[];
+  blockMetadata: { [block_name: string]: BlockMetadata };
 };
 
 export type BlockJson = {
   name: string;
   vocabulary: VocabularyMetadata;
-  params: string[];
+  params: BlockJson[];
 };
 
 export type RuleJson = {
