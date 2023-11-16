@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Block, Rule, Vocabulary } from "@/utils/BlockRuleTypes";
+import { Block, Rule, Vocabulary } from "@/types";
 import { convertRuleToString } from "@/utils/convertRuleToString";
 import Pen from "@/svg/Pen";
 import Bin from "@/svg/Bin";

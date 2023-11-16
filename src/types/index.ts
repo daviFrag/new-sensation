@@ -7,7 +7,14 @@ import {
   TaskInfo,
   TaskJson,
   VocabularyMetadata,
-} from "./ApiSchemas";
+} from "./ApiTypes";
+import {
+  Block,
+  BlockScope,
+  Rule,
+  RuleUnnested,
+  Vocabulary,
+} from "./BlockRuleTypes";
 
 export type {
   UserInterface,
@@ -19,4 +26,9 @@ export type {
   TaskInfo,
   TaskJson,
   VocabularyMetadata,
+  Block,
+  BlockScope,
+  Rule,
+  RuleUnnested,
+  Vocabulary,
 };

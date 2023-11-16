@@ -1,5 +1,5 @@
 import React from "react";
-import { Block, Vocabulary } from "@/utils/BlockRuleTypes";
+import { Block, Vocabulary } from "@/types";
 import CreateRuleMenu from "./CreateRuleMenu";
 import VocabularyFilter from "../rules/VocabularyFilter";
 

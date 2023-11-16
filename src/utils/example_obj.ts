@@ -1,4 +1,4 @@
-import { RuleJson, TaskInfo, TaskJson, VocabularyMetadata } from "@/schemas";
+import { RuleJson, TaskInfo, TaskJson, VocabularyMetadata } from "@/types";
 
 export const vocabularies: VocabularyMetadata[] = [
   {

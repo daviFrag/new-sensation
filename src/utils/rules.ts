@@ -1,5 +1,5 @@
 import { makeRuleNested } from "./makeRuleNested";
-import { RuleUnnested } from "./BlockRuleTypes";
+import { RuleUnnested } from "@/types";
 
 export const vocabularies_obj = {
   smarter: "SMARTER",

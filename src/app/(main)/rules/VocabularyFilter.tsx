@@ -1,4 +1,4 @@
-import { Vocabulary } from "@/utils/BlockRuleTypes";
+import { Vocabulary } from "@/types";
 import React, { useEffect } from "react";
 
 type VocabularyChoice = "SMARTER" | "SMARTER e SmartGame";

@@ -4,7 +4,7 @@ import {
   Rule,
   RuleUnnested,
   Vocabulary,
-} from "@/utils/BlockRuleTypes";
+} from "@/types";
 import { makeRuleNested } from "@/utils/makeRuleNested";
 import React, { useState } from "react";
 

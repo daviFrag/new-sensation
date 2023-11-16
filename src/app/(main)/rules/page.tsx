@@ -5,7 +5,7 @@ import Header from "../Header";
 import { links } from "@/utils/links";
 import RulesLoaded from "./RulesLoaded";
 import { rules as myrules, vocabularies, blocks } from "@/utils/rules";
-import { Rule } from "@/utils/BlockRuleTypes";
+import { Rule } from "@/types";
 import NoRules from "./NoRules";
 // import useApiQuery from "@/hooks/useApiQuery";
 // import { apiGet } from "@/services/api";

@@ -1,4 +1,4 @@
-import { Block, Rule, RuleUnnested } from "./BlockRuleTypes";
+import { Block, Rule, RuleUnnested } from "@/types";
 
 /** CAN THROW ERROR */
 export function makeRuleNested(sequetial_object: RuleUnnested): Rule {

@@ -1,4 +1,4 @@
-import { UserWithJwtInterface } from '@/schemas';
+import { UserWithJwtInterface } from '@/types';
 
 const token_key = 'JIC.JWT';
 const user_key = 'JIC.user';
