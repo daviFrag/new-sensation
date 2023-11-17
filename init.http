@@ -17,25 +17,9 @@ GET http://localhoost:8080/api/vocabularies
 
 GET http://localhoost:8080/api/vocabularies/6554ffe010da383f7fcdbf2d
 
-### create task
+### create rule
 
-POST http://localhoost:8080/api/tasks HTTP/1.1
-content-type: application/json
-
-{
-	"name": "Task SmarterVocabulary v2",
-	"vocabularies": [
-		"6554ffe010da383f7fcdbf2d"
-	]
-}
-
-### get tasks
-
-GET http://localhoost:8080/api/tasks
-
-### create rule of task
-
-POST http://localhoost:8080/api/tasks/6554ffee10da383f7fcdbf2e/rules HTTP/1.1
+POST http://localhoost:8080/api/rules HTTP/1.1
 content-type: application/json
 
 {
@@ -60,6 +44,33 @@ content-type: application/json
 	]
 }
 
-### get rules of task
+### get rules
 
-GET http://localhoost:8080/api/tasks/6554ffee10da383f7fcdbf2e/rules
+GET http://localhoost:8080/api/rules
+
+### create task
+
+POST http://localhoost:8080/api/tasks HTTP/1.1
+content-type: application/json
+
+{
+	"name": "Task SmarterVocabulary v2",
+	"vocabularies": [
+		"6554ffe010da383f7fcdbf2d"
+	]
+}
+
+### get tasks
+
+GET http://localhoost:8080/api/tasks
+
+### create rule of task
+
+PUT http://localhoost:8080/api/tasks/6557fa98a688b03aaf95f730 HTTP/1.1
+content-type: application/json
+
+{
+	"id": "6557fa98a688b03aaf95f730",
+	"name": "Task SmarterVocabulary v2",
+	"rules": ["6557fb59a688b03aaf95f731"]
+}

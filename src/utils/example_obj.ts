@@ -2,7 +2,7 @@ import { RuleJson, TaskInfo, TaskJson, VocabularyMetadata } from "@/types";
 
 export const vocabularies: VocabularyMetadata[] = [
   {
-    id: "6554ffe010da383f7fcdbf2d",
+    id: "6557fa61a688b03aaf95f72e",
     name: "SmarterVocabulary",
     vocabularyUrl:
       "jar:file:vocabularies/smarter-vocabulary-1.0-SNAPSHOT-shaded.jar!/",
@@ -11,6 +11,17 @@ export const vocabularies: VocabularyMetadata[] = [
       EndExecutionBlock: {
         label: "End execution",
         params: [],
+      },
+      AndBlock: {
+        label: "E",
+        params: [
+          {
+            classNameOpts: ["Block"],
+          },
+          {
+            classNameOpts: ["Block"],
+          },
+        ],
       },
       HelloWorldBlock: {
         label: "hello world",
@@ -24,6 +35,10 @@ export const vocabularies: VocabularyMetadata[] = [
         label: "",
         params: [],
       },
+      IsSymbolBlock: {
+        label: "is a symbol",
+        params: [],
+      },
       OnLeftBlock: {
         label: "on left",
         params: [
@@ -31,10 +46,6 @@ export const vocabularies: VocabularyMetadata[] = [
             classNameOpts: ["IsNumberBlock", "IsSymbolBlock"],
           },
         ],
-      },
-      IsSymbolBlock: {
-        label: "is a symbol",
-        params: [],
       },
       RemovedCardBlock: {
         label: "removed card",
