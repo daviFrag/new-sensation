@@ -1,3 +1,14 @@
+export type CreateVocabularyMetadata = {
+  name: string;
+  vocabularyUrl: string;
+  rootPackageName: string;
+};
+
+export type VocabularyMetadata = CreateVocabularyMetadata & {
+  id: string;
+  blockMetadata: { [block_name: string]: BlockMetadata };
+};
+
 export type ParamMetadata = {
   classNameOpts: string[];
 };
@@ -7,25 +18,25 @@ export type BlockMetadata = {
   params: ParamMetadata[];
 };
 
-export type VocabularyMetadata = {
-  id: string;
-  name: string;
-  vocabularyUrl: string;
-  rootPackageName: string;
-  blockMetadata: { [block_name: string]: BlockMetadata };
-};
-
 export type BlockJson = {
   name: string;
-  vocabulary: VocabularyMetadata;
+  vocabulary: VocabularyMetadata | string;
   params: BlockJson[];
 };
 
-export type RuleJson = {
-  id: string;
+export type CreateRuleJson = {
   name: string;
   condition: BlockJson;
   actions: BlockJson[];
+};
+
+export type RuleJson = CreateRuleJson & {
+  id: string;
+};
+
+export type CreateTaskJson = {
+  name: string;
+  vocabularies: string[];
 };
 
 export type TaskJson = {

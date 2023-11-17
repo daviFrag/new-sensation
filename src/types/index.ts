@@ -7,6 +7,9 @@ import {
   TaskInfo,
   TaskJson,
   VocabularyMetadata,
+  CreateRuleJson,
+  CreateTaskJson,
+  CreateVocabularyMetadata,
 } from "./ApiTypes";
 import {
   Block,
@@ -14,7 +17,7 @@ import {
   Rule,
   RuleUnnested,
   Vocabulary,
-} from "./BlockRuleTypes";
+} from "./ClientTypes";
 
 export type {
   UserInterface,
@@ -26,6 +29,9 @@ export type {
   TaskInfo,
   TaskJson,
   VocabularyMetadata,
+  CreateRuleJson,
+  CreateTaskJson,
+  CreateVocabularyMetadata,
   Block,
   BlockScope,
   Rule,
