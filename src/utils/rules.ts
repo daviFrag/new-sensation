@@ -51,13 +51,13 @@ export const blocks_obj = {
   },
   LED_COLOR: {
     name: "LED_COLOR",
-    scope: "OUTPUT",
+    scope: "ACTION",
     text: "accendi LED di colore",
     vocabulary: vocabularies_obj.smarter,
   },
   POINTS: {
     name: "POINTS",
-    scope: "OUTPUT",
+    scope: "ACTION",
     text: "dai punti",
     vocabulary: vocabularies_obj.smartgame,
   },

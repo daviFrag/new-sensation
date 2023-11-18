@@ -15,7 +15,7 @@ export function makeRuleNested(sequetial_object: RuleUnnested): Rule {
 
   const new_while_arr = makeArrayNested(while_arr);
   const new_when_arr = makeArrayNested(when_arr);
-  const new_do_arr = do_arr.filter((b) => b.scope === "OUTPUT");
+  const new_do_arr = do_arr.filter((b) => b.scope === "ACTION");
 
   if (!new_while_arr || !new_when_arr) throw new Error("empty when or while");
 
@@ -43,8 +43,8 @@ function nestDescriptionsInsideStates(arr: Block[]): Block[] {
       case "SELECTOR":
         throw new Error("SELECTOR inside SELECTOR");
 
-      case "OUTPUT":
-        throw new Error("OUTPUT block in when/while");
+      case "ACTION":
+        throw new Error("ACTION block in when/while");
 
       case "DESCRIPTION":
         // we reached a DESCRIPTION, but it should be inside the params of the STATE that was before

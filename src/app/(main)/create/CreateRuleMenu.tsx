@@ -126,7 +126,7 @@ export default function CreateRuleMenu(props: {
 
   function doArrayToText() {
     let elem: React.ReactNode = getSelectOfBlocks(
-      getBlocksByScope("OUTPUT").filter(
+      getBlocksByScope("ACTION").filter(
         (b) => !doArray.some((bb) => b.name === bb.name)
       ),
       "che cosa deve avvenire?",

@@ -1,6 +1,6 @@
 export type Vocabulary = string;
 
-export type BlockScope = "SELECTOR" | "LOGIC" | "STATE" | "DESCRIPTION" | "OUTPUT";
+export type BlockScope = "SELECTOR" | "LOGIC" | "STATE" | "DESCRIPTION" | "ACTION";
 
 export type Block = {
   name: string;
