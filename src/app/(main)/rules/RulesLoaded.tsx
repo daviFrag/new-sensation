@@ -7,6 +7,7 @@ import CreateRuleMenu from "../create/CreateRuleMenu";
 import VocabularyFilter from "./VocabularyFilter";
 import Copy from "@/svg/Copy";
 import CreateGameModal from "./CreateGameModal";
+import { createRuleApi, deleteRuleApi } from "@/utils/callKnownApi";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -90,19 +91,13 @@ export default function RulesLoaded(props: {
                   <Pen />
                 </div>
                 <div
-                  onClick={() => {
-                    // TODO API
-                    alert(`Copied rule with id: ${r.id}`);
-                  }}
+                  onClick={() => createRuleApi(r, blocks)}
                   className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
                   <Copy />
                 </div>
                 <div
-                  onClick={() => {
-                    // TODO API
-                    alert(`Delete rule with id: ${r.id}`);
-                  }}
+                  onClick={() => deleteRuleApi(r)}
                   className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
                   <Bin />
@@ -114,23 +109,14 @@ export default function RulesLoaded(props: {
                 blocks={blocks}
                 vocabularies={vocabularies}
                 confirm_button_text="Modifica regola"
-                doSomethingWithRule={(rule) => {
-                  // TODO API
-                  alert(
-                    `Modify rule with id ${r.id}: ${JSON.stringify(
-                      rule,
-                      null,
-                      2
-                    )}`
-                  );
-                }}
+                doSomethingWithRule={(rule) => createRuleApi(rule, blocks)}
                 extraDoOnReset={() => setRuleModify("")}
               />
             )}
           </div>
         ))}
       </div>
-      <CreateGameModal modal={modal} />
+      <CreateGameModal modal={modal} rules_ids={selected_rules_ids}/>
     </main>
   );
 }

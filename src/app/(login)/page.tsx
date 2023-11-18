@@ -15,7 +15,7 @@ export default function Home() {
     };
     const username = target.username.value;
     const password = target.password.value;
-    // TODO API
+    // TODO auth
     const access_token = "MYJWT";
     setLocalStorageUserWithJwt({ user: { username }, access_token });
     router.push("./select");

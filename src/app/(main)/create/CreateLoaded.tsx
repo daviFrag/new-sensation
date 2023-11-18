@@ -2,6 +2,7 @@ import React from "react";
 import { Block, Vocabulary } from "@/types";
 import CreateRuleMenu from "./CreateRuleMenu";
 import VocabularyFilter from "../rules/VocabularyFilter";
+import { createRuleApi } from "@/utils/callKnownApi";
 
 export default function CreateLoaded(props: {
   vocabularies: Vocabulary[];
@@ -23,8 +24,7 @@ export default function CreateLoaded(props: {
         vocabularies={vocabularies}
         confirm_button_text="Crea regola"
         doSomethingWithRule={(rule) => {
-          // TODO API
-          alert(JSON.stringify(rule, null, 2));
+          createRuleApi(rule, blocks);
         }}
       />
     </main>

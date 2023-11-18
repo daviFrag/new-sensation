@@ -13,7 +13,7 @@ import {
 export default function Start() {
   const router = useRouter();
 
-  // TODO API
+  // TODO auth
   // const username = getLocalStorageUserWithJwt().user.username;
   // ? use client not working, problems with localstorage and pre rendering
   const [username, setUsername] = useState("");
@@ -35,7 +35,7 @@ export default function Start() {
       <button
         className="absolute bottom-0 right-0 m-10 w-20 aspect-square bg-orange-100 hover:bg-orange-200 hover:scale-110 ease-in-out duration-100 rounded-xl p-2"
         onClick={() => {
-          // TODO API
+          // TODO auth
           deleteLocalStorageUserWithJwt();
           router.push("./");
         }}

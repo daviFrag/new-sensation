@@ -36,7 +36,7 @@ export type RuleJson = CreateRuleJson & {
 
 export type CreateTaskJson = {
   name: string;
-  vocabularies: string[];
+  rules: string[];
 };
 
 export type TaskJson = {

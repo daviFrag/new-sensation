@@ -51,7 +51,7 @@ function SideMenu({ text, hideMenu }: { text: string; hideMenu: () => void }) {
         <div
           className="flex items-center gap-2 w-full px-10 py-3 hover:bg-orange-300 ease-in-out duration-75 mt-auto cursor-pointer"
           onClick={() => {
-            // TODO API
+            // TODO auth
             deleteLocalStorageUserWithJwt();
             router.push("./");
           }}

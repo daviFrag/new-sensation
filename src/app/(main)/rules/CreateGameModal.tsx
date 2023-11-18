@@ -1,6 +1,12 @@
+import { createTaskApi } from "@/utils/callKnownApi";
 import React from "react";
 
-function InputField(props: { id: string; label: string; extra_text?: string, required?: boolean }) {
+function InputField(props: {
+  id: string;
+  label: string;
+  extra_text?: string;
+  required?: boolean;
+}) {
   const { id, label, extra_text, required } = props;
 
   return (
@@ -21,13 +27,13 @@ function InputField(props: { id: string; label: string; extra_text?: string, req
 
 // ! Watch out for compatibility in really old web browser versions: https://caniuse.com/dialog
 export default function CreateGameModal(props: {
+  rules_ids: string[];
   modal: React.RefObject<HTMLDialogElement>;
 }) {
-  const { modal } = props;
+  const { rules_ids, modal } = props;
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO API
     // @ts-ignore
     const name = e.target.name.value as string;
     // @ts-ignore
@@ -36,7 +42,8 @@ export default function CreateGameModal(props: {
     const students = e.target.students.value as string;
     // TODO check if the fields name are correct
     const form_result = { name, classrooms, students };
-    alert(JSON.stringify(form_result, null, 2));
+
+    createTaskApi(name, rules_ids);
 
     modal.current?.close();
   }
@@ -53,7 +60,7 @@ export default function CreateGameModal(props: {
       >
         <h3 className="text-3xl font-bold">Nuovo gioco</h3>
 
-        <InputField id="name" label="Nome del gioco" required/>
+        <InputField id="name" label="Nome del gioco" required />
         <InputField
           id="classrooms"
           label="Classi"

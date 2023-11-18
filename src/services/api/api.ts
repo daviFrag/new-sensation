@@ -43,7 +43,7 @@ async function apiCall<T>(
       "Content-Type": "application/json",
     };
 
-    // todo auth
+    // TODO auth
     /* if (token) {
       headers.Authorization = `Bearer ${token}`;
     } */
