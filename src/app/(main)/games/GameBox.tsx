@@ -22,10 +22,20 @@ function RuleBox(props: {
   return (
     <div className="flex border-t-2 border-solid border-black text-2xl w-full px-7">
       <p className="flex items-center px-7">{getRuleName()}</p>
-      <div className="ml-auto h-16 p-3">
+      <div
+        className="ml-auto h-16 p-3"
+        onClick={() => {
+          /* TODO api */
+        }}
+      >
         <Pen />
       </div>
-      <div className="h-16 p-3">
+      <div
+        className="h-16 p-3"
+        onClick={() => {
+          /* TODO api */
+        }}
+      >
         <Bin />
       </div>
     </div>
