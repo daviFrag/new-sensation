@@ -36,6 +36,7 @@ function RulesPartial(props: {
           rules={rules}
           vocabularies={vocabularies}
           blocks={blocks}
+          vocabularies_metadata={vocabularies_metadata}
         />
       ) : (
         <NoRules />

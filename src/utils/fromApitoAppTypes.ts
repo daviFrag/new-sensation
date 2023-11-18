@@ -7,9 +7,24 @@ import {
   BlockJson,
   RuleJson,
   BlockMetadata,
+  BlockScope,
 } from "@/types";
 
 const andBlockName = "AndBlock";
+
+// todo delete and add scope inside each BlockJson
+const blockScopeMap: {
+  [block_name: string]: BlockScope;
+} = {
+  AndBlock: "LOGIC",
+  HelloWorldBlock: "ACTION",
+  IsNumberBlock: "DESCRIPTION",
+  InsertedCardBlock: "STATE",
+  IsSymbolBlock: "DESCRIPTION",
+  OnLeftBlock: "STATE",
+  RemovedCardBlock: "STATE",
+  HelloWorld2Block: "ACTION",
+} as const;
 
 function getBlockParamsFromBlockJsonParams(
   b: BlockMetadata,
@@ -48,7 +63,7 @@ export function getBlock(
       name,
       text: b.label,
       // TODO add scope
-      scope: "OUTPUT",
+      scope: blockScopeMap[name] ?? "ACTION",
       params: getBlockParamsFromBlockJsonParams(b, v),
       // TODO where should I save the value?
       value: "",
@@ -97,19 +112,24 @@ export function convertBlockJsonToBlock(
       name: b.name,
       vocabulary: (b.vocabulary as VocabularyMetadata).name,
       // TODO add scope
-      scope: "OUTPUT",
+      scope: blockScopeMap[b.name] ?? "ACTION",
       text: v.blockMetadata[b.name].label,
       params: getBlockParamsFromBlockJsonParams(v.blockMetadata[b.name], v),
     },
   };
 }
 
-export function convertBlockToBlockJson(b: Block): BlockJson {
+export function convertBlockToBlockJson(
+  b: Block,
+  vocabularies_metadata: VocabularyMetadata[]
+): BlockJson {
   return {
     name: b.name,
     // todo b.vocabulary.id
-    vocabulary: b.vocabulary,
-    params: b.params ? b.params.map((bb) => convertBlockToBlockJson(bb)) : [],
+    vocabulary: findIdOfVocabulary(b.vocabulary, vocabularies_metadata),
+    params: b.params
+      ? b.params.map((bb) => convertBlockToBlockJson(bb, vocabularies_metadata))
+      : [],
   };
 }
 
@@ -126,14 +146,11 @@ export function convertRuleJsonToRule(
   }
 
   const whenRes = convertBlockJsonToBlock(condition_block.params[0], v);
-  console.log('a')
   if (whenRes.status !== "success") return whenRes;
   const whileRes = convertBlockJsonToBlock(condition_block.params[1], v);
-  console.log('b')
   if (whileRes.status !== "success") return whileRes;
   const doBlocks: Block[] = [];
   for (const b of rule_json.actions) {
-    console.log('c', b.name)
     const res = convertBlockJsonToBlock(b, v);
     if (res.status !== "success") return res;
     doBlocks.push(res.block);
@@ -153,7 +170,8 @@ export function convertRuleJsonToRule(
 
 export function convertRuleToRuleJson(
   rule: Rule,
-  blocks: Block[]
+  blocks: Block[],
+  vocabularies_metadata: VocabularyMetadata[]
 ):
   | { status: "success"; rule: CreateRuleJson }
   | { status: "error"; msg: string } {
@@ -169,14 +187,26 @@ export function convertRuleToRuleJson(
     name: "",
     condition: {
       name: andBlockName,
-      vocabulary: andBlock.vocabulary,
+      vocabulary: findIdOfVocabulary(
+        andBlock.vocabulary,
+        vocabularies_metadata
+      ),
       params: [
-        convertBlockToBlockJson(rule.when),
-        convertBlockToBlockJson(rule.while),
+        convertBlockToBlockJson(rule.when, vocabularies_metadata),
+        convertBlockToBlockJson(rule.while, vocabularies_metadata),
       ],
     },
-    actions: rule.do.map((b) => convertBlockToBlockJson(b)),
+    actions: rule.do.map((b) =>
+      convertBlockToBlockJson(b, vocabularies_metadata)
+    ),
   };
 
   return { status: "success", rule: createRuleJson };
+}
+
+function findIdOfVocabulary(
+  name: string,
+  vocabularies_metadata: VocabularyMetadata[]
+): VocabularyMetadata["id"] {
+  return vocabularies_metadata.find((v) => v.name === name)?.id ?? "";
 }

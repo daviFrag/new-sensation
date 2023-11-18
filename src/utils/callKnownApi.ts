@@ -1,11 +1,26 @@
-import { Block, CreateTaskJson, Rule, RuleJson, TaskJson } from "@/types";
+import {
+  Block,
+  CreateTaskJson,
+  Rule,
+  RuleJson,
+  TaskJson,
+  VocabularyMetadata,
+} from "@/types";
 import { convertRuleToRuleJson } from "./fromApitoAppTypes";
 import Swal from "sweetalert2";
 import wrapApiCallInWaitingSwal from "./wrapApiCallInWaitingSwal";
 import { apiDelete, apiPost } from "@/services/api";
 
-export function createRuleApi(rule: Rule, blocks: Block[]) {
-  const rule_json_res = convertRuleToRuleJson(rule, blocks);
+export function createRuleApi(
+  rule: Rule,
+  blocks: Block[],
+  vocabularies_metadata: VocabularyMetadata[]
+) {
+  const rule_json_res = convertRuleToRuleJson(
+    rule,
+    blocks,
+    vocabularies_metadata
+  );
 
   if (rule_json_res.status !== "success")
     return Swal.fire("Errore", rule_json_res.msg, "error");

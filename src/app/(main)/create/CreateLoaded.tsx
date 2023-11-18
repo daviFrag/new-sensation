@@ -1,5 +1,5 @@
 import React from "react";
-import { Block, Vocabulary } from "@/types";
+import { Block, Vocabulary, VocabularyMetadata } from "@/types";
 import CreateRuleMenu from "./CreateRuleMenu";
 import VocabularyFilter from "../rules/VocabularyFilter";
 import { createRuleApi } from "@/utils/callKnownApi";
@@ -7,8 +7,9 @@ import { createRuleApi } from "@/utils/callKnownApi";
 export default function CreateLoaded(props: {
   vocabularies: Vocabulary[];
   blocks: Block[];
+  vocabularies_metadata: VocabularyMetadata[];
 }) {
-  const { vocabularies, blocks } = props;
+  const { vocabularies, blocks, vocabularies_metadata } = props;
 
   return (
     <main>
@@ -24,7 +25,7 @@ export default function CreateLoaded(props: {
         vocabularies={vocabularies}
         confirm_button_text="Crea regola"
         doSomethingWithRule={(rule) => {
-          createRuleApi(rule, blocks);
+          createRuleApi(rule, blocks, vocabularies_metadata);
         }}
       />
     </main>

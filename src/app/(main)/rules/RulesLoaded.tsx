@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Block, Rule, Vocabulary } from "@/types";
+import { Block, Rule, Vocabulary, VocabularyMetadata } from "@/types";
 import { convertRuleToString } from "@/utils/convertRuleToString";
 import Pen from "@/svg/Pen";
 import Bin from "@/svg/Bin";
@@ -13,8 +13,9 @@ export default function RulesLoaded(props: {
   rules: Rule[];
   vocabularies: Vocabulary[];
   blocks: Block[];
+  vocabularies_metadata: VocabularyMetadata[];
 }) {
-  const { rules, vocabularies, blocks } = props;
+  const { rules, vocabularies, blocks, vocabularies_metadata } = props;
 
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -91,7 +92,9 @@ export default function RulesLoaded(props: {
                   <Pen />
                 </div>
                 <div
-                  onClick={() => createRuleApi(r, blocks)}
+                  onClick={() =>
+                    createRuleApi(r, blocks, vocabularies_metadata)
+                  }
                   className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
                   <Copy />
@@ -109,14 +112,16 @@ export default function RulesLoaded(props: {
                 blocks={blocks}
                 vocabularies={vocabularies}
                 confirm_button_text="Modifica regola"
-                doSomethingWithRule={(rule) => createRuleApi(rule, blocks)}
+                doSomethingWithRule={(rule) =>
+                  createRuleApi(rule, blocks, vocabularies_metadata)
+                }
                 extraDoOnReset={() => setRuleModify("")}
               />
             )}
           </div>
         ))}
       </div>
-      <CreateGameModal modal={modal} rules_ids={selected_rules_ids}/>
+      <CreateGameModal modal={modal} rules_ids={selected_rules_ids} />
     </main>
   );
 }
