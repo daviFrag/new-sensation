@@ -56,7 +56,7 @@ async function apiCall<T>(
     });
 
     const response_json: T = await response.json();
-    if (response.status !== 200) {
+    if (response.status >= 400) {
       return {
         status: "error",
         message: "Risposta negativa dal server",
