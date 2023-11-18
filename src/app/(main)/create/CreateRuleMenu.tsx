@@ -135,8 +135,8 @@ export default function CreateRuleMenu(props: {
     const s = doArray.map((b, i) => (
       <>
         <br />
-        {b.text} ({b?.value})
-        <input
+        {b.text}
+        {/* <input
           onChange={(e) => {
             const value = e.target.value;
             setDoArray((old_arr) => {
@@ -146,10 +146,10 @@ export default function CreateRuleMenu(props: {
             });
           }}
           className="border border-black"
-        />
+        /> */}
       </>
     ));
-    return [s, elem];
+    return [s, <br key={"super-new-line"}/>, elem];
   }
 
   return (
