@@ -43,9 +43,10 @@ async function apiCall<T>(
       "Content-Type": "application/json",
     };
 
-    if (token) {
+    // todo auth
+    /* if (token) {
       headers.Authorization = `Bearer ${token}`;
-    }
+    } */
 
     const body = data ? JSON.stringify(data) : undefined;
     const response = await fetch(url, {

@@ -4,27 +4,29 @@ import React from "react";
 import Header from "../Header";
 import { links } from "@/utils/links";
 import RulesLoaded from "./RulesLoaded";
-import { rules as myrules, vocabularies, blocks } from "@/utils/rules";
-import { Rule } from "@/types";
+import { Block, Rule, Vocabulary, VocabularyMetadata } from "@/types";
 import NoRules from "./NoRules";
+import {
+  useRulesApiQuery,
+  useVocabularyApiQuery,
+} from "@/hooks/useKnownApiQuery";
 // import useApiQuery from "@/hooks/useApiQuery";
 // import { apiGet } from "@/services/api";
 
-export default function Rules() {
-  // const {
-  //   data,
-  //   is_loading,
-  //   is_error,
-  //   invalidateQuery,
-  // } = useApiQuery("", apiGet<any>);
+function RulesPartial(props: {
+  vocabularies_metadata: VocabularyMetadata[];
+  vocabularies: Vocabulary[];
+  blocks: Block[];
+}) {
+  const { vocabularies_metadata, vocabularies, blocks } = props;
+  const {
+    data: rules,
+    is_loading,
+    is_error,
+  } = useRulesApiQuery(vocabularies_metadata);
 
-  // if (is_loading) return <h1>Caricamento...</h1>;
-  // if (is_error) return <h1>Errore nel caricamento dati</h1>;
-
-  // console.log(data);
-
-  // TODO API
-  const rules: Rule[] = myrules;
+  if (is_loading) return <h1>Caricamento</h1>;
+  if (is_error) return <h1>Errore</h1>;
 
   return (
     <>
@@ -39,5 +41,22 @@ export default function Rules() {
         <NoRules />
       )}
     </>
+  );
+}
+
+export default function Rules() {
+  const { data, is_loading, is_error } = useVocabularyApiQuery();
+
+  if (is_loading) return <h1>Caricamento</h1>;
+  if (is_error) return <h1>Errore</h1>;
+
+  const { vocabularies_metadata, vocabularies, blocks } = data;
+
+  return (
+    <RulesPartial
+      vocabularies_metadata={vocabularies_metadata}
+      vocabularies={vocabularies}
+      blocks={blocks}
+    />
   );
 }

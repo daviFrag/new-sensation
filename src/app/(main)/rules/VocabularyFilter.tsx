@@ -64,7 +64,7 @@ export default function VocabularyFilter(props: {
 }) {
   const { vocabularies, onChange } = props;
 
-  /* return (
+  return (
     <div className="w-11/12 mx-auto text-2xl py-5">
       {vocabularies.map((v) => (
         <label key={v} className="flex gap-5">
@@ -73,7 +73,7 @@ export default function VocabularyFilter(props: {
         </label>
       ))}
     </div>
-  ); */
+  );
 
-  return <VocabularyFilterHardCoded {...props} />;
+  // return <VocabularyFilterHardCoded {...props} />;
 }
