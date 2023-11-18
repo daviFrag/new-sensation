@@ -1,16 +1,27 @@
 import Toggle from "@/components/Toggle";
 import Bin from "@/svg/Bin";
 import Pen from "@/svg/Pen";
-import { RuleJson, TaskJson } from "@/types";
+import { Rule, RuleJson, TaskJson, VocabularyMetadata } from "@/types";
+import { convertRuleToString } from "@/utils/convertRuleToString";
+import { convertRuleJsonToRule } from "@/utils/fromApitoAppTypes";
 import React, { useRef, useState } from "react";
 
-function RuleBox(props: { rule: RuleJson }) {
-  const { rule } = props;
+function RuleBox(props: {
+  rule: RuleJson;
+  vocabularies_metadata: VocabularyMetadata[];
+}) {
+  const { rule, vocabularies_metadata } = props;
+  const getRuleName = () => {
+    const res = convertRuleJsonToRule(rule, vocabularies_metadata);
+    if (res.status !== "success")
+      return `Error reading rule with id ${rule.id}`;
+    return convertRuleToString(res.rule);
+  };
 
   // TODO function to convert rule to string
   return (
-    <div className="flex border-y-2 border-solid border-black text-2xl w-full px-7">
-      <p className="flex items-center px-7">{rule.name}</p>
+    <div className="flex border-t-2 border-solid border-black text-2xl w-full px-7">
+      <p className="flex items-center px-7">{getRuleName()}</p>
       <div className="ml-auto h-16 p-3">
         <Pen />
       </div>
@@ -21,8 +32,12 @@ function RuleBox(props: { rule: RuleJson }) {
   );
 }
 
-export default function GameBox(props: { task: TaskJson }) {
-  const { task } = props;
+export default function GameBox(props: {
+  task: TaskJson;
+  rules: Rule[];
+  vocabularies_metadata: VocabularyMetadata[];
+}) {
+  const { task, rules, vocabularies_metadata } = props;
   const [task_running, setTaskRunning] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -46,16 +61,21 @@ export default function GameBox(props: { task: TaskJson }) {
       </div>
 
       {task.rules.map((r) => (
-        <RuleBox key={r.id} rule={r} />
+        <RuleBox
+          key={r.id}
+          rule={r}
+          vocabularies_metadata={vocabularies_metadata}
+        />
       ))}
 
-      <div className="flex justify-end p-7 w-full">
+      <div className="flex justify-end p-7 w-full border-t-2 border-solid border-black">
         <button
           className="uppercase text-white py-3 px-7 text-2xl rounded-2xl"
           style={{
             backgroundColor: "#146AB9",
           }}
           onClick={() => {
+            // TODO api add rule to task
             if (modal.current) modal.current?.showModal();
           }}
         >

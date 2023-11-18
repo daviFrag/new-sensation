@@ -1,14 +1,15 @@
 import React, { useRef, useState } from "react";
 import VocabularyFilter from "../rules/VocabularyFilter";
-import { Rule, TaskJson, Vocabulary } from "@/types";
+import { Rule, TaskJson, Vocabulary, VocabularyMetadata } from "@/types";
 import GameBox from "./GameBox";
 
 export default function GamesLoaded(props: {
   vocabularies: Vocabulary[];
   rules: Rule[];
   tasks: TaskJson[];
+  vocabularies_metadata: VocabularyMetadata[];
 }) {
-  const { vocabularies, rules, tasks } = props;
+  const { vocabularies, rules, tasks, vocabularies_metadata } = props;
 
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -55,7 +56,12 @@ export default function GamesLoaded(props: {
 
       <div className="w-11/12 mx-auto">
         {filterTasks(tasks).map((t) => (
-          <GameBox key={t.id} task={t} />
+          <GameBox
+            key={t.id}
+            task={t}
+            rules={rules}
+            vocabularies_metadata={vocabularies_metadata}
+          />
         ))}
       </div>
     </main>

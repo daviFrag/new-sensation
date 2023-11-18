@@ -34,7 +34,12 @@ function GamesPartial(props: {
   return (
     <>
       <Header text={links.games} />
-      <GamesLoaded vocabularies={vocabularies} rules={rules} tasks={tasks} />
+      <GamesLoaded
+        vocabularies={vocabularies}
+        rules={rules}
+        tasks={tasks}
+        vocabularies_metadata={vocabularies_metadata}
+      />
     </>
   );
 }

@@ -48,7 +48,7 @@ export function createTaskApi(name: string, rules_id: string[]) {
   };
 
   wrapApiCallInWaitingSwal(
-    () => apiPost<TaskJson>("task", new_task),
+    () => apiPost<TaskJson>("tasks", new_task),
     (res) => Swal.fire("Gioco creato", res.data.name, "success")
   );
 }
