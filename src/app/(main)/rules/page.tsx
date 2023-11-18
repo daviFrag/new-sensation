@@ -23,6 +23,7 @@ function RulesPartial(props: {
     data: rules,
     is_loading,
     is_error,
+    invalidateQuery
   } = useRulesApiQuery(vocabularies_metadata);
 
   if (is_loading) return <h1>Caricamento</h1>;
@@ -37,6 +38,7 @@ function RulesPartial(props: {
           vocabularies={vocabularies}
           blocks={blocks}
           vocabularies_metadata={vocabularies_metadata}
+          reloadRules={invalidateQuery}
         />
       ) : (
         <NoRules />

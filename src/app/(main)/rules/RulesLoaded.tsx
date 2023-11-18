@@ -14,8 +14,10 @@ export default function RulesLoaded(props: {
   vocabularies: Vocabulary[];
   blocks: Block[];
   vocabularies_metadata: VocabularyMetadata[];
+  reloadRules: () => void;
 }) {
-  const { rules, vocabularies, blocks, vocabularies_metadata } = props;
+  const { rules, vocabularies, blocks, vocabularies_metadata, reloadRules } =
+    props;
 
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -92,15 +94,19 @@ export default function RulesLoaded(props: {
                   <Pen />
                 </div>
                 <div
-                  onClick={() =>
-                    createRuleApi(r, blocks, vocabularies_metadata)
-                  }
+                  onClick={() => {
+                    createRuleApi(r, blocks, vocabularies_metadata);
+                    reloadRules();
+                  }}
                   className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
                   <Copy />
                 </div>
                 <div
-                  onClick={() => deleteRuleApi(r)}
+                  onClick={() => {
+                    deleteRuleApi(r);
+                    reloadRules();
+                  }}
                   className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
                   <Bin />
@@ -112,9 +118,10 @@ export default function RulesLoaded(props: {
                 blocks={blocks}
                 vocabularies={vocabularies}
                 confirm_button_text="Modifica regola"
-                doSomethingWithRule={(rule) =>
-                  createRuleApi(rule, blocks, vocabularies_metadata)
-                }
+                doSomethingWithRule={(rule) => {
+                  createRuleApi(rule, blocks, vocabularies_metadata);
+                  reloadRules();
+                }}
                 extraDoOnReset={() => setRuleModify("")}
               />
             )}
