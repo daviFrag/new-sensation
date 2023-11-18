@@ -8,8 +8,9 @@ export default function GamesLoaded(props: {
   rules: Rule[];
   tasks: TaskJson[];
   vocabularies_metadata: VocabularyMetadata[];
+  updateData: () => void
 }) {
-  const { vocabularies, rules, tasks, vocabularies_metadata } = props;
+  const { vocabularies, rules, tasks, vocabularies_metadata, updateData } = props;
 
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -47,6 +48,7 @@ export default function GamesLoaded(props: {
             backgroundColor: "#146AB9",
           }}
           onClick={() => {
+            // todo api add game
             if (modal.current) modal.current?.showModal();
           }}
         >
@@ -61,6 +63,7 @@ export default function GamesLoaded(props: {
             task={t}
             rules={rules}
             vocabularies_metadata={vocabularies_metadata}
+            updateData={updateData}
           />
         ))}
       </div>

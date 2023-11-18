@@ -20,12 +20,14 @@ function GamesPartial(props: {
     data: rules,
     is_loading: rules_is_loading,
     is_error: rules_is_error,
+    invalidateQuery: invalidateRulesQuery,
   } = useRulesApiQuery(vocabularies_metadata);
 
   const {
     data: tasks,
     is_loading: tasks_is_loading,
     is_error: tasks_is_error,
+    invalidateQuery: invalidateTasksQuery,
   } = useTasksApiQuery();
 
   if (rules_is_loading || tasks_is_loading) return <h1>Caricamento</h1>;
@@ -39,6 +41,10 @@ function GamesPartial(props: {
         rules={rules}
         tasks={tasks}
         vocabularies_metadata={vocabularies_metadata}
+        updateData={() => {
+          invalidateRulesQuery();
+          invalidateTasksQuery();
+        }}
       />
     </>
   );

@@ -11,6 +11,7 @@ function RuleBox(props: {
   vocabularies_metadata: VocabularyMetadata[];
 }) {
   const { rule, vocabularies_metadata } = props;
+
   const getRuleName = () => {
     const res = convertRuleJsonToRule(rule, vocabularies_metadata);
     if (res.status !== "success")
@@ -18,7 +19,6 @@ function RuleBox(props: {
     return convertRuleToString(res.rule);
   };
 
-  // TODO function to convert rule to string
   return (
     <div className="flex border-t-2 border-solid border-black text-2xl w-full px-7">
       <p className="flex items-center px-7">{getRuleName()}</p>
@@ -36,8 +36,9 @@ export default function GameBox(props: {
   task: TaskJson;
   rules: Rule[];
   vocabularies_metadata: VocabularyMetadata[];
+  updateData: () => void;
 }) {
-  const { task, rules, vocabularies_metadata } = props;
+  const { task, rules, vocabularies_metadata, updateData } = props;
   const [task_running, setTaskRunning] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -51,7 +52,7 @@ export default function GameBox(props: {
       </div>
 
       <div className="text-2xl p-7">
-        {/* TODO API */}
+        {/* TODO API instance task */}
         <Toggle
           checked={task_running}
           label_text="attivato / disattivato"
