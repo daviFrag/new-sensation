@@ -3,7 +3,7 @@ import backend_url from "./backend_url";
 
 export interface ApiResult<T> {
   status: "success";
-  data: T;
+  data?: T;
 }
 
 export interface ApiError {
@@ -55,7 +55,6 @@ async function apiCall<T>(
       body,
     });
 
-    const response_json: T = await response.json();
     if (response.status >= 400) {
       return {
         status: "error",
@@ -64,7 +63,12 @@ async function apiCall<T>(
       };
     }
 
-    return { status: "success", data: response_json };
+    try {
+      const response_json: T = await response.json();
+      return { status: "success", data: response_json };
+    } catch (e) {
+      return { status: "success" };
+    }
   } catch (e: any) {
     const message: string = e.message;
     console.error(message);
