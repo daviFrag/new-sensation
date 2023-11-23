@@ -1,6 +1,7 @@
 import {
   Block,
   BlockScope,
+  BlockType,
   Rule,
   RuleUnnested,
   Vocabulary,
@@ -27,8 +28,14 @@ export default function CreateRuleMenu(props: {
   const [whenArray, setWhenArray] = useState<Block[]>([]);
   const [doArray, setDoArray] = useState<Block[]>([]);
 
-  function getBlocksByScope(scope: BlockScope): Block[] {
-    return blocks.filter((b) => b.scope === scope);
+  function getBlocksByScope(type: BlockType, scope: BlockScope): Block[] {
+    return blocks.filter((b) => b.type === type && b.scope === scope);
+  }
+
+  function getBlockString(b: Block): string {
+    let s = "";
+    for (const t of b.text) if (t.type === "TEXT") s += t.value + " ";
+    return s;
   }
 
   function getSelectOfBlocks(
@@ -55,7 +62,7 @@ export default function CreateRuleMenu(props: {
         <option>{std_text}</option>
         {blocks.map((b) => (
           <option key={b.name} value={b.name}>
-            {b.text}
+            {getBlockString(b)}
           </option>
         ))}
       </select>
@@ -65,17 +72,17 @@ export default function CreateRuleMenu(props: {
   function whenArrayToText() {
     if (!whenArray.length)
       return getSelectOfBlocks(
-        getBlocksByScope("STATE"),
+        getBlocksByScope("STATE", "WHEN"),
         "accade cosa?",
         setWhenArray
       );
 
     const last_block = whenArray.at(-1)!;
     let elem: React.ReactNode;
-    switch (last_block.scope) {
+    switch (last_block.type) {
       case "STATE":
         elem = getSelectOfBlocks(
-          getBlocksByScope("DESCRIPTION"),
+          getBlocksByScope("DESCRIPTION", "WHEN"),
           "tipo",
           setWhenArray
         );
@@ -84,34 +91,38 @@ export default function CreateRuleMenu(props: {
         break;
     }
 
-    const s = whenArray.map((b) => b.text).join(" ") + " ";
+    const s = whenArray.map((b) => getBlockString(b)).join(" ") + " ";
     return [s, elem];
   }
 
   function whileArrayToText() {
     if (!whileArray.length)
       return getSelectOfBlocks(
-        getBlocksByScope("STATE"),
+        getBlocksByScope("STATE", "WHEN"),
         "quale circostanza sta occorrendo?",
         setWhileArray
       );
 
     const last_block = whileArray.at(-1)!;
     let elem: React.ReactNode;
-    switch (last_block.scope) {
+    switch (last_block.type) {
       case "STATE":
         elem = getSelectOfBlocks(
-          getBlocksByScope("DESCRIPTION"),
+          getBlocksByScope("DESCRIPTION", "WHEN"),
           "tipo",
           setWhileArray
         );
         break;
       case "DESCRIPTION":
-        elem = getSelectOfBlocks(getBlocksByScope("LOGIC"), "", setWhileArray);
+        elem = getSelectOfBlocks(
+          getBlocksByScope("LOGIC", "WHEN"),
+          "",
+          setWhileArray
+        );
         break;
       case "LOGIC":
         elem = getSelectOfBlocks(
-          getBlocksByScope("STATE"),
+          getBlocksByScope("STATE", "WHEN"),
           "quale circostanza sta occorrendo?",
           setWhileArray
         );
@@ -120,13 +131,13 @@ export default function CreateRuleMenu(props: {
         break;
     }
 
-    const s = whileArray.map((b) => b.text).join(" ") + " ";
+    const s = whileArray.map((b) => getBlockString(b)).join(" ") + " ";
     return [s, elem];
   }
 
   function doArrayToText() {
     let elem: React.ReactNode = getSelectOfBlocks(
-      getBlocksByScope("ACTION").filter(
+      getBlocksByScope("ACTION", "ACTION").filter(
         (b) => !doArray.some((bb) => b.name === bb.name)
       ),
       "che cosa deve avvenire?",
@@ -135,7 +146,7 @@ export default function CreateRuleMenu(props: {
     const s = doArray.map((b, i) => (
       <>
         <br />
-        {b.text}
+        {getBlockString(b)}
         {/* <input
           onChange={(e) => {
             const value = e.target.value;
@@ -149,7 +160,7 @@ export default function CreateRuleMenu(props: {
         /> */}
       </>
     ));
-    return [s, <br key={"super-new-line"}/>, elem];
+    return [s, <br key={"super-new-line"} />, elem];
   }
 
   return (
