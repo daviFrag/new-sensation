@@ -1,10 +1,11 @@
-export type Vocabulary = string;
+import { BlockLabel, BlockScope, BlockType } from "./ApiTypes";
 
-export type BlockScope = "SELECTOR" | "LOGIC" | "STATE" | "DESCRIPTION" | "ACTION";
+export type Vocabulary = string;
 
 export type Block = {
   name: string;
-  text: string;
+  text: BlockLabel[];
+  type: BlockType;
   scope: BlockScope;
   params?: Block[];
   value?: string;

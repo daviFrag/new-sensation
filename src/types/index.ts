@@ -10,14 +10,11 @@ import {
   CreateRuleJson,
   CreateTaskJson,
   CreateVocabularyMetadata,
-} from "./ApiTypes";
-import {
-  Block,
+  BlockLabel,
   BlockScope,
-  Rule,
-  RuleUnnested,
-  Vocabulary,
-} from "./ClientTypes";
+  BlockType,
+} from "./ApiTypes";
+import { Block, Rule, RuleUnnested, Vocabulary } from "./ClientTypes";
 
 export type {
   UserInterface,
@@ -37,4 +34,6 @@ export type {
   Rule,
   RuleUnnested,
   Vocabulary,
+  BlockType,
+  BlockLabel,
 };

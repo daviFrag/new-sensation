@@ -13,8 +13,38 @@ export type ParamMetadata = {
   classNameOpts: string[];
 };
 
+export type BlockLabel =
+  | {
+      type: "TEXT";
+      value: string;
+    }
+  | {
+      type: "PARAM_CLASS";
+      values: string[];
+    }
+  | {
+      type: "PARAM_STRING";
+      values: string[];
+    }
+  | {
+      type: "PARAM_INTEGER";
+      values: number[];
+    };
+
+export type BlockType =
+  | "SELECTOR"
+  | "LOGIC"
+  | "STATE"
+  | "DESCRIPTION"
+  | "ACTION";
+
+export type BlockScope = "ACTION" | "WHEN" | "WHILE";
+
 export type BlockMetadata = {
-  label: string;
+  name: string;
+  scope: BlockScope;
+  type: BlockType;
+  label: BlockLabel[];
   params: ParamMetadata[];
 };
 
@@ -22,6 +52,7 @@ export type BlockJson = {
   name: string;
   vocabulary: VocabularyMetadata | string;
   params: BlockJson[];
+  value: any;
 };
 
 export type CreateRuleJson = {

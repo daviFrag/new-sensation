@@ -12,20 +12,6 @@ import {
 
 const andBlockName = "AndBlock";
 
-// todo delete and add scope inside each BlockJson
-const blockScopeMap: {
-  [block_name: string]: BlockScope;
-} = {
-  AndBlock: "LOGIC",
-  HelloWorldBlock: "ACTION",
-  IsNumberBlock: "DESCRIPTION",
-  InsertedCardBlock: "STATE",
-  IsSymbolBlock: "DESCRIPTION",
-  OnLeftBlock: "STATE",
-  RemovedCardBlock: "STATE",
-  HelloWorld2Block: "ACTION",
-} as const;
-
 function getBlockParamsFromBlockMetadataParams(
   b: BlockMetadata,
   v: VocabularyMetadata
@@ -33,6 +19,9 @@ function getBlockParamsFromBlockMetadataParams(
   const new_params: Block["params"] = [];
 
   for (const param of b.params) {
+    if (!param?.classNameOpts?.length) {
+      continue;
+    }
     for (const block_name of param.classNameOpts) {
       const res = getBlock(v, block_name);
       if (res.status !== "success") console.error(res.msg);
@@ -60,8 +49,8 @@ export function getBlock(
     block: {
       name,
       text: b.label,
-      // TODO add scope
-      scope: blockScopeMap[name] ?? "ACTION",
+      scope: b.scope,
+      type: b.type,
       params: getBlockParamsFromBlockMetadataParams(b, v),
       // TODO where should I save the value?
       value: "",
@@ -114,8 +103,8 @@ export function convertBlockJsonToBlock(
   const block: Block = {
     name: b.name,
     vocabulary: (b.vocabulary as VocabularyMetadata).name,
-    // TODO add scope
-    scope: blockScopeMap[b.name] ?? "ACTION",
+    type: v.blockMetadata[b.name].type,
+    scope: v.blockMetadata[b.name].scope,
     text: v.blockMetadata[b.name].label,
     params,
   };
@@ -132,11 +121,11 @@ export function convertBlockToBlockJson(
 ): BlockJson {
   return {
     name: b.name,
-    // todo b.vocabulary.id
     vocabulary: findIdOfVocabulary(b.vocabulary, vocabularies_metadata),
     params: b.params
       ? b.params.map((bb) => convertBlockToBlockJson(bb, vocabularies_metadata))
       : [],
+    value: b.value,
   };
 }
 
@@ -202,6 +191,7 @@ export function convertRuleToRuleJson(
         convertBlockToBlockJson(rule.when, vocabularies_metadata),
         convertBlockToBlockJson(rule.while, vocabularies_metadata),
       ],
+      value: "",
     },
     actions: rule.do.map((b) =>
       convertBlockToBlockJson(b, vocabularies_metadata)
