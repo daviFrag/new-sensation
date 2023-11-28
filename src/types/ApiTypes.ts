@@ -13,7 +13,12 @@ export type ParamMetadata = {
   classNameOpts: string[];
 };
 
-export type BlockLabel =
+export type BlockLabel = {
+  type: "TEXT";
+  value: string;
+} | BlockParam;
+
+export type BlockParam =
   | {
       type: "TEXT";
       value: string;
@@ -45,14 +50,14 @@ export type BlockMetadata = {
   scope: BlockScope;
   type: BlockType;
   label: BlockLabel[];
-  params: ParamMetadata[];
+  params: BlockParam[];
 };
 
 export type BlockJson = {
   name: string;
   vocabulary: VocabularyMetadata | string;
   params: BlockJson[];
-  value: any;
+  value?: string | number;
 };
 
 export type CreateRuleJson = {

@@ -9,28 +9,9 @@ import {
   BlockMetadata,
   BlockScope,
 } from "@/types";
+import { BlockText } from "@/types/ClientTypes";
 
 const andBlockName = "AndBlock";
-
-function getBlockParamsFromBlockMetadataParams(
-  b: BlockMetadata,
-  v: VocabularyMetadata
-): Block["params"] {
-  const new_params: Block["params"] = [];
-
-  for (const param of b.params) {
-    if (!param?.classNameOpts?.length) {
-      continue;
-    }
-    for (const block_name of param.classNameOpts) {
-      const res = getBlock(v, block_name);
-      if (res.status !== "success") console.error(res.msg);
-      else new_params.push(res.block);
-    }
-  }
-
-  return new_params;
-}
 
 export function getBlock(
   v: VocabularyMetadata,
@@ -48,11 +29,11 @@ export function getBlock(
     status: "success",
     block: {
       name,
-      text: b.label,
+      text: b.label.map((label) => {
+        return { label, type: label.type };
+      }),
       scope: b.scope,
       type: b.type,
-      params: getBlockParamsFromBlockMetadataParams(b, v),
-      // TODO where should I save the value?
       value: "",
       vocabulary: v.name,
     },
@@ -93,11 +74,48 @@ export function convertBlockJsonToBlock(
     return { status: "error", msg };
   }
 
-  const params: Block["params"] = [];
-  for (const child_block of b.params) {
-    const res = convertBlockJsonToBlock(child_block, vv);
-    if (res.status !== "success") console.error(res.msg);
-    else params.push(res.block);
+  const text: BlockText[] = [];
+  /* 
+  Since the param is linked to the label in a loose way, I can only know it by using an index.
+  Basically, BlockMetadata.label is a list of TEXT and options to choose, while BlockJson.params is the actual choice.
+  So, in this case I'm converting them to a single list of text and choices with an eventual selected value.
+  To convert a BlockJson to a Block, I need to construct the Block from the BlockMetadata, but adding the BlockJson choices.
+  Since the choices are in an array that has the same order as the label but without the text part, i need an external index.
+  */
+  let param_index = 0;
+  for (const label of v.blockMetadata[b.name].label) {
+    const { type } = label;
+    switch (type) {
+      case "TEXT":
+        text.push({ label, type });
+        break;
+      case "PARAM_INTEGER":
+        text.push({
+          label,
+          type,
+          value: b.params[param_index].value as number,
+        });
+        param_index++;
+        break;
+      case "PARAM_STRING":
+        text.push({
+          label,
+          type,
+          value: b.params[param_index].value as string,
+        });
+        param_index++;
+        break;
+      case "PARAM_CLASS":
+        const res = convertBlockJsonToBlock(b.params[param_index], vv);
+        if (res.status === "error") return res;
+        text.push({
+          label,
+          type,
+          choice: res.block,
+        });
+        param_index++;
+        break;
+    }
   }
 
   const block: Block = {
@@ -105,8 +123,8 @@ export function convertBlockJsonToBlock(
     vocabulary: (b.vocabulary as VocabularyMetadata).name,
     type: v.blockMetadata[b.name].type,
     scope: v.blockMetadata[b.name].scope,
-    text: v.blockMetadata[b.name].label,
-    params,
+    value: b.value,
+    text,
   };
 
   return {
@@ -119,13 +137,42 @@ export function convertBlockToBlockJson(
   b: Block,
   vocabularies_metadata: VocabularyMetadata[]
 ): BlockJson {
+  const { name, value } = b;
+  const vocabulary = findIdOfVocabulary(b.vocabulary, vocabularies_metadata);
+
+  const params: BlockJson["params"] = [];
+  for (const t of b.text) {
+    const { type } = t;
+    switch (type) {
+      case "TEXT":
+        break;
+      case "PARAM_CLASS":
+        params.push(convertBlockToBlockJson(t.choice!, vocabularies_metadata));
+        break;
+      case "PARAM_INTEGER":
+        params.push({
+          name: "Integer",
+          params: [],
+          vocabulary,
+          value: t.value,
+        });
+        break;
+      case "PARAM_STRING":
+        params.push({
+          name: "String",
+          params: [],
+          vocabulary,
+          value: t.value,
+        });
+        break;
+    }
+  }
+
   return {
-    name: b.name,
-    vocabulary: findIdOfVocabulary(b.vocabulary, vocabularies_metadata),
-    params: b.params
-      ? b.params.map((bb) => convertBlockToBlockJson(bb, vocabularies_metadata))
-      : [],
-    value: b.value,
+    name,
+    vocabulary,
+    params,
+    value,
   };
 }
 

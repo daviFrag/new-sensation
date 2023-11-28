@@ -1,14 +1,34 @@
-import { BlockLabel, BlockScope, BlockType } from "./ApiTypes";
+import { BlockLabel, BlockParam, BlockScope, BlockType } from "./ApiTypes";
 
 export type Vocabulary = string;
 
+export type BlockText =
+  | {
+      label: BlockLabel;
+      type: "TEXT";
+    }
+  | {
+      label: BlockLabel;
+      type: "PARAM_CLASS";
+      choice?: Block;
+    }
+  | {
+      label: BlockLabel;
+      type: "PARAM_STRING";
+      value?: string;
+    }
+  | {
+      label: BlockLabel;
+      type: "PARAM_INTEGER";
+      value?: number;
+    };
+
 export type Block = {
   name: string;
-  text: BlockLabel[];
+  text: BlockText[];
   type: BlockType;
   scope: BlockScope;
-  params?: Block[];
-  value?: string;
+  value?: string | number;
   vocabulary: Vocabulary;
 };
 

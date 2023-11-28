@@ -15,7 +15,7 @@ GET http://localhoost:8080/api/vocabularies
 
 ### get single vocabulary
 
-GET http://localhoost:8080/api/vocabularies/6554ffe010da383f7fcdbf2d
+GET http://localhoost:8080/api/vocabularies/65662b357d16023212908e73
 
 ### create rule
 
@@ -23,22 +23,66 @@ POST http://localhoost:8080/api/rules HTTP/1.1
 content-type: application/json
 
 {
-	"name": "rule 2",
+	"name": "rule and test v4",
+	"vocabularies": [
+		"65662b357d16023212908e73"
+	],
 	"condition": {
-		"name": "OnLeftBlock",
-		"vocabulary": "6554ffe010da383f7fcdbf2d",
+		"name": "ExpressionCardBlock",
+		"vocabulary": "65662b357d16023212908e73",
 		"params": [
 			{
-				"name": "IsNumberBlock",
-				"vocabulary": "6554ffe010da383f7fcdbf2d",
+				"name": "IsTrueBlock",
+				"vocabulary": "65662b357d16023212908e73",
 				"params": []
 			}
 		]
 	},
 	"actions": [
 		{
-			"name": "HelloWorldBlock",
-			"vocabulary": "6554ffe010da383f7fcdbf2d",
+			"name": "TurnOffLedBlock",
+			"vocabulary": "65662b357d16023212908e73",
+			"params": []
+		}
+	]
+}
+
+### create rule 2
+
+POST http://localhoost:8080/api/rules HTTP/1.1
+content-type: application/json
+
+{
+	"name": "rule and test v4",
+	"vocabularies": [
+		"65662b357d16023212908e73"
+	],
+	"condition": {
+		"name": "InsertedCardBlock",
+		"vocabulary": "65662b357d16023212908e73",
+		"params": [
+			{
+				"name": "IsNumberBlock",
+				"vocabulary": "65662b357d16023212908e73",
+				"params": []
+			},
+			{
+				"name": "IsAnyBlock",
+				"vocabulary": "65662b357d16023212908e73",
+				"params": []
+			},
+			{
+				"name": "Integer",
+				"vocabulary": "65662b357d16023212908e73",
+				"params": [],
+				"value": 1
+			}
+		]
+	},
+	"actions": [
+		{
+			"name": "TurnOffLedBlock",
+			"vocabulary": "65662b357d16023212908e73",
 			"params": []
 		}
 	]
@@ -47,6 +91,10 @@ content-type: application/json
 ### get rules
 
 GET http://localhoost:8080/api/rules
+
+### delete rule
+
+DELETE http://localhoost:8080/api/rules/65662f877d16023212908e75
 
 ### create task
 
