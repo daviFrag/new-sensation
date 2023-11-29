@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Block, Vocabulary, VocabularyMetadata } from "@/types";
 import CreateRuleMenu from "./CreateRuleMenu";
 import VocabularyFilter from "../rules/VocabularyFilter";
@@ -10,6 +10,9 @@ export default function CreateLoaded(props: {
   vocabularies_metadata: VocabularyMetadata[];
 }) {
   const { vocabularies, blocks, vocabularies_metadata } = props;
+  const [vocabularies_choices, setVocabChoices] = useState<Vocabulary[]>([]);
+  const vocabulariesChoicesChanges = (choices: Vocabulary[]) =>
+    setVocabChoices(choices);
 
   return (
     <main>
@@ -18,10 +21,12 @@ export default function CreateLoaded(props: {
       </h1>
       <VocabularyFilter
         vocabularies={vocabularies}
-        onChange={(choice) => console.log(choice)}
+        onChange={vocabulariesChoicesChanges}
       />
       <CreateRuleMenu
-        blocks={blocks}
+        blocks={blocks.filter((b) =>
+          vocabularies_choices.includes(b.vocabulary)
+        )}
         confirm_button_text="Crea regola"
         doSomethingWithRule={(rule) => {
           createRuleApi(rule, blocks, vocabularies_metadata);

@@ -18,13 +18,15 @@ export default function RulesLoaded(props: {
 }) {
   const { rules, vocabularies, blocks, vocabularies_metadata, reloadRules } =
     props;
-  console.log(rules);
 
   const modal = useRef<HTMLDialogElement>(null);
 
   const [rule_modify, setRuleModify] = useState("");
   const [rule_keyword_searched, setRuleKeywordSearched] = useState("");
   const [selected_rules_ids, setSelectedRulesIds] = useState<string[]>([]);
+  const [vocabularies_choices, setVocabChoices] = useState<Vocabulary[]>([]);
+  const vocabulariesChoicesChanges = (choices: Vocabulary[]) =>
+    setVocabChoices(choices);
 
   function newRuleInSelectedRules(rule_id: string) {
     setSelectedRulesIds((prev_rules_ids) => {
@@ -52,7 +54,7 @@ export default function RulesLoaded(props: {
       </h1>
       <VocabularyFilter
         vocabularies={vocabularies}
-        onChange={(choice) => console.log(choice)}
+        onChange={vocabulariesChoicesChanges}
       />
       <div className="w-11/12 mx-auto my-5 flex justify-between">
         <input

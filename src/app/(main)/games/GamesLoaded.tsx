@@ -15,6 +15,9 @@ export default function GamesLoaded(props: {
     props;
 
   const [task_keyword_searched, setTaskKeywordSearched] = useState("");
+  const [vocabularies_choices, setVocabChoices] = useState<Vocabulary[]>([]);
+  const vocabulariesChoicesChanges = (choices: Vocabulary[]) =>
+    setVocabChoices(choices);
 
   function filterTasks(tasks: TaskJson[]): TaskJson[] {
     if (!task_keyword_searched) return tasks;
@@ -32,7 +35,7 @@ export default function GamesLoaded(props: {
       </h1>
       <VocabularyFilter
         vocabularies={vocabularies}
-        onChange={(choice) => console.log(choice)}
+        onChange={vocabulariesChoicesChanges}
       />
 
       <div className="w-11/12 mx-auto my-5 flex justify-between">
