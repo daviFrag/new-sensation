@@ -14,7 +14,8 @@ import { apiDelete, apiPost } from "@/services/api";
 export function createRuleApi(
   rule: Rule,
   blocks: Block[],
-  vocabularies_metadata: VocabularyMetadata[]
+  vocabularies_metadata: VocabularyMetadata[],
+  reloadData?: () => void
 ) {
   const rule_json_res = convertRuleToRuleJson(
     rule,
@@ -28,16 +29,22 @@ export function createRuleApi(
   const rule_json = rule_json_res.rule;
   wrapApiCallInWaitingSwal(
     () => apiPost<RuleJson>("rules", rule_json),
-    (res) => Swal.fire("Regola creata", res.data.name, "success")
+    (res) => {
+      Swal.fire("Regola creata", res.data?.name, "success");
+      if (reloadData) reloadData();
+    }
   );
 }
 
-export function deleteRuleApi(rule: Rule) {
+export function deleteRuleApi(rule: Rule, reloadData?: () => void) {
   if (!rule.id) return Swal.fire("Errore", "Rule does not have id", "error");
 
   wrapApiCallInWaitingSwal(
     () => apiDelete<RuleJson>(`rules/${rule.id}`),
-    () => Swal.fire("Regola eliminata", "", "success")
+    () => {
+      Swal.fire("Regola eliminata", "", "success");
+      if (reloadData) reloadData();
+    }
   );
 }
 
@@ -49,6 +56,6 @@ export function createTaskApi(name: string, rules_id: string[]) {
 
   wrapApiCallInWaitingSwal(
     () => apiPost<TaskJson>("tasks", new_task),
-    (res) => Swal.fire("Gioco creato", res.data.name, "success")
+    (res) => Swal.fire("Gioco creato", res.data?.name, "success")
   );
 }

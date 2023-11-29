@@ -98,8 +98,12 @@ export default function RulesLoaded(props: {
                 </div>
                 <div
                   onClick={() => {
-                    createRuleApi(r, blocks, vocabularies_metadata);
-                    reloadRules();
+                    createRuleApi(
+                      r,
+                      blocks,
+                      vocabularies_metadata,
+                      reloadRules
+                    );
                   }}
                   className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
@@ -107,8 +111,7 @@ export default function RulesLoaded(props: {
                 </div>
                 <div
                   onClick={() => {
-                    deleteRuleApi(r);
-                    reloadRules();
+                    deleteRuleApi(r, reloadRules);
                   }}
                   className="cursor-pointer duration-75 ease-in-out hover:scale-110"
                 >
@@ -121,8 +124,12 @@ export default function RulesLoaded(props: {
                 blocks={blocks}
                 confirm_button_text="Modifica regola"
                 doSomethingWithRule={(rule) => {
-                  createRuleApi(rule, blocks, vocabularies_metadata);
-                  reloadRules();
+                  createRuleApi(
+                    rule,
+                    blocks,
+                    vocabularies_metadata,
+                    reloadRules
+                  );
                 }}
                 extraDoOnReset={() => setRuleModify("")}
                 starting_values={{
