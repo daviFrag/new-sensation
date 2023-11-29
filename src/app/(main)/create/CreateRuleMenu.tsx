@@ -110,7 +110,101 @@ export default function CreateRuleMenu(props: {
       </select>
     );
   }
-  
+
+  function getBlockElements(b: Block, valueIsChanged: (new_b: Block) => void) {
+    const elements: React.ReactNode[] = [];
+
+    let curr_t_index = 0;
+    for (const t of b.text) {
+      const t_index = curr_t_index;
+      switch (t.type) {
+        case "TEXT":
+          if (t.label.type !== "TEXT") throw new Error();
+
+          elements.push(t.label.value);
+
+          break;
+        case "PARAM_INTEGER":
+          if (t.label.type !== "PARAM_INTEGER") throw new Error();
+
+          if (t.value) elements.push(t.value);
+          else
+            elements.push(
+              getSelectOfStrings(
+                t.label.values.map((x) => `${x}`),
+                "<numero>",
+                (value) => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_INTEGER") throw new Error();
+                  new_t.value = Number(value);
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                }
+              )
+            );
+
+          break;
+        case "PARAM_STRING":
+          if (t.label.type !== "PARAM_STRING") throw new Error();
+
+          if (t.value) elements.push(t.value);
+          else
+            elements.push(
+              getSelectOfStrings(t.label.values, "<stringa>", (value) => {
+                const new_b: Block = JSON.parse(JSON.stringify(b));
+                const new_t = new_b.text[t_index];
+                if (new_t.type !== "PARAM_STRING") throw new Error();
+                new_t.value = value;
+                new_b.text[t_index] = new_t;
+                valueIsChanged(new_b);
+              })
+            );
+
+          break;
+        case "PARAM_CLASS":
+          if (t.label.type !== "PARAM_CLASS") throw new Error();
+
+          if (t.choice) {
+            // * here i need to parse the block inside choice
+            elements.push(
+              ...getBlockElements(t.choice, (new_choice) => {
+                console.log
+                const new_b: Block = JSON.parse(JSON.stringify(b));
+                const new_t = new_b.text[t_index];
+                if (new_t.type !== "PARAM_CLASS") throw new Error();
+                new_t.choice = new_choice;
+                new_b.text[t_index] = new_t;
+                valueIsChanged(new_b);
+              })
+            );
+          } else {
+            const this_choice_blocks = (() => {
+              if (b.type === "LOGIC" && t.label.values.includes("Block"))
+                return blocks.filter((b) => b.type === "STATE");
+              return t.label.values.map((x) => findBlock(x)!);
+            })();
+
+            elements.push(
+              getSelectOfBlocks(this_choice_blocks, "<scelta>", (value) => {
+                const new_b: Block = JSON.parse(JSON.stringify(b));
+                const new_t = new_b.text[t_index];
+                if (new_t.type !== "PARAM_CLASS") throw new Error();
+                new_t.choice = findBlock(value);
+                new_b.text[t_index] = new_t;
+                valueIsChanged(new_b);
+              })
+            );
+          }
+
+          break;
+      }
+      curr_t_index++;
+    }
+
+    return elements;
+  }
+
   function blockArrayToText(
     array: (Block | null)[],
     setArray: React.Dispatch<React.SetStateAction<(Block | null)[]>>,
@@ -150,89 +244,18 @@ export default function CreateRuleMenu(props: {
         continue;
       }
 
-      // all this stuff should be a recoursive function that returns a new button, that later may be pushed to the state
-      let curr_t_index = 0;
-      for (const t of b.text) {
-        const t_index = curr_t_index;
-        switch (t.type) {
-          case "TEXT":
-            if (t.label.type !== "TEXT") throw new Error();
+      elements.push(
+        ...getBlockElements(b, (new_b) => {
+          setArray((prev) => {
+            return [
+              ...prev.slice(0, b_index),
+              new_b,
+              ...prev.slice(b_index + 1, prev.length),
+            ];
+          });
+        })
+      );
 
-            elements.push(t.label.value);
-
-            break;
-          case "PARAM_INTEGER":
-            if (t.label.type !== "PARAM_INTEGER") throw new Error();
-
-            if (t.value) elements.push(t.value);
-            else
-              elements.push(
-                getSelectOfStrings(
-                  t.label.values.map((x) => `${x}`),
-                  "<numero>",
-                  (value) => {
-                    setArray((prev) => {
-                      const new_arr = [...prev];
-                      const new_t = new_arr[b_index]!.text[t_index];
-                      if (new_t.type !== "PARAM_INTEGER") throw new Error();
-                      new_t.value = Number(value);
-                      new_arr[b_index]!.text[t_index] = new_t;
-                      return new_arr;
-                    });
-                  }
-                )
-              );
-
-            break;
-          case "PARAM_STRING":
-            if (t.label.type !== "PARAM_STRING") throw new Error();
-
-            if (t.value) elements.push(t.value);
-            else
-              elements.push(
-                getSelectOfStrings(t.label.values, "<stringa>", (value) => {
-                  setArray((prev) => {
-                    const new_arr = [...prev];
-                    const new_t = new_arr[b_index]!.text[t_index];
-                    if (new_t.type !== "PARAM_STRING") throw new Error();
-                    new_t.value = value;
-                    new_arr[b_index]!.text[t_index] = new_t;
-                    return new_arr;
-                  });
-                })
-              );
-
-            break;
-          case "PARAM_CLASS":
-            if (t.label.type !== "PARAM_CLASS") throw new Error();
-
-            if (t.choice) {
-              elements.push('here I should parse again the block t.choice')
-            } else {
-              const this_choice_blocks = (() => {
-                if (b.type === "LOGIC" && t.label.values.includes("Block"))
-                  return blocks.filter((b) => b.type === "STATE");
-                return t.label.values.map((x) => findBlock(x)!);
-              })();
-
-              elements.push(
-                getSelectOfBlocks(this_choice_blocks, "<scelta>", (value) => {
-                  setArray((prev) => {
-                    const new_arr = [...prev];
-                    const new_t = new_arr[b_index]!.text[t_index];
-                    if (new_t.type !== "PARAM_CLASS") throw new Error();
-                    new_t.choice = findBlock(value);
-                    new_arr[b_index]!.text[t_index] = new_t;
-                    return new_arr;
-                  });
-                })
-              );
-            }
-
-            break;
-        }
-        curr_t_index++;
-      }
       curr_b_index++;
     }
 
