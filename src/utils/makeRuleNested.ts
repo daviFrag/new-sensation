@@ -1,7 +1,11 @@
 import { Block, Rule, RuleUnnested } from "@/types";
+import { andBlockName } from "./fromApitoAppTypes";
 
 /** CAN THROW ERROR */
-export function makeRuleNested(sequetial_object: RuleUnnested): Rule {
+export function makeRuleNested(
+  sequetial_object: RuleUnnested,
+  blocks: Block[]
+): Rule {
   const {
     while: while_arr,
     when: when_arr,
@@ -13,9 +17,11 @@ export function makeRuleNested(sequetial_object: RuleUnnested): Rule {
     throw new Error("Not a selector block");
   }
 
-  const new_while_arr = makeArrayNested(while_arr);
-  const new_when_arr = makeArrayNested(when_arr);
-  const new_do_arr = do_arr.filter((b) => b.scope === "ACTION");
+  const and_block = blocks.find((b) => b.name === andBlockName);
+  if (!and_block) throw new Error("No AND block found in vocabulary");
+
+  const new_while_arr = makeArrayNested(while_arr, and_block);
+  const new_when_arr = makeArrayNested(when_arr, and_block);
 
   if (!new_while_arr || !new_when_arr) throw new Error("empty when or while");
 
@@ -23,64 +29,24 @@ export function makeRuleNested(sequetial_object: RuleUnnested): Rule {
     id: sequetial_object.id,
     when: new_when_arr,
     while: new_while_arr,
-    do: new_do_arr,
+    do: do_arr,
     scope,
   };
 
   return new_sequential_object;
 }
 
-function makeArrayNested(arr: Block[]): Block | undefined {
+function makeArrayNested(arr: Block[], and_block: Block): Block | undefined {
   if (!arr?.length) return;
-  return nestStatesInsideLogicsRec(nestDescriptionsInsideStates(arr));
-}
-
-function nestDescriptionsInsideStates(arr: Block[]): Block[] {
-  const new_arr: Block[] = [];
-  while (arr.length > 0) {
-    const curr = arr.shift()!;
-    switch (curr.scope) {
-      case "SELECTOR":
-        throw new Error("SELECTOR inside SELECTOR");
-
-      case "ACTION":
-        throw new Error("ACTION block in when/while");
-
-      case "DESCRIPTION":
-        // we reached a DESCRIPTION, but it should be inside the params of the STATE that was before
-        throw new Error("DESCRIPTION without STATE before it");
-
-      case "STATE":
-        while (arr[0]?.scope === "DESCRIPTION") {
-          if (!curr.params) curr.params = [];
-          curr.params.push(arr.shift()!);
-        }
-        if (!curr.params?.length) throw new Error("No DESCRIPTION after STATE");
-        break;
-
-      case "LOGIC":
-        const prev_bloc = arr.at(-1);
-        if (!prev_bloc) throw new Error("LOGIC without STATE before it");
-        break;
-    }
-    new_arr.push(curr);
+  while (arr.length > 1) {
+    const b_1 = arr.pop()!;
+    const b_2 = arr.pop()!;
+    const this_and_block: Block = JSON.parse(JSON.stringify(and_block));
+    // @ts-ignore
+    this_and_block.text[0].choice = b_1;
+    // @ts-ignore
+    this_and_block.text[2].choice = b_1;
+    arr.push(this_and_block);
   }
-  return new_arr;
-}
-
-function nestStatesInsideLogicsRec(arr: Block[]): Block {
-  if (!arr?.length) throw new Error("empty array in nestStatesInsideLogicsRec");
-  if (arr[0].scope !== "STATE") {
-    throw new Error("Found alone a non STATE that shouldnt be here");
-  }
-  if (arr.length === 1) return arr[0];
-  if (arr.length === 2) {
-    throw new Error("There are two blocks that cannot link");
-  }
-  if (arr[1].scope !== "LOGIC")
-    throw new Error("Found a non LOGIC that shouldnt be here");
-  const first_state = arr.shift()!;
-  const first_logic = arr.shift()!;
-  first_logic.params = [first_state, nestStatesInsideLogicsRec(arr)];
-  return first_logic;
+  return arr[0];
 }

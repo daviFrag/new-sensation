@@ -6,12 +6,10 @@ import {
   VocabularyMetadata,
   BlockJson,
   RuleJson,
-  BlockMetadata,
-  BlockScope,
 } from "@/types";
 import { BlockText } from "@/types/ClientTypes";
 
-const andBlockName = "AndBlock";
+export const andBlockName = "AndBlock";
 
 export function getBlock(
   v: VocabularyMetadata,

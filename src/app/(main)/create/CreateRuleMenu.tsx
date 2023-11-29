@@ -169,7 +169,7 @@ export default function CreateRuleMenu(props: {
             // * here i need to parse the block inside choice
             elements.push(
               ...getBlockElements(t.choice, (new_choice) => {
-                console.log
+                console.log;
                 const new_b: Block = JSON.parse(JSON.stringify(b));
                 const new_t = new_b.text[t_index];
                 if (new_t.type !== "PARAM_CLASS") throw new Error();
@@ -318,7 +318,8 @@ export default function CreateRuleMenu(props: {
 
             try {
               const rule = makeRuleNested(
-                JSON.parse(JSON.stringify(rule_unnested))
+                JSON.parse(JSON.stringify(rule_unnested)),
+                blocks
               );
               doSomethingWithRule(rule);
             } catch (e) {
