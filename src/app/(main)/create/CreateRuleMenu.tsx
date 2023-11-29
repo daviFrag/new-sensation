@@ -24,9 +24,13 @@ export default function CreateRuleMenu(props: {
     extraDoOnReset,
   } = props;
 
-  const [whileArray, setWhileArray] = useState<Block[]>([]);
-  const [whenArray, setWhenArray] = useState<Block[]>([]);
-  const [doArray, setDoArray] = useState<Block[]>([]);
+  const [whileArray, setWhileArray] = useState<(Block | null)[]>([null]);
+  const [whenArray, setWhenArray] = useState<(Block | null)[]>([null]);
+  const [doArray, setDoArray] = useState<(Block | null)[]>([null]);
+
+  function findBlock(name: string): Block | undefined {
+    return blocks.find((b) => b.name === name);
+  }
 
   function getBlocksByScope(type: BlockType, scope: BlockScope): Block[] {
     return blocks.filter((b) => b.type === type && b.scope === scope);
@@ -34,14 +38,29 @@ export default function CreateRuleMenu(props: {
 
   function getBlockString(b: Block): string {
     let s = "";
-    for (const t of b.text) if (t.type === "TEXT") s += t.value + " ";
-    return s;
+    for (const t of b.text)
+      switch (t.type) {
+        case "TEXT":
+          if (t.label.type !== "TEXT") throw new Error();
+          s += t.label.value + " ";
+          break;
+        case "PARAM_INTEGER":
+          s += "<numero> ";
+          break;
+        case "PARAM_STRING":
+          s += "<stringa> ";
+          break;
+        case "PARAM_CLASS":
+          s += "<scelta> ";
+          break;
+      }
+    return s.trim();
   }
 
   function getSelectOfBlocks(
     blocks: Block[],
     std_text: string,
-    setNewArray: (f: (arr: Block[]) => Block[]) => void
+    onChange: (value: string) => void
   ) {
     if (!blocks.length) return;
 
@@ -49,14 +68,10 @@ export default function CreateRuleMenu(props: {
       <select
         onChange={(event) => {
           const value = event.target.value;
-          const new_block = blocks.find((b) => b.name === value);
-          if (!new_block) return;
-          setNewArray((old_arr) => {
-            return [...old_arr, { ...new_block }];
-          });
+          onChange(value);
         }}
         value=""
-        className="text-white p-2"
+        className="text-white p-2 w-full max-w-xs"
         style={{ backgroundColor: "#73B9F9" }}
       >
         <option>{std_text}</option>
@@ -69,98 +84,158 @@ export default function CreateRuleMenu(props: {
     );
   }
 
-  function whenArrayToText() {
-    if (!whenArray.length)
-      return getSelectOfBlocks(
-        getBlocksByScope("STATE", "WHEN"),
-        "accade cosa?",
-        setWhenArray
-      );
+  function getSelectOfStrings(
+    options: string[],
+    std_text: string,
+    onChange: (value: string) => void
+  ) {
+    if (!blocks.length) return;
 
-    const last_block = whenArray.at(-1)!;
-    let elem: React.ReactNode;
-    switch (last_block.type) {
-      case "STATE":
-        elem = getSelectOfBlocks(
-          getBlocksByScope("DESCRIPTION", "WHEN"),
-          "tipo",
-          setWhenArray
-        );
-        break;
-      default:
-        break;
-    }
-
-    const s = whenArray.map((b) => getBlockString(b)).join(" ") + " ";
-    return [s, elem];
-  }
-
-  function whileArrayToText() {
-    if (!whileArray.length)
-      return getSelectOfBlocks(
-        getBlocksByScope("STATE", "WHEN"),
-        "quale circostanza sta occorrendo?",
-        setWhileArray
-      );
-
-    const last_block = whileArray.at(-1)!;
-    let elem: React.ReactNode;
-    switch (last_block.type) {
-      case "STATE":
-        elem = getSelectOfBlocks(
-          getBlocksByScope("DESCRIPTION", "WHEN"),
-          "tipo",
-          setWhileArray
-        );
-        break;
-      case "DESCRIPTION":
-        elem = getSelectOfBlocks(
-          getBlocksByScope("LOGIC", "WHEN"),
-          "",
-          setWhileArray
-        );
-        break;
-      case "LOGIC":
-        elem = getSelectOfBlocks(
-          getBlocksByScope("STATE", "WHEN"),
-          "quale circostanza sta occorrendo?",
-          setWhileArray
-        );
-        break;
-      default:
-        break;
-    }
-
-    const s = whileArray.map((b) => getBlockString(b)).join(" ") + " ";
-    return [s, elem];
-  }
-
-  function doArrayToText() {
-    let elem: React.ReactNode = getSelectOfBlocks(
-      getBlocksByScope("ACTION", "ACTION").filter(
-        (b) => !doArray.some((bb) => b.name === bb.name)
-      ),
-      "che cosa deve avvenire?",
-      setDoArray
+    return (
+      <select
+        onChange={(event) => {
+          const value = event.target.value;
+          onChange(value);
+        }}
+        value=""
+        className="text-white p-2"
+        style={{ backgroundColor: "#73B9F9" }}
+      >
+        <option className="max-w-md">{std_text}</option>
+        {options.map((x) => (
+          <option key={x} value={x}>
+            {x}
+          </option>
+        ))}
+      </select>
     );
-    const s = doArray.map((b, i) => (
-      <>
-        <br />
-        {getBlockString(b)}
-        {/* <input
-          onChange={(e) => {
-            const value = e.target.value;
-            setDoArray((old_arr) => {
-              const new_arr = [...old_arr];
-              new_arr[i].value = value;
-              return new_arr;
-            });
-          }}
-          className="border border-black"
-        /> */}
-      </>
-    ));
-    return [s, <br key={"super-new-line"} />, elem];
+  }
+
+  function blockArrayToText(
+    array: (Block | null)[],
+    setArray: React.Dispatch<React.SetStateAction<(Block | null)[]>>,
+    type: BlockType,
+    scope: BlockScope
+  ): React.ReactNode[] {
+    if (!array.length) {
+      setArray([null]);
+      return [];
+    }
+
+    const elements: React.ReactNode[] = [];
+
+    let b_index = 0;
+    for (const b of array) {
+      if (b_index) elements.push(" & ");
+
+      if (!b) {
+        // * new block
+        elements.push(
+          getSelectOfBlocks(
+            getBlocksByScope(type, scope),
+            "accade cosa?",
+            (value) => {
+              const new_block = findBlock(value);
+              if (!new_block) return;
+              // todo not working, ids are persistent
+              setArray((prev) => {
+                const new_arr = [...prev];
+                new_arr[b_index] = new_block;
+                return new_arr;
+              });
+            }
+          )
+        );
+        b_index++;
+        continue;
+      }
+
+      let t_index = 0;
+      for (const t of b.text) {
+        switch (t.type) {
+          case "TEXT":
+            if (t.label.type !== "TEXT") throw new Error();
+
+            elements.push(t.label.value);
+
+            break;
+          case "PARAM_INTEGER":
+            if (t.label.type !== "PARAM_INTEGER") throw new Error();
+
+            elements.push(
+              getSelectOfStrings(
+                t.label.values.map((x) => `${x}`),
+                "<numero>",
+                (value) => {
+                  // todo not working, ids are persistent
+                  setArray((prev) => {
+                    const new_arr = [...prev];
+                    const new_t = new_arr[b_index]!.text[t_index];
+                    if (new_t.type !== "PARAM_INTEGER") throw new Error();
+                    new_t.value = Number(value);
+                    return new_arr;
+                  });
+                }
+              )
+            );
+
+            break;
+          case "PARAM_STRING":
+            if (t.label.type !== "PARAM_STRING") throw new Error();
+
+            elements.push(
+              getSelectOfStrings(t.label.values, "<stringa>", (value) => {
+                // todo not working, ids are persistent
+                setArray((prev) => {
+                  const new_arr = [...prev];
+                  const new_t = new_arr[b_index]!.text[t_index];
+                  if (new_t.type !== "PARAM_STRING") throw new Error();
+                  new_t.value = value;
+                  return new_arr;
+                });
+              })
+            );
+
+            break;
+          case "PARAM_CLASS":
+            if (t.label.type !== "PARAM_CLASS") throw new Error();
+
+            const this_choice_blocks = (() => {
+              if (b.type === "LOGIC" && t.label.values.includes("Block"))
+                return blocks.filter((b) => b.type === "STATE");
+              return t.label.values.map((x) => findBlock(x)!);
+            })();
+
+            elements.push(
+              getSelectOfBlocks(this_choice_blocks, "<scelta>", (value) => {
+                // todo not working, ids are persistent
+                setArray((prev) => {
+                  const new_arr = [...prev];
+                  const new_t = new_arr[b_index]!.text[t_index];
+                  if (new_t.type !== "PARAM_CLASS") throw new Error();
+                  new_t.choice = findBlock(value);
+                  return new_arr;
+                });
+              })
+            );
+
+            break;
+        }
+        t_index++;
+      }
+      b_index++;
+    }
+
+    const plus_button = (
+      <button
+        className="rounded-full w-8 aspect-square bg-sky-300"
+        onClick={() => setArray((prev) => [...prev, null])}
+      >
+        +
+      </button>
+    );
+
+    return [elements, plus_button];
   }
 
   return (
@@ -169,28 +244,29 @@ export default function CreateRuleMenu(props: {
         <div className="w-4/12">
           <h2 className="text-2xl py-5">Evento</h2>
           <div className="border border-black rounded-xl h-full text-xl p-3">
-            QUANDO {whenArrayToText()}
+            QUANDO {blockArrayToText(whenArray, setWhenArray, "STATE", "WHEN")}
           </div>
         </div>
         <div className="w-4/12">
           <h2 className="text-2xl py-5">Stato</h2>
           <div className="border border-black rounded-xl h-full text-xl p-3">
-            MENTRE {whileArrayToText()}
+            MENTRE{" "}
+            {blockArrayToText(whileArray, setWhileArray, "STATE", "WHEN")}
           </div>
         </div>
         <div className="w-4/12">
           <h2 className="text-2xl py-5">Azione</h2>
           <div className="border border-black rounded-xl h-full text-xl p-3">
-            ALLORA {doArrayToText()}
+            ALLORA {blockArrayToText(doArray, setDoArray, "ACTION", "ACTION")}
           </div>
         </div>
       </div>
       <div className="w-11/12 ml-auto flex justify-end gap-10 mt-20">
         <button
           onClick={() => {
-            setWhenArray([]);
-            setWhileArray([]);
-            setDoArray([]);
+            setWhenArray([null]);
+            setWhileArray([null]);
+            setDoArray([null]);
             if (extraDoOnReset) extraDoOnReset();
           }}
           className="text-white p-5 rounded text-xl my-5 uppercase"
@@ -201,9 +277,9 @@ export default function CreateRuleMenu(props: {
         <button
           onClick={() => {
             const rule_unnested: RuleUnnested = {
-              when: whenArray,
-              while: whileArray,
-              do: doArray,
+              when: whenArray.filter((x) => !!x) as Block[],
+              while: whileArray.filter((x) => !!x) as Block[],
+              do: doArray.filter((x) => !!x) as Block[],
               scope: "SELECTOR",
             };
 
