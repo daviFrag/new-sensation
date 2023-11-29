@@ -110,7 +110,7 @@ export default function CreateRuleMenu(props: {
       </select>
     );
   }
-
+  
   function blockArrayToText(
     array: (Block | null)[],
     setArray: React.Dispatch<React.SetStateAction<(Block | null)[]>>,
@@ -124,8 +124,9 @@ export default function CreateRuleMenu(props: {
 
     const elements: React.ReactNode[] = [];
 
-    let b_index = 0;
+    let curr_b_index = 0;
     for (const b of array) {
+      const b_index = curr_b_index;
       if (b_index) elements.push(" & ");
 
       if (!b) {
@@ -137,7 +138,6 @@ export default function CreateRuleMenu(props: {
             (value) => {
               const new_block = findBlock(value);
               if (!new_block) return;
-              // todo not working, ids are persistent
               setArray((prev) => {
                 const new_arr = [...prev];
                 new_arr[b_index] = new_block;
@@ -146,12 +146,14 @@ export default function CreateRuleMenu(props: {
             }
           )
         );
-        b_index++;
+        curr_b_index++;
         continue;
       }
 
-      let t_index = 0;
+      // all this stuff should be a recoursive function that returns a new button, that later may be pushed to the state
+      let curr_t_index = 0;
       for (const t of b.text) {
+        const t_index = curr_t_index;
         switch (t.type) {
           case "TEXT":
             if (t.label.type !== "TEXT") throw new Error();
@@ -162,68 +164,76 @@ export default function CreateRuleMenu(props: {
           case "PARAM_INTEGER":
             if (t.label.type !== "PARAM_INTEGER") throw new Error();
 
-            elements.push(
-              getSelectOfStrings(
-                t.label.values.map((x) => `${x}`),
-                "<numero>",
-                (value) => {
-                  // todo not working, ids are persistent
-                  setArray((prev) => {
-                    const new_arr = [...prev];
-                    const new_t = new_arr[b_index]!.text[t_index];
-                    if (new_t.type !== "PARAM_INTEGER") throw new Error();
-                    new_t.value = Number(value);
-                    return new_arr;
-                  });
-                }
-              )
-            );
+            if (t.value) elements.push(t.value);
+            else
+              elements.push(
+                getSelectOfStrings(
+                  t.label.values.map((x) => `${x}`),
+                  "<numero>",
+                  (value) => {
+                    setArray((prev) => {
+                      const new_arr = [...prev];
+                      const new_t = new_arr[b_index]!.text[t_index];
+                      if (new_t.type !== "PARAM_INTEGER") throw new Error();
+                      new_t.value = Number(value);
+                      new_arr[b_index]!.text[t_index] = new_t;
+                      return new_arr;
+                    });
+                  }
+                )
+              );
 
             break;
           case "PARAM_STRING":
             if (t.label.type !== "PARAM_STRING") throw new Error();
 
-            elements.push(
-              getSelectOfStrings(t.label.values, "<stringa>", (value) => {
-                // todo not working, ids are persistent
-                setArray((prev) => {
-                  const new_arr = [...prev];
-                  const new_t = new_arr[b_index]!.text[t_index];
-                  if (new_t.type !== "PARAM_STRING") throw new Error();
-                  new_t.value = value;
-                  return new_arr;
-                });
-              })
-            );
+            if (t.value) elements.push(t.value);
+            else
+              elements.push(
+                getSelectOfStrings(t.label.values, "<stringa>", (value) => {
+                  setArray((prev) => {
+                    const new_arr = [...prev];
+                    const new_t = new_arr[b_index]!.text[t_index];
+                    if (new_t.type !== "PARAM_STRING") throw new Error();
+                    new_t.value = value;
+                    new_arr[b_index]!.text[t_index] = new_t;
+                    return new_arr;
+                  });
+                })
+              );
 
             break;
           case "PARAM_CLASS":
             if (t.label.type !== "PARAM_CLASS") throw new Error();
 
-            const this_choice_blocks = (() => {
-              if (b.type === "LOGIC" && t.label.values.includes("Block"))
-                return blocks.filter((b) => b.type === "STATE");
-              return t.label.values.map((x) => findBlock(x)!);
-            })();
+            if (t.choice) {
+              elements.push('here I should parse again the block t.choice')
+            } else {
+              const this_choice_blocks = (() => {
+                if (b.type === "LOGIC" && t.label.values.includes("Block"))
+                  return blocks.filter((b) => b.type === "STATE");
+                return t.label.values.map((x) => findBlock(x)!);
+              })();
 
-            elements.push(
-              getSelectOfBlocks(this_choice_blocks, "<scelta>", (value) => {
-                // todo not working, ids are persistent
-                setArray((prev) => {
-                  const new_arr = [...prev];
-                  const new_t = new_arr[b_index]!.text[t_index];
-                  if (new_t.type !== "PARAM_CLASS") throw new Error();
-                  new_t.choice = findBlock(value);
-                  return new_arr;
-                });
-              })
-            );
+              elements.push(
+                getSelectOfBlocks(this_choice_blocks, "<scelta>", (value) => {
+                  setArray((prev) => {
+                    const new_arr = [...prev];
+                    const new_t = new_arr[b_index]!.text[t_index];
+                    if (new_t.type !== "PARAM_CLASS") throw new Error();
+                    new_t.choice = findBlock(value);
+                    new_arr[b_index]!.text[t_index] = new_t;
+                    return new_arr;
+                  });
+                })
+              );
+            }
 
             break;
         }
-        t_index++;
+        curr_t_index++;
       }
-      b_index++;
+      curr_b_index++;
     }
 
     const plus_button = (
