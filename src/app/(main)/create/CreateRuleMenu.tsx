@@ -10,23 +10,33 @@ import { makeRuleNested } from "@/utils/makeRuleNested";
 import React, { useState } from "react";
 
 export default function CreateRuleMenu(props: {
-  vocabularies: Vocabulary[];
   blocks: Block[];
   confirm_button_text: string;
   doSomethingWithRule: (rule: Rule) => void;
   extraDoOnReset?: () => void;
+  starting_values?: {
+    whileArray: Block[];
+    whenArray: Block[];
+    doArray: Block[];
+  };
 }) {
   const {
-    vocabularies,
     blocks,
     confirm_button_text,
     doSomethingWithRule,
     extraDoOnReset,
+    starting_values,
   } = props;
 
-  const [whileArray, setWhileArray] = useState<(Block | null)[]>([null]);
-  const [whenArray, setWhenArray] = useState<(Block | null)[]>([null]);
-  const [doArray, setDoArray] = useState<(Block | null)[]>([null]);
+  const [whileArray, setWhileArray] = useState<(Block | null)[]>(
+    starting_values?.whileArray ?? [null]
+  );
+  const [whenArray, setWhenArray] = useState<(Block | null)[]>(
+    starting_values?.whenArray ?? [null]
+  );
+  const [doArray, setDoArray] = useState<(Block | null)[]>(
+    starting_values?.doArray ?? [null]
+  );
 
   function findBlock(name: string): Block | undefined {
     return blocks.find((b) => b.name === name);
@@ -121,7 +131,7 @@ export default function CreateRuleMenu(props: {
         case "TEXT":
           if (t.label.type !== "TEXT") throw new Error();
 
-          elements.push(t.label.value);
+          elements.push(` ${t.label.value} `);
 
           break;
         case "PARAM_INTEGER":

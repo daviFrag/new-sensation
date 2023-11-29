@@ -18,6 +18,7 @@ export default function RulesLoaded(props: {
 }) {
   const { rules, vocabularies, blocks, vocabularies_metadata, reloadRules } =
     props;
+  console.log(rules);
 
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -116,13 +117,17 @@ export default function RulesLoaded(props: {
             {rule_modify === r.id && (
               <CreateRuleMenu
                 blocks={blocks}
-                vocabularies={vocabularies}
                 confirm_button_text="Modifica regola"
                 doSomethingWithRule={(rule) => {
                   createRuleApi(rule, blocks, vocabularies_metadata);
                   reloadRules();
                 }}
                 extraDoOnReset={() => setRuleModify("")}
+                starting_values={{
+                  whileArray: [r.while],
+                  whenArray: [r.while],
+                  doArray: r.do,
+                }}
               />
             )}
           </div>

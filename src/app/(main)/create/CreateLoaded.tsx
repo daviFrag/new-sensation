@@ -22,7 +22,6 @@ export default function CreateLoaded(props: {
       />
       <CreateRuleMenu
         blocks={blocks}
-        vocabularies={vocabularies}
         confirm_button_text="Crea regola"
         doSomethingWithRule={(rule) => {
           createRuleApi(rule, blocks, vocabularies_metadata);
