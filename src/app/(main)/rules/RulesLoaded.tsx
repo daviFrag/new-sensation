@@ -7,7 +7,11 @@ import CreateRuleMenu from "../create/CreateRuleMenu";
 import VocabularyFilter from "./VocabularyFilter";
 import Copy from "@/svg/Copy";
 import CreateGameModal from "./CreateGameModal";
-import { createRuleApi, deleteRuleApi, modifyRuleApi } from "@/utils/callKnownApi";
+import {
+  createRuleApi,
+  deleteRuleApi,
+  modifyRuleApi,
+} from "@/utils/callKnownApi";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -144,6 +148,7 @@ export default function RulesLoaded(props: {
                 }}
                 extraDoOnReset={() => setRuleModify("")}
                 starting_values={{
+                  id: r.id,
                   whileArray: [r.while],
                   whenArray: [r.while],
                   doArray: r.do,

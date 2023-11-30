@@ -15,6 +15,7 @@ export default function CreateRuleMenu(props: {
   doSomethingWithRule: (rule: Rule) => void;
   extraDoOnReset?: () => void;
   starting_values?: {
+    id: string;
     whileArray: Block[];
     whenArray: Block[];
     doArray: Block[];
@@ -333,6 +334,7 @@ export default function CreateRuleMenu(props: {
                 JSON.parse(JSON.stringify(rule_unnested)),
                 blocks
               );
+              if (starting_values?.id) rule.id = starting_values.id;
               doSomethingWithRule(rule);
               resetFields();
             } catch (e) {

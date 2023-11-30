@@ -42,6 +42,8 @@ export function modifyRuleApi(
   vocabularies_metadata: VocabularyMetadata[],
   reloadData?: () => void
 ) {
+  if (!rule.id) return Swal.fire("Errore, rule non ha id");
+
   const rule_json_res = convertRuleToRuleJson(
     rule,
     blocks,
