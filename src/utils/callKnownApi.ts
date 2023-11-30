@@ -9,7 +9,7 @@ import {
 import { convertRuleToRuleJson } from "./fromApitoAppTypes";
 import Swal from "sweetalert2";
 import wrapApiCallInWaitingSwal from "./wrapApiCallInWaitingSwal";
-import { apiDelete, apiPost } from "@/services/api";
+import { apiDelete, apiPost, apiPut } from "@/services/api";
 
 export function createRuleApi(
   rule: Rule,
@@ -31,6 +31,31 @@ export function createRuleApi(
     () => apiPost<RuleJson>("rules", rule_json),
     (res) => {
       Swal.fire("Regola creata", res.data?.name, "success");
+      if (reloadData) reloadData();
+    }
+  );
+}
+
+export function modifyRuleApi(
+  rule: Rule,
+  blocks: Block[],
+  vocabularies_metadata: VocabularyMetadata[],
+  reloadData?: () => void
+) {
+  const rule_json_res = convertRuleToRuleJson(
+    rule,
+    blocks,
+    vocabularies_metadata
+  );
+
+  if (rule_json_res.status !== "success")
+    return Swal.fire("Errore", rule_json_res.msg, "error");
+
+  const rule_json = rule_json_res.rule;
+  wrapApiCallInWaitingSwal(
+    () => apiPut<RuleJson>(`rules/${rule.id}`, rule_json),
+    (res) => {
+      Swal.fire("Regola modificata", res.data?.name, "success");
       if (reloadData) reloadData();
     }
   );

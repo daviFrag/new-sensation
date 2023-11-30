@@ -7,7 +7,7 @@ import CreateRuleMenu from "../create/CreateRuleMenu";
 import VocabularyFilter from "./VocabularyFilter";
 import Copy from "@/svg/Copy";
 import CreateGameModal from "./CreateGameModal";
-import { createRuleApi, deleteRuleApi } from "@/utils/callKnownApi";
+import { createRuleApi, deleteRuleApi, modifyRuleApi } from "@/utils/callKnownApi";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -135,7 +135,7 @@ export default function RulesLoaded(props: {
                 )}
                 confirm_button_text="Modifica regola"
                 doSomethingWithRule={(rule) => {
-                  createRuleApi(
+                  modifyRuleApi(
                     rule,
                     blocks,
                     vocabularies_metadata,
