@@ -22,11 +22,11 @@ export function makeRuleNested(
   } = sequetial_object;
 
   if (!while_arr || !when_arr || !do_arr || scope !== "SELECTOR") {
-    throw new Error("Not a selector block");
+    throw new Error("Non un blocco SELECTOR");
   }
 
   const and_block = blocks.find((b) => b.name === andBlockName);
-  if (!and_block) throw new Error("No AND block found in vocabulary");
+  if (!and_block) throw new Error("Nessun blocco AND trovato nei vocabolari");
 
   const v: Set<Vocabulary> = new Set();
   for (const b of while_arr) v.add(b.vocabulary);
@@ -40,7 +40,7 @@ export function makeRuleNested(
   const new_while_arr = makeArrayNested(while_arr, and_block);
   const new_when_arr = makeArrayNested(when_arr, and_block);
 
-  if (!new_while_arr || !new_when_arr) throw new Error("empty when or while");
+  if (!new_while_arr || !new_when_arr) throw new Error("Quando o Mentre vuoto");
 
   const new_sequential_object: Rule = {
     id: sequetial_object.id,
