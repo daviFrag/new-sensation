@@ -34,6 +34,7 @@ export type Block = {
 
 export type Rule = {
   id?: string;
+  vocabularies: Vocabulary[];
   when: Block;
   while: Block;
   do: Block[];

@@ -8,6 +8,7 @@ import {
   RuleJson,
 } from "@/types";
 import { BlockText } from "@/types/ClientTypes";
+import { stringify } from "querystring";
 
 export const andBlockName = "AndBlock";
 
@@ -56,7 +57,10 @@ export function convertVocabularyMetadataToVocabularyAndBlocks(
 
   // return { vocabulary, blocks };
   // todo wait for fixing of this block
-  return {vocabulary, blocks: blocks.filter(b => b.name !== 'TurnOnLedBlock')}
+  return {
+    vocabulary,
+    blocks: blocks.filter((b) => b.name !== "TurnOnLedBlock"),
+  };
 }
 
 export function convertBlockJsonToBlock(
@@ -203,6 +207,11 @@ export function convertRuleJsonToRule(
     status: "success",
     rule: {
       id: rule_json.id,
+      vocabularies: rule_json.vocabularies.map((rv) => {
+        if (typeof rv === "string")
+          return v.find((vv) => vv.id === rv)?.name ?? "";
+        return rv.name;
+      }),
       when: whenRes.block,
       while: whileRes.block,
       do: doBlocks,
@@ -225,9 +234,20 @@ export function convertRuleToRuleJson(
     return { status: "error", msg };
   }
 
+  const vocabularies: string[] = [];
+  vocabularies.push(
+    findIdOfVocabulary(rule.when.vocabulary, vocabularies_metadata)
+  );
+  vocabularies.push(
+    findIdOfVocabulary(rule.while.vocabulary, vocabularies_metadata)
+  );
+  for (const b of rule.do)
+    vocabularies.push(findIdOfVocabulary(b.vocabulary, vocabularies_metadata));
+
   const createRuleJson: CreateRuleJson = {
     // todo add rule name
     name: "",
+    vocabularies,
     condition: {
       name: andBlockName,
       vocabulary: findIdOfVocabulary(

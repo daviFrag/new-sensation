@@ -64,6 +64,7 @@ export type CreateRuleJson = {
   name: string;
   condition: BlockJson;
   actions: BlockJson[];
+  vocabularies: string[] | VocabularyMetadata[];
 };
 
 export type RuleJson = CreateRuleJson & {

@@ -47,6 +47,15 @@ export default function RulesLoaded(props: {
     );
   }
 
+  function filterVocabularyChoiceRules(rules: Rule[]): Rule[] {
+    return rules.filter((r) => {
+      for (const v of r.vocabularies) {
+        if (!vocabularies_choices.includes(v)) return false;
+      }
+      return true;
+    });
+  }
+
   return (
     <main>
       <h1 className="w-11/12 mx-auto text-3xl font-semibold pt-10 pb-4">
@@ -77,7 +86,7 @@ export default function RulesLoaded(props: {
         </button>
       </div>
       <div className="w-11/12 mx-auto">
-        {filterSearchedRules(rules).map((r) => (
+        {filterSearchedRules(filterVocabularyChoiceRules(rules)).map((r) => (
           <div
             key={r.id}
             className="text-2xl border border-black p-3 flex flex-col mb-2 rounded"
@@ -121,7 +130,9 @@ export default function RulesLoaded(props: {
             </div>
             {rule_modify === r.id && (
               <CreateRuleMenu
-                blocks={blocks}
+                blocks={blocks.filter((b) =>
+                  vocabularies_choices.includes(b.vocabulary)
+                )}
                 confirm_button_text="Modifica regola"
                 doSomethingWithRule={(rule) => {
                   createRuleApi(
