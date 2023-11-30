@@ -273,6 +273,7 @@ export default function CreateRuleMenu(props: {
       <button
         className="rounded-full w-8 aspect-square bg-sky-300"
         onClick={() => setArray((prev) => [...prev, null])}
+        key={`add-block-${type}-${scope}`}
       >
         +
       </button>
