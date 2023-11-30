@@ -104,17 +104,12 @@ export function modifyTaskApi(
 ) {
   if (!task?.id) return Swal.fire("Errore", "Task does not have id", "error");
 
-  waitForConfirmSwal(
-    `Vuoi modificare le regole del gioco ${task.name}?`,
-    "Modifica",
-    () =>
-      wrapApiCallInWaitingSwal(
-        () => apiPut<TaskJson>(`tasks/${task.id}`, new_task),
-        (res) => {
-          Swal.fire("Gioco modificato", res.data?.name, "success");
-          if (reloadData) reloadData();
-        }
-      )
+  wrapApiCallInWaitingSwal(
+    () => apiPut<TaskJson>(`tasks/${task.id}`, new_task),
+    (res) => {
+      Swal.fire("Gioco modificato", res.data?.name, "success");
+      if (reloadData) reloadData();
+    }
   );
 }
 
