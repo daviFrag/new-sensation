@@ -1,10 +1,17 @@
-import { Block, Rule, RuleUnnested } from "@/types";
-import { andBlockName } from "./fromApitoAppTypes";
+import {
+  Block,
+  Rule,
+  RuleUnnested,
+  Vocabulary,
+  VocabularyMetadata,
+} from "@/types";
+import { andBlockName, findIdOfVocabulary } from "./fromApitoAppTypes";
 
 /** CAN THROW ERROR */
 export function makeRuleNested(
   sequetial_object: RuleUnnested,
-  blocks: Block[]
+  blocks: Block[],
+  vocabularies_metadata: VocabularyMetadata[]
 ): Rule {
   const {
     while: while_arr,
@@ -20,6 +27,15 @@ export function makeRuleNested(
   const and_block = blocks.find((b) => b.name === andBlockName);
   if (!and_block) throw new Error("No AND block found in vocabulary");
 
+  const v: Set<Vocabulary> = new Set();
+  for (const b of while_arr) v.add(b.vocabulary);
+  for (const b of when_arr) v.add(b.vocabulary);
+  for (const b of do_arr) v.add(b.vocabulary);
+  const vocabularies: string[] = [];
+  v.forEach((v_name) =>
+    vocabularies.push(findIdOfVocabulary(v_name, vocabularies_metadata))
+  );
+
   const new_while_arr = makeArrayNested(while_arr, and_block);
   const new_when_arr = makeArrayNested(when_arr, and_block);
 
@@ -27,6 +43,7 @@ export function makeRuleNested(
 
   const new_sequential_object: Rule = {
     id: sequetial_object.id,
+    vocabularies,
     when: new_when_arr,
     while: new_while_arr,
     do: do_arr,

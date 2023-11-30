@@ -28,6 +28,7 @@ export default function CreateLoaded(props: {
           vocabularies_choices.includes(b.vocabulary)
         )}
         confirm_button_text="Crea regola"
+        vocabularies_metadata={vocabularies_metadata}
         doSomethingWithRule={(rule) => {
           createRuleApi(rule, blocks, vocabularies_metadata);
         }}

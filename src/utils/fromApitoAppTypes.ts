@@ -263,7 +263,7 @@ export function convertRuleToRuleJson(
   return { status: "success", rule: createRuleJson };
 }
 
-function findIdOfVocabulary(
+export function findIdOfVocabulary(
   name: string,
   vocabularies_metadata: VocabularyMetadata[]
 ): VocabularyMetadata["id"] {
