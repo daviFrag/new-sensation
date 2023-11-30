@@ -140,8 +140,6 @@ export default function RulesLoaded(props: {
                 confirm_button_text="Modifica regola"
                 vocabularies_metadata={vocabularies_metadata}
                 doSomethingWithRule={(rule) => {
-                  console.log(convertRuleToString(r));
-                  console.log(convertRuleToString(rule));
                   modifyRuleApi(
                     rule,
                     blocks,

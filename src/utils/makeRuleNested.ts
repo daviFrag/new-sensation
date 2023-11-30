@@ -60,7 +60,7 @@ function makeArrayNested(arr: Block[], and_block: Block): Block | undefined {
     const b_2 = arr.pop()!;
     const this_and_block: Block = JSON.parse(JSON.stringify(and_block));
     // @ts-ignore
-    this_and_block.text[0].choice = b_1;
+    this_and_block.text[0].choice = b_2;
     // @ts-ignore
     this_and_block.text[2].choice = b_1;
     arr.push(this_and_block);

@@ -15,7 +15,7 @@ export default function CreateRuleMenu(props: {
   confirm_button_text: string;
   doSomethingWithRule: (rule: Rule) => void;
   extraDoOnReset?: () => void;
-  vocabularies_metadata: VocabularyMetadata[],
+  vocabularies_metadata: VocabularyMetadata[];
   starting_values?: {
     id: string;
     whileArray: Block[];
@@ -41,8 +41,6 @@ export default function CreateRuleMenu(props: {
   const [doArray, setDoArray] = useState<(Block | null)[]>(
     starting_values?.doArray ?? [null]
   );
-
-  console.log({whileArray, whenArray, doArray});
 
   function findBlock(name: string): Block | undefined {
     return blocks.find((b) => b.name === name);
@@ -340,8 +338,6 @@ export default function CreateRuleMenu(props: {
                 blocks,
                 vocabularies_metadata
               );
-              console.log(rule_unnested);
-              console.log(rule);
               if (starting_values?.id) rule.id = starting_values.id;
               doSomethingWithRule(rule);
               resetFields();
