@@ -1,10 +1,20 @@
 import Toggle from "@/components/Toggle";
+import useApiQuery from "@/hooks/useApiQuery";
+import { apiDelete, apiGet, apiPost } from "@/services/api";
 import Bin from "@/svg/Bin";
 import Pen from "@/svg/Pen";
-import { Rule, RuleJson, TaskJson, VocabularyMetadata } from "@/types";
+import {
+  Rule,
+  RuleJson,
+  TaskInfo,
+  TaskJson,
+  VocabularyMetadata,
+} from "@/types";
 import { convertRuleToString } from "@/utils/convertRuleToString";
 import { convertRuleJsonToRule } from "@/utils/fromApitoAppTypes";
-import React, { useRef, useState } from "react";
+import wrapApiCallInWaitingSwal from "@/utils/wrapApiCallInWaitingSwal";
+import React, { useEffect, useRef, useState } from "react";
+import Swal from "sweetalert2";
 
 function RuleBox(props: {
   rule: RuleJson;
@@ -49,8 +59,19 @@ export default function GameBox(props: {
   updateData: () => void;
 }) {
   const { task, rules, vocabularies_metadata, updateData } = props;
-  const [task_running, setTaskRunning] = useState(false);
+  const task_instances_url = `tasks/${task.id}/instances`;
   const modal = useRef<HTMLDialogElement>(null);
+  const [instances, setInstances] = useState<TaskInfo[]>();
+  const resetInstances = () =>
+    apiGet<TaskInfo[]>(task_instances_url).then((res) => {
+      if (res.status === "success")
+        setInstances(res.data?.filter((x) => x.status !== "STOPPED"));
+      console.log(res)
+    });
+  useEffect(() => {
+    resetInstances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="border border-solid border-black rounded">
@@ -62,12 +83,29 @@ export default function GameBox(props: {
       </div>
 
       <div className="text-2xl p-7">
-        {/* TODO API instance task */}
         <Toggle
-          checked={task_running}
+          checked={!!instances && instances.length > 0}
+          disabled={!instances}
           label_text="attivato / disattivato"
-          checkedFn={() => setTaskRunning(false)}
-          uncheckedFn={() => setTaskRunning(true)}
+          checkedFn={() =>
+            wrapApiCallInWaitingSwal(
+              () =>
+                apiDelete(task_instances_url + `/${instances?.[0].instanceId}`),
+              () => {
+                Swal.fire("Gioco eliminato", "", "success");
+                resetInstances();
+              }
+            )
+          }
+          uncheckedFn={() =>
+            wrapApiCallInWaitingSwal(
+              () => apiPost(task_instances_url, {}),
+              () => {
+                Swal.fire("Gioco attivato", "", "success");
+                resetInstances();
+              }
+            )
+          }
         />
       </div>
 

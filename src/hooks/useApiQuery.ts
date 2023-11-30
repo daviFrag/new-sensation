@@ -100,7 +100,7 @@ export default function useApiQuery<T>(
   }
 
   return {
-    data: data.data,
+    data: data.data!,
     is_loading,
     is_error: false,
     invalidateQuery: () => query_client.invalidateQueries([query_key]),

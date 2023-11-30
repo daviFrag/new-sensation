@@ -1,8 +1,7 @@
-import React, { useRef, useState } from "react";
-import VocabularyFilter from "../rules/VocabularyFilter";
+import React, { useState } from "react";
+// import VocabularyFilter from "../rules/VocabularyFilter";
 import { Rule, TaskJson, Vocabulary, VocabularyMetadata } from "@/types";
 import GameBox from "./GameBox";
-import { links } from "@/utils/links";
 
 export default function GamesLoaded(props: {
   vocabularies: Vocabulary[];
@@ -15,9 +14,9 @@ export default function GamesLoaded(props: {
     props;
 
   const [task_keyword_searched, setTaskKeywordSearched] = useState("");
-  const [vocabularies_choices, setVocabChoices] = useState<Vocabulary[]>([]);
+  /* const [vocabularies_choices, setVocabChoices] = useState<Vocabulary[]>([]);
   const vocabulariesChoicesChanges = (choices: Vocabulary[]) =>
-    setVocabChoices(choices);
+    setVocabChoices(choices); */
 
   function filterTasks(tasks: TaskJson[]): TaskJson[] {
     if (!task_keyword_searched) return tasks;
@@ -33,10 +32,10 @@ export default function GamesLoaded(props: {
       <h1 className="w-11/12 mx-auto text-3xl font-semibold pt-10 pb-4">
         Giochi
       </h1>
-      <VocabularyFilter
+      {/* <VocabularyFilter
         vocabularies={vocabularies}
         onChange={vocabulariesChoicesChanges}
-      />
+      /> */}
 
       <div className="w-11/12 mx-auto my-5 flex justify-between">
         <input

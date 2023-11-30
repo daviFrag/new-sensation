@@ -3,11 +3,12 @@ import styles from './Toggle.module.css';
 
 export default function Toggle(props: {
   checked: boolean;
+  disabled?: boolean;
   label_text?: string;
   checkedFn: () => void;
   uncheckedFn: () => void;
 }) {
-  const { checked, label_text, checkedFn, uncheckedFn } = props;
+  const { checked, disabled, label_text, checkedFn, uncheckedFn } = props;
   const id = useId();
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -23,6 +24,7 @@ export default function Toggle(props: {
         type='checkbox'
         className={styles.input}
         checked={checked}
+        disabled={disabled}
         onChange={(e) => onChange(e)}
       />
       <label htmlFor={id} className={styles.label}>
