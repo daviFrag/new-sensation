@@ -22,7 +22,7 @@ export default function RuleBox(props: {
     <div className="flex border-t-2 border-solid border-black text-2xl w-full px-7">
       <p className="flex items-center px-7">{getRuleName()}</p>
       <div
-        className="ml-auto h-16 p-3"
+        className="ml-auto h-16 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
         onClick={() => {
           /* TODO api */
         }}
@@ -30,7 +30,7 @@ export default function RuleBox(props: {
         <Pen />
       </div>
       <div
-        className="h-16 p-3"
+        className="h-16 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
         onClick={() => {
           /* TODO api */
         }}

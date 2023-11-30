@@ -1,24 +1,21 @@
 import Toggle from "@/components/Toggle";
 import { apiDelete, apiGet, apiPost } from "@/services/api";
 import Bin from "@/svg/Bin";
-import {
-  Rule,
-  TaskInfo,
-  TaskJson,
-  VocabularyMetadata,
-} from "@/types";
+import { Rule, TaskInfo, TaskJson, VocabularyMetadata } from "@/types";
 import wrapApiCallInWaitingSwal from "@/utils/wrapApiCallInWaitingSwal";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import RuleBox from "./RuleBox";
+import Copy from "@/svg/Copy";
+import { createTaskApi, deleteTaskApi } from "@/utils/callKnownApi";
 
 export default function GameBox(props: {
   task: TaskJson;
   rules: Rule[];
   vocabularies_metadata: VocabularyMetadata[];
-  updateData: () => void;
+  reloadData: () => void;
 }) {
-  const { task, rules, vocabularies_metadata, updateData } = props;
+  const { task, rules, vocabularies_metadata, reloadData } = props;
   const task_instances_url = `tasks/${task.id}/instances`;
   const modal = useRef<HTMLDialogElement>(null);
 
@@ -56,7 +53,22 @@ export default function GameBox(props: {
     <div className="border border-solid border-black rounded">
       <div className="flex h-12 items-center justify-start p-7 pt-12">
         <h2 className="w-4/5 mr-auto text-3xl font-bold">{task.name}</h2>
-        <div className="ml-auto h-20 p-3">
+        <div
+          className="ml-auto h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
+          onClick={() =>
+            createTaskApi(
+              task.name + " - copia",
+              task.rules.map((r) => r.id),
+              reloadData
+            )
+          }
+        >
+          <Copy />
+        </div>
+        <div
+          className="h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
+          onClick={() => deleteTaskApi(task.id, reloadData)}
+        >
           <Bin />
         </div>
       </div>

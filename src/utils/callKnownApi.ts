@@ -75,7 +75,11 @@ export function deleteRuleApi(rule: Rule, reloadData?: () => void) {
   );
 }
 
-export function createTaskApi(name: string, rules_id: string[]) {
+export function createTaskApi(
+  name: string,
+  rules_id: string[],
+  reloadData?: () => void
+) {
   const new_task: CreateTaskJson = {
     name,
     rules: rules_id,
@@ -83,6 +87,21 @@ export function createTaskApi(name: string, rules_id: string[]) {
 
   wrapApiCallInWaitingSwal(
     () => apiPost<TaskJson>("tasks", new_task),
-    (res) => Swal.fire("Gioco creato", res.data?.name, "success")
+    (res) => {
+      Swal.fire("Gioco creato", res.data?.name, "success");
+      if (reloadData) reloadData();
+    }
+  );
+}
+
+export function deleteTaskApi(task_id: string, reloadData?: () => void) {
+  if (!task_id) return Swal.fire("Errore", "Task does not have id", "error");
+
+  wrapApiCallInWaitingSwal(
+    () => apiDelete(`tasks/${task_id}`),
+    (res) => {
+      Swal.fire("Gioco eliminato", "", "success");
+      if (reloadData) reloadData();
+    }
   );
 }

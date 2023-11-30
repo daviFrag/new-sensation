@@ -8,9 +8,9 @@ export default function GamesLoaded(props: {
   rules: Rule[];
   tasks: TaskJson[];
   vocabularies_metadata: VocabularyMetadata[];
-  updateData: () => void;
+  reloadData: () => void;
 }) {
-  const { vocabularies, rules, tasks, vocabularies_metadata, updateData } =
+  const { vocabularies, rules, tasks, vocabularies_metadata, reloadData } =
     props;
 
   const [task_keyword_searched, setTaskKeywordSearched] = useState("");
@@ -63,7 +63,7 @@ export default function GamesLoaded(props: {
             task={t}
             rules={rules}
             vocabularies_metadata={vocabularies_metadata}
-            updateData={updateData}
+            reloadData={reloadData}
           />
         ))}
       </div>

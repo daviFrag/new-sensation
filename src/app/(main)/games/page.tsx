@@ -41,7 +41,7 @@ function GamesPartial(props: {
         rules={rules}
         tasks={tasks}
         vocabularies_metadata={vocabularies_metadata}
-        updateData={() => {
+        reloadData={() => {
           invalidateRulesQuery();
           invalidateTasksQuery();
         }}
