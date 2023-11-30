@@ -1,6 +1,6 @@
 ### create vocabulary
 
-POST http://localhoost:8080/api/vocabularies HTTP/1.1
+POST http://localhost:8080/api/vocabularies HTTP/1.1
 content-type: application/json
 
 {
@@ -11,15 +11,15 @@ content-type: application/json
 
 ### get vocabularies
 
-GET http://localhoost:8080/api/vocabularies
+GET http://localhost:8080/api/vocabularies
 
 ### get single vocabulary
 
-GET http://localhoost:8080/api/vocabularies/65662b357d16023212908e73
+GET http://localhost:8080/api/vocabularies/65662b357d16023212908e73
 
 ### create rule
 
-POST http://localhoost:8080/api/rules HTTP/1.1
+POST http://localhost:8080/api/rules HTTP/1.1
 content-type: application/json
 
 {
@@ -49,7 +49,7 @@ content-type: application/json
 
 ### create rule 2
 
-POST http://localhoost:8080/api/rules HTTP/1.1
+POST http://localhost:8080/api/rules HTTP/1.1
 content-type: application/json
 
 {
@@ -90,15 +90,15 @@ content-type: application/json
 
 ### get rules
 
-GET http://localhoost:8080/api/rules
+GET http://localhost:8080/api/rules
 
 ### delete rule
 
-DELETE http://localhoost:8080/api/rules/65662f877d16023212908e75
+DELETE http://localhost:8080/api/rules/65662f877d16023212908e75
 
 ### create task
 
-POST http://localhoost:8080/api/tasks HTTP/1.1
+POST http://localhost:8080/api/tasks HTTP/1.1
 content-type: application/json
 
 {
@@ -110,11 +110,11 @@ content-type: application/json
 
 ### get tasks
 
-GET http://localhoost:8080/api/tasks
+GET http://localhost:8080/api/tasks
 
 ### create rule of task
 
-PUT http://localhoost:8080/api/tasks/6557fa98a688b03aaf95f730 HTTP/1.1
+PUT http://localhost:8080/api/tasks/6557fa98a688b03aaf95f730 HTTP/1.1
 content-type: application/json
 
 {

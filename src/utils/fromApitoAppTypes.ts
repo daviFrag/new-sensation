@@ -55,12 +55,7 @@ export function convertVocabularyMetadataToVocabularyAndBlocks(
     else console.log(x.msg);
   }
 
-  // return { vocabulary, blocks };
-  // todo wait for fixing of this block
-  return {
-    vocabulary,
-    blocks: blocks.filter((b) => b.name !== "TurnOnLedBlock"),
-  };
+  return { vocabulary, blocks };
 }
 
 export function convertBlockJsonToBlock(

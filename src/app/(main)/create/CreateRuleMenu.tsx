@@ -281,6 +281,13 @@ export default function CreateRuleMenu(props: {
     return [elements, plus_button];
   }
 
+  function resetFields() {
+    setWhenArray([null]);
+    setWhileArray([null]);
+    setDoArray([null]);
+    if (extraDoOnReset) extraDoOnReset();
+  }
+
   return (
     <div className="w-11/12 mx-auto flex flex-col">
       <div className="flex gap-10">
@@ -294,7 +301,7 @@ export default function CreateRuleMenu(props: {
           <h2 className="text-2xl py-5">Stato</h2>
           <div className="border border-black rounded-xl h-full text-xl p-3">
             MENTRE{" "}
-            {blockArrayToText(whileArray, setWhileArray, "STATE", "WHEN")}
+            {blockArrayToText(whileArray, setWhileArray, "STATE", "WHILE")}
           </div>
         </div>
         <div className="w-4/12">
@@ -306,12 +313,7 @@ export default function CreateRuleMenu(props: {
       </div>
       <div className="w-11/12 ml-auto flex justify-end gap-10 mt-20">
         <button
-          onClick={() => {
-            setWhenArray([null]);
-            setWhileArray([null]);
-            setDoArray([null]);
-            if (extraDoOnReset) extraDoOnReset();
-          }}
+          onClick={() => resetFields()}
           className="text-white p-5 rounded text-xl my-5 uppercase"
           style={{ backgroundColor: "#D73E3E" }}
         >
@@ -332,6 +334,7 @@ export default function CreateRuleMenu(props: {
                 blocks
               );
               doSomethingWithRule(rule);
+              resetFields();
             } catch (e) {
               alert(e);
             }
