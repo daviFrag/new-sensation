@@ -291,6 +291,7 @@ export default function CreateRuleMenu(props: {
     setWhenArray([null]);
     setWhileArray([null]);
     setDoArray([null]);
+    setName("");
     if (extraDoOnReset) extraDoOnReset();
   }
 
