@@ -77,7 +77,7 @@ export default function RulesLoaded(props: {
           onChange={(e) => setRuleKeywordSearched(e.target.value)}
         />
         <button
-          className="uppercase text-white py-3 px-7 text-2xl rounded-2xl"
+          className="uppercase text-white py-3 px-7 text-2xl rounded-2xl duration-100 ease-in-out enabled:hover:scale-105"
           style={{
             backgroundColor: !selected_rules_ids.length ? "#7E7B7B" : "#146AB9",
           }}

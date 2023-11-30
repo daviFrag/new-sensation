@@ -112,7 +112,7 @@ export default function GameBox(props: {
 
       <div className="flex justify-end p-7 w-full border-t-2 border-solid border-black">
         <button
-          className="uppercase text-white py-3 px-7 text-2xl rounded-2xl"
+          className="uppercase text-white py-3 px-7 text-2xl rounded-2xl duration-100 ease-in-out hover:scale-105"
           style={{
             backgroundColor: "#146AB9",
           }}
