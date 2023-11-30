@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import RuleBox from "./RuleBox";
 import Copy from "@/svg/Copy";
 import { createTaskApi, deleteTaskApi } from "@/utils/callKnownApi";
+import AddRuleToTaskModal from "./AddRuleToTaskModal";
 
 export default function GameBox(props: {
   task: TaskJson;
@@ -105,8 +106,10 @@ export default function GameBox(props: {
       {task.rules.map((r) => (
         <RuleBox
           key={r.id}
+          task={task}
           rule={r}
           vocabularies_metadata={vocabularies_metadata}
+          reloadData={reloadData}
         />
       ))}
 
@@ -117,13 +120,20 @@ export default function GameBox(props: {
             backgroundColor: "#146AB9",
           }}
           onClick={() => {
-            // TODO api add rule to task
             if (modal.current) modal.current?.showModal();
           }}
         >
           Aggiungi Regola
         </button>
       </div>
+
+      <AddRuleToTaskModal
+        modal={modal}
+        task={task}
+        // rules={[...rules, ...rules, ...rules, ...rules, ...rules]}
+        rules={rules}
+        reloadData={reloadData}
+      />
     </div>
   );
 }

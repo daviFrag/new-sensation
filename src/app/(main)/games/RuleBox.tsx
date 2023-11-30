@@ -1,15 +1,18 @@
-import Bin from '@/svg/Bin';
-import Pen from '@/svg/Pen';
-import { RuleJson, VocabularyMetadata } from '@/types';
-import { convertRuleToString } from '@/utils/convertRuleToString';
-import { convertRuleJsonToRule } from '@/utils/fromApitoAppTypes';
-import React from 'react'
+import Bin from "@/svg/Bin";
+import Pen from "@/svg/Pen";
+import { RuleJson, TaskJson, VocabularyMetadata } from "@/types";
+import { modifyTaskApi } from "@/utils/callKnownApi";
+import { convertRuleToString } from "@/utils/convertRuleToString";
+import { convertRuleJsonToRule } from "@/utils/fromApitoAppTypes";
+import React from "react";
 
 export default function RuleBox(props: {
+  task: TaskJson;
   rule: RuleJson;
   vocabularies_metadata: VocabularyMetadata[];
+  reloadData: () => void;
 }) {
-  const { rule, vocabularies_metadata } = props;
+  const { task, rule, vocabularies_metadata, reloadData } = props;
 
   const getRuleName = () => {
     const res = convertRuleJsonToRule(rule, vocabularies_metadata);
@@ -20,19 +23,22 @@ export default function RuleBox(props: {
 
   return (
     <div className="flex border-t-2 border-solid border-black text-2xl w-full px-7">
-      <p className="flex items-center px-7">{getRuleName()}</p>
-      <div
-        className="ml-auto h-16 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
+      <p className="flex items-center px-7 mr-auto">{getRuleName()}</p>
+      {/* <div
+        className="h-16 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
         onClick={() => {
-          /* TODO api */
+          // TODO api
+          // ? what should this api do
         }}
       >
         <Pen />
-      </div>
+      </div> */}
       <div
         className="h-16 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
         onClick={() => {
-          /* TODO api */
+          const new_task: TaskJson = JSON.parse(JSON.stringify(task));
+          new_task.rules = new_task.rules.filter((r) => r.id !== rule.id);
+          modifyTaskApi(task.id, new_task, reloadData);
         }}
       >
         <Bin />

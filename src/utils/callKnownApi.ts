@@ -94,6 +94,22 @@ export function createTaskApi(
   );
 }
 
+export function modifyTaskApi(
+  task_id: string,
+  new_task: TaskJson,
+  reloadData?: () => void
+) {
+  if (!task_id) return Swal.fire("Errore", "Task does not have id", "error");
+
+  wrapApiCallInWaitingSwal(
+    () => apiPut<TaskJson>(`tasks/${task_id}`, new_task),
+    (res) => {
+      Swal.fire("Gioco modificato", res.data?.name, "success");
+      if (reloadData) reloadData();
+    }
+  );
+}
+
 export function deleteTaskApi(task_id: string, reloadData?: () => void) {
   if (!task_id) return Swal.fire("Errore", "Task does not have id", "error");
 
