@@ -32,7 +32,7 @@ export default function AddRuleToTaskModal(props: {
                 const new_rules = [...new_task.rules.map((rr) => rr.id), r.id!];
                 // @ts-ignore
                 new_task.rules = new_rules;
-                modifyTaskApi(task.id, new_task, reloadData);
+                modifyTaskApi(task, new_task, reloadData);
                 closeModal();
               }}
             >

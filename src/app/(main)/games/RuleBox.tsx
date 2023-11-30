@@ -38,7 +38,7 @@ export default function RuleBox(props: {
         onClick={() => {
           const new_task: TaskJson = JSON.parse(JSON.stringify(task));
           new_task.rules = new_task.rules.filter((r) => r.id !== rule.id);
-          modifyTaskApi(task.id, new_task, reloadData);
+          modifyTaskApi(task, new_task, reloadData);
         }}
       >
         <Bin />

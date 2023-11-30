@@ -10,6 +10,7 @@ import { convertRuleToRuleJson } from "./fromApitoAppTypes";
 import Swal from "sweetalert2";
 import wrapApiCallInWaitingSwal from "./wrapApiCallInWaitingSwal";
 import { apiDelete, apiPost, apiPut } from "@/services/api";
+import waitForConfirmSwal from "./waitForConfirmSwal";
 
 export function createRuleApi(
   rule: Rule,
@@ -54,24 +55,28 @@ export function modifyRuleApi(
     return Swal.fire("Errore", rule_json_res.msg, "error");
 
   const rule_json = rule_json_res.rule;
-  wrapApiCallInWaitingSwal(
-    () => apiPut<RuleJson>(`rules/${rule.id}`, rule_json),
-    (res) => {
-      Swal.fire("Regola modificata", res.data?.name, "success");
-      if (reloadData) reloadData();
-    }
+  waitForConfirmSwal(`Vuoi modificare la regola?`, "Modifica", () =>
+    wrapApiCallInWaitingSwal(
+      () => apiPut<RuleJson>(`rules/${rule.id}`, rule_json),
+      (res) => {
+        Swal.fire("Regola modificata", res.data?.name, "success");
+        if (reloadData) reloadData();
+      }
+    )
   );
 }
 
 export function deleteRuleApi(rule: Rule, reloadData?: () => void) {
   if (!rule.id) return Swal.fire("Errore", "Rule does not have id", "error");
 
-  wrapApiCallInWaitingSwal(
-    () => apiDelete<RuleJson>(`rules/${rule.id}`),
-    () => {
-      Swal.fire("Regola eliminata", "", "success");
-      if (reloadData) reloadData();
-    }
+  waitForConfirmSwal(`Vuoi eliminare la regola?`, "Elimina", () =>
+    wrapApiCallInWaitingSwal(
+      () => apiDelete<RuleJson>(`rules/${rule.id}`),
+      () => {
+        Swal.fire("Regola eliminata", "", "success");
+        if (reloadData) reloadData();
+      }
+    )
   );
 }
 
@@ -95,29 +100,33 @@ export function createTaskApi(
 }
 
 export function modifyTaskApi(
-  task_id: string,
+  task: TaskJson,
   new_task: TaskJson,
   reloadData?: () => void
 ) {
-  if (!task_id) return Swal.fire("Errore", "Task does not have id", "error");
+  if (!task?.id) return Swal.fire("Errore", "Task does not have id", "error");
 
-  wrapApiCallInWaitingSwal(
-    () => apiPut<TaskJson>(`tasks/${task_id}`, new_task),
-    (res) => {
-      Swal.fire("Gioco modificato", res.data?.name, "success");
-      if (reloadData) reloadData();
-    }
+  waitForConfirmSwal(`Vuoi modificare le regole del gioco ${task.name}?`, "Modifica", () =>
+    wrapApiCallInWaitingSwal(
+      () => apiPut<TaskJson>(`tasks/${task.id}`, new_task),
+      (res) => {
+        Swal.fire("Gioco modificato", res.data?.name, "success");
+        if (reloadData) reloadData();
+      }
+    )
   );
 }
 
-export function deleteTaskApi(task_id: string, reloadData?: () => void) {
-  if (!task_id) return Swal.fire("Errore", "Task does not have id", "error");
+export function deleteTaskApi(task: TaskJson, reloadData?: () => void) {
+  if (!task?.id) return Swal.fire("Errore", "Task does not have id", "error");
 
-  wrapApiCallInWaitingSwal(
-    () => apiDelete(`tasks/${task_id}`),
-    (res) => {
-      Swal.fire("Gioco eliminato", "", "success");
-      if (reloadData) reloadData();
-    }
+  waitForConfirmSwal(`Vuoi eliminare il gioco ${task.name}?`, "Elimina", () =>
+    wrapApiCallInWaitingSwal(
+      () => apiDelete(`tasks/${task.id}`),
+      (res) => {
+        Swal.fire("Gioco eliminato", "", "success");
+        if (reloadData) reloadData();
+      }
+    )
   );
 }

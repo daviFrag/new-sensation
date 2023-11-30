@@ -9,6 +9,7 @@ import RuleBox from "./RuleBox";
 import Copy from "@/svg/Copy";
 import { createTaskApi, deleteTaskApi } from "@/utils/callKnownApi";
 import AddRuleToTaskModal from "./AddRuleToTaskModal";
+import waitForConfirmSwal from "@/utils/waitForConfirmSwal";
 
 export default function GameBox(props: {
   task: TaskJson;
@@ -50,6 +51,29 @@ export default function GameBox(props: {
     return conf;
   }, [vocabularies_metadata]);
 
+  function createNewInstance() {
+    wrapApiCallInWaitingSwal(
+      () => apiPost(task_instances_url, taskConfig),
+      () => {
+        Swal.fire("Gioco attivato", "", "success");
+        resetInstances();
+      }
+    );
+  }
+
+  function deleteInstances() {
+    if (!instances) return;
+
+    const promises = instances.map((i) =>
+      apiDelete(task_instances_url + `/${i.instanceId}`)
+    );
+
+    Promise.all(promises).then(() => {
+      Swal.fire("Gioco eliminato", "", "success");
+      resetInstances();
+    });
+  }
+
   return (
     <div className="border border-solid border-black rounded">
       <div className="flex h-12 items-center justify-start p-7 pt-12">
@@ -68,7 +92,7 @@ export default function GameBox(props: {
         </div>
         <div
           className="h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
-          onClick={() => deleteTaskApi(task.id, reloadData)}
+          onClick={() => deleteTaskApi(task, reloadData)}
         >
           <Bin />
         </div>
@@ -79,25 +103,18 @@ export default function GameBox(props: {
           checked={!!instances && instances.length > 0}
           disabled={!instances}
           label_text="attivato / disattivato"
-          checkedFn={() => {
-            if (!instances) return;
-
-            const promises = instances.map((i) =>
-              apiDelete(task_instances_url + `/${i.instanceId}`)
-            );
-
-            Promise.all(promises).then(() => {
-              Swal.fire("Gioco eliminato", "", "success");
-              resetInstances();
-            });
-          }}
+          checkedFn={() =>
+            waitForConfirmSwal(
+              `Vuoi chiudere le istanze del gioco ${task.name}?`,
+              "Chiudi",
+              () => deleteInstances()
+            )
+          }
           uncheckedFn={() =>
-            wrapApiCallInWaitingSwal(
-              () => apiPost(task_instances_url, taskConfig),
-              () => {
-                Swal.fire("Gioco attivato", "", "success");
-                resetInstances();
-              }
+            waitForConfirmSwal(
+              `Vuoi creare una nuova istanza del gioco ${task.name}?`,
+              "Apri",
+              () => createNewInstance()
             )
           }
         />
