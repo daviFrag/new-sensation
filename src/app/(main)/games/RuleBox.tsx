@@ -18,7 +18,7 @@ export default function RuleBox(props: {
     const res = convertRuleJsonToRule(rule, vocabularies_metadata);
     if (res.status !== "success")
       return `Error reading rule with id ${rule.id}`;
-    return convertRuleToString(res.rule);
+    return `${res.rule.name}: ${convertRuleToString(res.rule)}`;
   };
 
   return (

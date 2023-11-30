@@ -4,11 +4,11 @@ import {
   BlockType,
   Rule,
   RuleUnnested,
-  Vocabulary,
   VocabularyMetadata,
 } from "@/types";
 import { makeRuleNested } from "@/utils/makeRuleNested";
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function CreateRuleMenu(props: {
   blocks: Block[];
@@ -18,6 +18,7 @@ export default function CreateRuleMenu(props: {
   vocabularies_metadata: VocabularyMetadata[];
   starting_values?: {
     id: string;
+    name: string;
     whileArray: Block[];
     whenArray: Block[];
     doArray: Block[];
@@ -41,6 +42,7 @@ export default function CreateRuleMenu(props: {
   const [doArray, setDoArray] = useState<(Block | null)[]>(
     starting_values?.doArray ?? [null]
   );
+  const [name, setName] = useState(starting_values?.name ?? "");
 
   function findBlock(name: string): Block | undefined {
     return blocks.find((b) => b.name === name);
@@ -294,6 +296,14 @@ export default function CreateRuleMenu(props: {
 
   return (
     <div className="w-11/12 mx-auto flex flex-col">
+      <label className="text-2xl">
+        Nome della regola:
+        <input
+          className="border border-black px-2 mx-2"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
       <div className="flex gap-10">
         <div className="w-4/12">
           <h2 className="text-2xl py-5">Evento</h2>
@@ -325,7 +335,13 @@ export default function CreateRuleMenu(props: {
         </button>
         <button
           onClick={() => {
+            if (!name) {
+              Swal.fire("Dai un nome alla regola", "", "error");
+              return;
+            }
+
             const rule_unnested: RuleUnnested = {
+              name,
               when: whenArray.filter((x) => !!x) as Block[],
               while: whileArray.filter((x) => !!x) as Block[],
               do: doArray.filter((x) => !!x) as Block[],
@@ -342,7 +358,9 @@ export default function CreateRuleMenu(props: {
               doSomethingWithRule(rule);
               resetFields();
             } catch (e) {
-              alert(e);
+              // @ts-ignore
+              const message = e.message;
+              Swal.fire("Errore nel creare la regola", message, "error");
             }
           }}
           className="text-white bg-sky-500 p-5 rounded text-2xl my-5 uppercase duration-100 ease-in-out hover:scale-105"

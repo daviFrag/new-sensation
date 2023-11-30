@@ -18,6 +18,7 @@ export function makeRuleNested(
     when: when_arr,
     do: do_arr,
     scope,
+    name,
   } = sequetial_object;
 
   if (!while_arr || !when_arr || !do_arr || scope !== "SELECTOR") {
@@ -43,6 +44,7 @@ export function makeRuleNested(
 
   const new_sequential_object: Rule = {
     id: sequetial_object.id,
+    name,
     vocabularies,
     when: new_when_arr,
     while: new_while_arr,

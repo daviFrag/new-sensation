@@ -34,6 +34,7 @@ export type Block = {
 
 export type Rule = {
   id?: string;
+  name: string;
   vocabularies: Vocabulary[];
   when: Block;
   while: Block;
@@ -43,6 +44,7 @@ export type Rule = {
 
 export type RuleUnnested = {
   id?: string;
+  name: string;
   when: Block[];
   while: Block[];
   do: Block[];

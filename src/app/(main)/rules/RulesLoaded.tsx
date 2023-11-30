@@ -101,7 +101,9 @@ export default function RulesLoaded(props: {
                 className="scale-150"
                 onClick={() => newRuleInSelectedRules(r.id!)}
               />
-              <p className="w-10/12">{convertRuleToString(r)}</p>
+              <p className="w-10/12">
+                <em>{r.name}</em>: {convertRuleToString(r)}
+              </p>
               <div className="w-1/12 flex">
                 <div
                   onClick={() => setRuleModify(r.id!)}
@@ -150,6 +152,7 @@ export default function RulesLoaded(props: {
                 extraDoOnReset={() => setRuleModify("")}
                 starting_values={{
                   id: r.id,
+                  name: r.name,
                   whileArray: [r.while],
                   whenArray: [r.when],
                   doArray: r.do,

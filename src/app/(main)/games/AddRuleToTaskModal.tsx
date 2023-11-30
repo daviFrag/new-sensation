@@ -37,7 +37,7 @@ export default function AddRuleToTaskModal(props: {
               }}
             >
               <p className="flex items-center px-7 mr-auto">
-                {convertRuleToString(r)}
+                {`${r.name}: ${convertRuleToString(r)}`}
               </p>
             </div>
           ))}

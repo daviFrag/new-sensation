@@ -202,6 +202,7 @@ export function convertRuleJsonToRule(
     status: "success",
     rule: {
       id: rule_json.id,
+      name: rule_json.name,
       vocabularies: rule_json.vocabularies.map((rv) => {
         if (typeof rv === "string")
           return v.find((vv) => vv.id === rv)?.name ?? "";
@@ -240,8 +241,7 @@ export function convertRuleToRuleJson(
     vocabularies.push(findIdOfVocabulary(b.vocabulary, vocabularies_metadata));
 
   const createRuleJson: CreateRuleJson = {
-    // todo add rule name
-    name: "",
+    name: rule.name,
     vocabularies,
     condition: {
       name: andBlockName,
