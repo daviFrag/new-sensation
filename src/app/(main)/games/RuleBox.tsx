@@ -23,7 +23,7 @@ export default function RuleBox(props: {
 
   return (
     <div className="flex border-t-2 border-solid border-black text-2xl w-full px-7">
-      <p className="flex items-center px-7 mr-auto">{getRuleName()}</p>
+      <p className="flex items-center px-7 w-11/12 mr-auto">{getRuleName()}</p>
       {/* <div
         className="h-16 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
         onClick={() => {
