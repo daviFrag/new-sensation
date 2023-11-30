@@ -13,7 +13,7 @@ import {
 import { convertRuleToString } from "@/utils/convertRuleToString";
 import { convertRuleJsonToRule } from "@/utils/fromApitoAppTypes";
 import wrapApiCallInWaitingSwal from "@/utils/wrapApiCallInWaitingSwal";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Swal from "sweetalert2";
 
 function RuleBox(props: {
@@ -61,17 +61,36 @@ export default function GameBox(props: {
   const { task, rules, vocabularies_metadata, updateData } = props;
   const task_instances_url = `tasks/${task.id}/instances`;
   const modal = useRef<HTMLDialogElement>(null);
+
+  // * only running instances
   const [instances, setInstances] = useState<TaskInfo[]>();
   const resetInstances = () =>
     apiGet<TaskInfo[]>(task_instances_url).then((res) => {
       if (res.status === "success")
-        setInstances(res.data?.filter((x) => x.status !== "STOPPED"));
-      console.log(res)
+        setInstances(res.data?.filter((x) => x.status === "RUNNING"));
     });
+
   useEffect(() => {
     resetInstances();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // TODO: refactor this only for demo purposes
+  const taskConfig = useMemo(() => {
+    const conf: { [x: string]: any } = {};
+    for (const v of vocabularies_metadata) {
+      conf[v.name] = {
+        SmarterStateReader: {
+          broker: "tcp://localhost:1883",
+          user: "admin",
+          password: "password",
+          smarter: "smarter_fbk_5",
+        },
+      };
+    }
+
+    return conf;
+  }, [vocabularies_metadata]);
 
   return (
     <div className="border border-solid border-black rounded">
@@ -87,19 +106,21 @@ export default function GameBox(props: {
           checked={!!instances && instances.length > 0}
           disabled={!instances}
           label_text="attivato / disattivato"
-          checkedFn={() =>
-            wrapApiCallInWaitingSwal(
-              () =>
-                apiDelete(task_instances_url + `/${instances?.[0].instanceId}`),
-              () => {
-                Swal.fire("Gioco eliminato", "", "success");
-                resetInstances();
-              }
-            )
-          }
+          checkedFn={() => {
+            if (!instances) return;
+
+            const promises = instances.map((i) =>
+              apiDelete(task_instances_url + `/${i.instanceId}`)
+            );
+
+            Promise.all(promises).then(() => {
+              Swal.fire("Gioco eliminato", "", "success");
+              resetInstances();
+            });
+          }}
           uncheckedFn={() =>
             wrapApiCallInWaitingSwal(
-              () => apiPost(task_instances_url, {}),
+              () => apiPost(task_instances_url, taskConfig),
               () => {
                 Swal.fire("Gioco attivato", "", "success");
                 resetInstances();
