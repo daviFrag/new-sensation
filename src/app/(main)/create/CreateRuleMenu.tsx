@@ -67,7 +67,7 @@ export default function CreateRuleMenu(props: {
           s += "<stringa> ";
           break;
         case "PARAM_CLASS":
-          s += "<scelta> ";
+          s += "<tipo> ";
           break;
       }
     return s.trim();
@@ -233,7 +233,7 @@ export default function CreateRuleMenu(props: {
             })();
 
             elements.push(
-              getSelectOfBlocks(this_choice_blocks, "<scelta>", (value) => {
+              getSelectOfBlocks(this_choice_blocks, "<tipo>", (value) => {
                 const new_b: Block = JSON.parse(JSON.stringify(b));
                 const new_t = new_b.text[t_index];
                 if (new_t.type !== "PARAM_CLASS") throw new Error();
