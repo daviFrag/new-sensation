@@ -73,6 +73,28 @@ export default function RulePartBox(props: {
     return blocks.filter((b) => b.type === type && b.scope === scope);
   }
 
+  function resetBlockChoices(
+    b: Block,
+    t_index: number,
+    valueIsChanged: (new_b: Block) => void
+  ) {
+    const new_b: Block = JSON.parse(JSON.stringify(b));
+    const new_t = new_b.text[t_index];
+    switch (new_t.type) {
+      case "PARAM_INTEGER":
+        new_t.value = undefined;
+        break;
+      case "PARAM_STRING":
+        new_t.value = undefined;
+        break;
+      case "PARAM_CLASS":
+        new_t.choice = undefined;
+        break;
+    }
+    new_b.text[t_index] = new_t;
+    valueIsChanged(new_b);
+  }
+
   function getBlockElements(b: Block, valueIsChanged: (new_b: Block) => void) {
     const elements: React.ReactNode[] = [];
 
@@ -92,15 +114,7 @@ export default function RulePartBox(props: {
           if (t.value != null)
             elements.push(
               <WrapNodeInClickableDiv
-                onClick={() => {
-                  // * reset choice
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_INTEGER") throw new Error();
-                  new_t.value = undefined;
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                }}
+                onClick={() => resetBlockChoices(b, t_index, valueIsChanged)}
               >
                 {t.value}
               </WrapNodeInClickableDiv>
@@ -130,15 +144,7 @@ export default function RulePartBox(props: {
           if (t.value)
             elements.push(
               <WrapNodeInClickableDiv
-                onClick={() => {
-                  // * reset choice
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_STRING") throw new Error();
-                  new_t.value = undefined;
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                }}
+                onClick={() => resetBlockChoices(b, t_index, valueIsChanged)}
               >
                 {t.value}
               </WrapNodeInClickableDiv>
@@ -169,15 +175,7 @@ export default function RulePartBox(props: {
             // * here i need to parse the block inside choice
             elements.push(
               <WrapNodeInClickableDiv
-                onClick={() => {
-                  // * reset choice
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_CLASS") throw new Error();
-                  new_t.choice = undefined;
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                }}
+                onClick={() => resetBlockChoices(b, t_index, valueIsChanged)}
               >
                 {getBlockElements(t.choice, (new_choice) => {
                   // * select choice
