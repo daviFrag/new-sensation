@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Block, Vocabulary, VocabularyMetadata } from "@/types";
 import CreateRuleMenu from "./CreateRuleMenu";
 import VocabularyFilter from "../rules/VocabularyFilter";
@@ -13,6 +13,10 @@ export default function CreateLoaded(props: {
   const [vocabularies_choices, setVocabChoices] = useState<Vocabulary[]>([]);
   const vocabulariesChoicesChanges = (choices: Vocabulary[]) =>
     setVocabChoices(choices);
+  const filtered_blocks = useMemo(
+    () => blocks.filter((b) => vocabularies_choices.includes(b.vocabulary)),
+    [blocks, vocabularies_choices]
+  );
 
   return (
     <main>
@@ -23,16 +27,16 @@ export default function CreateLoaded(props: {
         vocabularies={vocabularies}
         onChange={vocabulariesChoicesChanges}
       />
-      <CreateRuleMenu
-        blocks={blocks.filter((b) =>
-          vocabularies_choices.includes(b.vocabulary)
-        )}
-        confirm_button_text="Crea regola"
-        vocabularies_metadata={vocabularies_metadata}
-        doSomethingWithRule={(rule) => {
-          createRuleApi(rule, blocks, vocabularies_metadata);
-        }}
-      />
+      {(!filtered_blocks?.length && <div>no rules</div>) || (
+        <CreateRuleMenu
+          blocks={filtered_blocks}
+          confirm_button_text="Crea regola"
+          vocabularies_metadata={vocabularies_metadata}
+          doSomethingWithRule={(rule) => {
+            createRuleApi(rule, blocks, vocabularies_metadata);
+          }}
+        />
+      )}
     </main>
   );
 }
