@@ -73,7 +73,30 @@ export default function RulePartBox(props: {
     return blocks.filter((b) => b.type === type && b.scope === scope);
   }
 
-  function resetBlockChoices(
+  function addBlockChoice(
+    b: Block,
+    t_index: number,
+    new_value: string,
+    valueIsChanged: (new_b: Block) => void
+  ) {
+    const new_b: Block = JSON.parse(JSON.stringify(b));
+    const new_t = new_b.text[t_index];
+    switch (new_t.type) {
+      case "PARAM_INTEGER":
+        new_t.value = Number(new_value);
+        break;
+      case "PARAM_STRING":
+        new_t.value = new_value;
+        break;
+      case "PARAM_CLASS":
+        new_t.choice = findBlock(new_value);
+        break;
+    }
+    new_b.text[t_index] = new_t;
+    valueIsChanged(new_b);
+  }
+
+  function resetBlockChoice(
     b: Block,
     t_index: number,
     valueIsChanged: (new_b: Block) => void
@@ -114,7 +137,7 @@ export default function RulePartBox(props: {
           if (t.value != null)
             elements.push(
               <WrapNodeInClickableDiv
-                onClick={() => resetBlockChoices(b, t_index, valueIsChanged)}
+                onClick={() => resetBlockChoice(b, t_index, valueIsChanged)}
               >
                 {t.value}
               </WrapNodeInClickableDiv>
@@ -125,15 +148,9 @@ export default function RulePartBox(props: {
                 blocks={blocks}
                 std_text="<numero>"
                 options={t.label.values.map((x) => `${x}`)}
-                onChange={(value) => {
-                  // * select choice
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_INTEGER") throw new Error();
-                  new_t.value = Number(value);
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                }}
+                onChange={(value) =>
+                  addBlockChoice(b, t_index, value, valueIsChanged)
+                }
               />
             );
 
@@ -144,7 +161,7 @@ export default function RulePartBox(props: {
           if (t.value)
             elements.push(
               <WrapNodeInClickableDiv
-                onClick={() => resetBlockChoices(b, t_index, valueIsChanged)}
+                onClick={() => resetBlockChoice(b, t_index, valueIsChanged)}
               >
                 {t.value}
               </WrapNodeInClickableDiv>
@@ -155,15 +172,9 @@ export default function RulePartBox(props: {
                 blocks={blocks}
                 std_text="<stringa>"
                 options={t.label.values}
-                onChange={(value) => {
-                  // * select choice
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_STRING") throw new Error();
-                  new_t.value = value;
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                }}
+                onChange={(value) =>
+                  addBlockChoice(b, t_index, value, valueIsChanged)
+                }
               />
             );
 
@@ -175,7 +186,7 @@ export default function RulePartBox(props: {
             // * here i need to parse the block inside choice
             elements.push(
               <WrapNodeInClickableDiv
-                onClick={() => resetBlockChoices(b, t_index, valueIsChanged)}
+                onClick={() => resetBlockChoice(b, t_index, valueIsChanged)}
               >
                 {getBlockElements(t.choice, (new_choice) => {
                   // * select choice
@@ -201,15 +212,9 @@ export default function RulePartBox(props: {
               <SelectOfBlocks
                 blocks={this_choice_blocks}
                 std_text="<tipo>"
-                onChange={(value) => {
-                  // * select choice
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_CLASS") throw new Error();
-                  new_t.choice = findBlock(value);
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                }}
+                onChange={(value) =>
+                  addBlockChoice(b, t_index, value, valueIsChanged)
+                }
               />
             );
           }
