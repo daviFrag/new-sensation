@@ -340,6 +340,17 @@ export default function CreateRuleMenu(props: {
           e.stopPropagation();
           onClick();
         }}
+        onMouseOver={(e) => {
+          e.stopPropagation();
+          const target = e.currentTarget;
+          const className = "bg-red-400 rounded py-1";
+          target.className = className;
+        }}
+        onMouseOut={(e) => {
+          e.stopPropagation();
+          const target = e.currentTarget;
+          target.className = "";
+        }}
       >
         {n}
       </span>
