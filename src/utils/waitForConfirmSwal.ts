@@ -29,7 +29,7 @@ export default function waitForConfirmSwal(
       Swal.showLoading();
       setTimeout(() => {
         Swal.hideLoading();
-      }, 2000);
+      }, 0);
     },
   }).then((result) => {
     if (result.isConfirmed) {
