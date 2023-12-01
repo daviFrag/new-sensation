@@ -12,7 +12,8 @@ import {
   deleteRuleApi,
   modifyRuleApi,
 } from "@/utils/callKnownApi";
-import NoRules from "./NoRules";
+import NoElementMenu from "@/components/NoElementMenu";
+import DocumentPlus from "@/svg/DocumentPlus";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -67,6 +68,18 @@ export default function RulesLoaded(props: {
     });
   }
 
+  if (!rules?.length)
+    return (
+      <NoElementMenu
+        Svg={DocumentPlus}
+        svg_dimension="big"
+        title="Nessuna regola creata"
+        text="Crea nuove regole per far giocare i tuoi studenti con SMARTER e SmartGame"
+        url="./create"
+        button_text="Crea regola"
+      />
+    );
+
   return (
     <main>
       <h1 className="w-11/12 mx-auto text-3xl font-semibold pt-10 pb-4">
@@ -97,7 +110,16 @@ export default function RulesLoaded(props: {
         </button>
       </div>
       <div className="w-11/12 mx-auto">
-        {(filtered_rules.length === 0 && <NoRules />) ||
+        {(filtered_rules.length === 0 && (
+          <NoElementMenu
+            Svg={DocumentPlus}
+            svg_dimension="small"
+            title="Nessuna regola trovata"
+            text="Nessuna regola trovata con i filtri selezionati"
+            url="./create"
+            button_text="Crea regola"
+          />
+        )) ||
           filtered_rules.map((r) => (
             <div
               key={r.id}

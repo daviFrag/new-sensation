@@ -2,7 +2,8 @@ import React, { useMemo, useState } from "react";
 // import VocabularyFilter from "../rules/VocabularyFilter";
 import { Rule, TaskJson, Vocabulary, VocabularyMetadata } from "@/types";
 import GameBox from "./GameBox";
-import NoGames from "./NoGames";
+import NoElementMenu from "@/components/NoElementMenu";
+import Puzzle from "@/svg/Puzzle";
 
 export default function GamesLoaded(props: {
   vocabularies: Vocabulary[];
@@ -32,6 +33,18 @@ export default function GamesLoaded(props: {
     return filterTasks(tasks);
   }, [tasks, task_keyword_searched]);
 
+  if (!tasks?.length)
+    return (
+      <NoElementMenu
+        Svg={Puzzle}
+        svg_dimension="big"
+        title="Nessun gioco creato"
+        text="Creando giochi potrai far giocare i tuoi studenti con SmartGame"
+        url="./create"
+        button_text="Aggiungi gioco"
+      />
+    );
+
   return (
     <main>
       <h1 className="w-8/12 mx-auto text-3xl font-semibold pt-10 pb-4">
@@ -42,39 +55,45 @@ export default function GamesLoaded(props: {
         onChange={vocabulariesChoicesChanges}
       /> */}
 
-      {(tasks.length === 0 && <NoGames />) || (
-        <>
-          <div className="w-8/12 mx-auto my-5 flex justify-between">
-            <input
-              placeholder="Cerca..."
-              className="w-1/4 rounded bg-gray-200 p-2"
-              value={task_keyword_searched}
-              onChange={(e) => setTaskKeywordSearched(e.target.value)}
+      <div className="w-8/12 mx-auto my-5 flex justify-between">
+        <input
+          placeholder="Cerca..."
+          className="w-1/4 rounded bg-gray-200 p-2"
+          value={task_keyword_searched}
+          onChange={(e) => setTaskKeywordSearched(e.target.value)}
+        />
+        <a href="./rules">
+          <button
+            className="uppercase text-white py-3 px-7 text-2xl rounded-2xl duration-100 ease-in-out hover:scale-105"
+            style={{
+              backgroundColor: "#146AB9",
+            }}
+          >
+            Aggiungi Gioco
+          </button>
+        </a>
+      </div>
+      <div className="w-8/12 mx-auto">
+        {(filtered_tasks.length === 0 && (
+          <NoElementMenu
+            Svg={Puzzle}
+            svg_dimension="small"
+            title="Nessun gioco trovato"
+            text="Nessun gioco trovato con i filtri selezionati"
+            url="./create"
+            button_text="Aggiungi gioco"
+          />
+        )) ||
+          filtered_tasks.map((t) => (
+            <GameBox
+              key={t.id}
+              task={t}
+              rules={rules}
+              vocabularies_metadata={vocabularies_metadata}
+              reloadData={reloadData}
             />
-            <a href="./rules">
-              <button
-                className="uppercase text-white py-3 px-7 text-2xl rounded-2xl duration-100 ease-in-out hover:scale-105"
-                style={{
-                  backgroundColor: "#146AB9",
-                }}
-              >
-                Aggiungi Gioco
-              </button>
-            </a>
-          </div>
-          <div className="w-8/12 mx-auto">
-            {filtered_tasks.map((t) => (
-              <GameBox
-                key={t.id}
-                task={t}
-                rules={rules}
-                vocabularies_metadata={vocabularies_metadata}
-                reloadData={reloadData}
-              />
-            ))}
-          </div>
-        </>
-      )}
+          ))}
+      </div>
     </main>
   );
 }
