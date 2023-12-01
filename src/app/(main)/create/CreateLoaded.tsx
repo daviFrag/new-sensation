@@ -3,6 +3,8 @@ import { Block, Vocabulary, VocabularyMetadata } from "@/types";
 import CreateRuleMenu from "./CreateRuleMenu";
 import VocabularyFilter from "../rules/VocabularyFilter";
 import { createRuleApi } from "@/utils/callKnownApi";
+import NoElementMenu from "@/components/NoElementMenu";
+import Attention from "@/svg/Attention";
 
 export default function CreateLoaded(props: {
   vocabularies: Vocabulary[];
@@ -27,7 +29,14 @@ export default function CreateLoaded(props: {
         vocabularies={vocabularies}
         onChange={vocabulariesChoicesChanges}
       />
-      {(!filtered_blocks?.length && <div>no rules</div>) || (
+      {(!filtered_blocks?.length && (
+        <NoElementMenu
+          Svg={Attention}
+          title="Nessun blocco disponibile"
+          text="Nessun blocco disponibile da alcun vocabolario. Seleziona un vocabolario"
+          svg_dimension="small"
+        />
+      )) || (
         <CreateRuleMenu
           blocks={filtered_blocks}
           confirm_button_text="Crea regola"
