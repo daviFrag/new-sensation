@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Block, Rule, Vocabulary, VocabularyMetadata } from "@/types";
 import { convertRuleToString } from "@/utils/convertRuleToString";
 import Pen from "@/svg/Pen";
@@ -12,6 +12,7 @@ import {
   deleteRuleApi,
   modifyRuleApi,
 } from "@/utils/callKnownApi";
+import NoRules from "./NoRules";
 
 export default function RulesLoaded(props: {
   rules: Rule[];
@@ -29,8 +30,32 @@ export default function RulesLoaded(props: {
   const [rule_keyword_searched, setRuleKeywordSearched] = useState("");
   const [selected_rules_ids, setSelectedRulesIds] = useState<string[]>([]);
   const [vocabularies_choices, setVocabChoices] = useState<Vocabulary[]>([]);
-  const vocabulariesChoicesChanges = (choices: Vocabulary[]) =>
+  const vocabulariesChoicesChanges = (choices: Vocabulary[]) => {
     setVocabChoices(choices);
+    setSelectedRulesIds([]);
+  };
+
+  const filtered_rules = useMemo(() => {
+    function filterSearchedRules(rules: Rule[]): Rule[] {
+      if (!rule_keyword_searched) return rules;
+      return rules.filter((r) =>
+        convertRuleToString(r)
+          .toLocaleLowerCase()
+          .includes(rule_keyword_searched.trim().toLocaleLowerCase())
+      );
+    }
+
+    function filterVocabularyChoiceRules(rules: Rule[]): Rule[] {
+      return rules.filter((r) => {
+        for (const v of r.vocabularies) {
+          if (!vocabularies_choices.includes(v)) return false;
+        }
+        return true;
+      });
+    }
+
+    return filterSearchedRules(filterVocabularyChoiceRules(rules));
+  }, [rules, rule_keyword_searched, vocabularies_choices]);
 
   function newRuleInSelectedRules(rule_id: string) {
     setSelectedRulesIds((prev_rules_ids) => {
@@ -39,24 +64,6 @@ export default function RulesLoaded(props: {
       } else {
         return [...prev_rules_ids, rule_id].sort();
       }
-    });
-  }
-
-  function filterSearchedRules(rules: Rule[]): Rule[] {
-    if (!rule_keyword_searched) return rules;
-    return rules.filter((r) =>
-      convertRuleToString(r)
-        .toLocaleLowerCase()
-        .includes(rule_keyword_searched.trim().toLocaleLowerCase())
-    );
-  }
-
-  function filterVocabularyChoiceRules(rules: Rule[]): Rule[] {
-    return rules.filter((r) => {
-      for (const v of r.vocabularies) {
-        if (!vocabularies_choices.includes(v)) return false;
-      }
-      return true;
     });
   }
 
@@ -90,78 +97,79 @@ export default function RulesLoaded(props: {
         </button>
       </div>
       <div className="w-11/12 mx-auto">
-        {filterSearchedRules(filterVocabularyChoiceRules(rules)).map((r) => (
-          <div
-            key={r.id}
-            className="text-2xl border border-black p-3 flex flex-col mb-2 rounded"
-          >
-            <div className=" flex justify-between">
-              <input
-                type="checkbox"
-                className="scale-150"
-                onClick={() => newRuleInSelectedRules(r.id!)}
-              />
-              <p className="w-10/12">
-                <em>{r.name}</em>: {convertRuleToString(r)}
-              </p>
-              <div className="w-1/12 flex">
-                <div
-                  onClick={() => setRuleModify(r.id!)}
-                  className="cursor-pointer duration-75 ease-in-out hover:scale-110"
-                >
-                  <Pen />
+        {(filtered_rules.length === 0 && <NoRules />) ||
+          filtered_rules.map((r) => (
+            <div
+              key={r.id}
+              className="text-2xl border border-black p-3 flex flex-col mb-2 rounded"
+            >
+              <div className=" flex justify-between">
+                <input
+                  type="checkbox"
+                  className="scale-150"
+                  onClick={() => newRuleInSelectedRules(r.id!)}
+                />
+                <p className="w-10/12">
+                  <em>{r.name}</em>: {convertRuleToString(r)}
+                </p>
+                <div className="w-1/12 flex">
+                  <div
+                    onClick={() => setRuleModify(r.id!)}
+                    className="cursor-pointer duration-75 ease-in-out hover:scale-110"
+                  >
+                    <Pen />
+                  </div>
+                  <div
+                    onClick={() => {
+                      createRuleApi(
+                        r,
+                        blocks,
+                        vocabularies_metadata,
+                        reloadRules
+                      );
+                    }}
+                    className="cursor-pointer duration-75 ease-in-out hover:scale-110"
+                  >
+                    <Copy />
+                  </div>
+                  <div
+                    onClick={() => {
+                      deleteRuleApi(r, reloadRules);
+                    }}
+                    className="cursor-pointer duration-75 ease-in-out hover:scale-110"
+                  >
+                    <Bin />
+                  </div>
                 </div>
-                <div
-                  onClick={() => {
-                    createRuleApi(
-                      r,
+              </div>
+              {rule_modify === r.id && (
+                <CreateRuleMenu
+                  blocks={blocks.filter((b) =>
+                    vocabularies_choices.includes(b.vocabulary)
+                  )}
+                  confirm_button_text="Modifica regola"
+                  vocabularies_metadata={vocabularies_metadata}
+                  doSomethingWithRule={(rule) => {
+                    modifyRuleApi(
+                      rule,
                       blocks,
                       vocabularies_metadata,
                       reloadRules
                     );
                   }}
-                  className="cursor-pointer duration-75 ease-in-out hover:scale-110"
-                >
-                  <Copy />
-                </div>
-                <div
-                  onClick={() => {
-                    deleteRuleApi(r, reloadRules);
+                  extraDoOnReset={() => setRuleModify("")}
+                  starting_values={{
+                    id: r.id,
+                    name: r.name,
+                    whileArray: [r.while],
+                    whenArray: [r.when],
+                    doArray: r.do,
                   }}
-                  className="cursor-pointer duration-75 ease-in-out hover:scale-110"
-                >
-                  <Bin />
-                </div>
-              </div>
+                  key={`create-rule-menu-${r.id}`}
+                />
+              )}
             </div>
-            {rule_modify === r.id && (
-              <CreateRuleMenu
-                blocks={blocks.filter((b) =>
-                  vocabularies_choices.includes(b.vocabulary)
-                )}
-                confirm_button_text="Modifica regola"
-                vocabularies_metadata={vocabularies_metadata}
-                doSomethingWithRule={(rule) => {
-                  modifyRuleApi(
-                    rule,
-                    blocks,
-                    vocabularies_metadata,
-                    reloadRules
-                  );
-                }}
-                extraDoOnReset={() => setRuleModify("")}
-                starting_values={{
-                  id: r.id,
-                  name: r.name,
-                  whileArray: [r.while],
-                  whenArray: [r.when],
-                  doArray: r.do,
-                }}
-                key={`create-rule-menu-${r.id}`}
-              />
-            )}
-          </div>
-        ))}
+          ))}
       </div>
       <CreateGameModal modal={modal} rules_ids={selected_rules_ids} />
     </main>

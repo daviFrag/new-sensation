@@ -5,7 +5,6 @@ import Header from "../Header";
 import { links } from "@/utils/links";
 import RulesLoaded from "./RulesLoaded";
 import { Block, Rule, Vocabulary, VocabularyMetadata } from "@/types";
-import NoRules from "./NoRules";
 import {
   useRulesApiQuery,
   useVocabularyApiQuery,
@@ -23,7 +22,7 @@ function RulesPartial(props: {
     data: rules,
     is_loading,
     is_error,
-    invalidateQuery
+    invalidateQuery,
   } = useRulesApiQuery(vocabularies_metadata);
 
   if (is_loading) return <h1>Caricamento</h1>;
@@ -32,17 +31,13 @@ function RulesPartial(props: {
   return (
     <>
       <Header text={links.rules} />
-      {rules.length > 0 ? (
-        <RulesLoaded
-          rules={rules}
-          vocabularies={vocabularies}
-          blocks={blocks}
-          vocabularies_metadata={vocabularies_metadata}
-          reloadRules={invalidateQuery}
-        />
-      ) : (
-        <NoRules />
-      )}
+      <RulesLoaded
+        rules={rules}
+        vocabularies={vocabularies}
+        blocks={blocks}
+        vocabularies_metadata={vocabularies_metadata}
+        reloadRules={invalidateQuery}
+      />
     </>
   );
 }
