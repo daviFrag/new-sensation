@@ -118,6 +118,20 @@ export default function RulePartBox(props: {
     valueIsChanged(new_b);
   }
 
+  function passChildBlockUpdate(
+    b: Block,
+    t_index: number,
+    new_choice: Block,
+    valueIsChanged: (new_b: Block) => void
+  ) {
+    const new_b: Block = JSON.parse(JSON.stringify(b));
+    const new_t = new_b.text[t_index];
+    if (new_t.type !== "PARAM_CLASS") throw new Error();
+    new_t.choice = new_choice;
+    new_b.text[t_index] = new_t;
+    valueIsChanged(new_b);
+  }
+
   function getBlockElements(b: Block, valueIsChanged: (new_b: Block) => void) {
     const elements: React.ReactNode[] = [];
 
@@ -188,15 +202,9 @@ export default function RulePartBox(props: {
               <WrapNodeInClickableDiv
                 onClick={() => resetBlockChoice(b, t_index, valueIsChanged)}
               >
-                {getBlockElements(t.choice, (new_choice) => {
-                  // * select choice
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_CLASS") throw new Error();
-                  new_t.choice = new_choice;
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                })}
+                {getBlockElements(t.choice, (new_choice) =>
+                  passChildBlockUpdate(b, t_index, new_choice, valueIsChanged)
+                )}
               </WrapNodeInClickableDiv>
             );
           } else {
