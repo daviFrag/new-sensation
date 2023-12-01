@@ -75,7 +75,7 @@ export default function GameBox(props: {
   }
 
   return (
-    <div className="border border-solid border-black rounded">
+    <div className="border border-solid border-black rounded-xl">
       <div className="flex h-12 items-center justify-start p-7 pt-12">
         <h2 className="w-4/5 mr-auto text-3xl font-bold">{task.name}</h2>
         <div
