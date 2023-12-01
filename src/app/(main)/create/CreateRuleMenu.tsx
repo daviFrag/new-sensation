@@ -1,3 +1,4 @@
+import Bin from "@/svg/Bin";
 import {
   Block,
   BlockScope,
@@ -377,20 +378,50 @@ export default function CreateRuleMenu(props: {
       </label>
       <div className="flex gap-10">
         <div className="w-4/12">
-          <h2 className="text-2xl py-5">Evento</h2>
+          <h2 className="text-2xl py-5 flex items-center gap-3">
+            Evento
+            <div
+              onClick={() => {
+                setWhenArray([]);
+              }}
+              className="h-10 cursor-pointer duration-75 ease-in-out hover:scale-110"
+            >
+              <Bin />
+            </div>
+          </h2>
           <div className="border border-black rounded-xl h-full text-xl p-3">
             QUANDO {blockArrayToText(whenArray, setWhenArray, "STATE", "WHEN")}
           </div>
         </div>
         <div className="w-4/12">
-          <h2 className="text-2xl py-5">Stato</h2>
+          <h2 className="text-2xl py-5 flex items-center gap-3">
+            Stato
+            <div
+              onClick={() => {
+                setWhileArray([]);
+              }}
+              className="h-10 cursor-pointer duration-75 ease-in-out hover:scale-110"
+            >
+              <Bin />
+            </div>
+          </h2>
           <div className="border border-black rounded-xl h-full text-xl p-3">
             MENTRE{" "}
             {blockArrayToText(whileArray, setWhileArray, "STATE", "WHILE")}
           </div>
         </div>
         <div className="w-4/12">
-          <h2 className="text-2xl py-5">Azione</h2>
+          <h2 className="text-2xl py-5 flex items-center gap-3">
+            Azione
+            <div
+              onClick={() => {
+                setDoArray([]);
+              }}
+              className="h-10 cursor-pointer duration-75 ease-in-out hover:scale-110"
+            >
+              <Bin />
+            </div>
+          </h2>
           <div className="border border-black rounded-xl h-full text-xl p-3">
             ALLORA {blockArrayToText(doArray, setDoArray, "ACTION", "ACTION")}
           </div>
