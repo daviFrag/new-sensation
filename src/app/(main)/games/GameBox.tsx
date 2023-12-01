@@ -7,9 +7,15 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import RuleBox from "./RuleBox";
 import Copy from "@/svg/Copy";
-import { createTaskApi, deleteTaskApi } from "@/utils/callKnownApi";
+import {
+  createTaskApi,
+  deleteTaskApi,
+  modifyTaskApi,
+} from "@/utils/callKnownApi";
 import AddRuleToTaskModal from "./AddRuleToTaskModal";
 import waitForConfirmSwal from "@/utils/waitForConfirmSwal";
+import Pen from "@/svg/Pen";
+import Check from "@/svg/Check";
 
 export default function GameBox(props: {
   task: TaskJson;
@@ -33,6 +39,9 @@ export default function GameBox(props: {
     resetInstances();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const [new_task_name, setNewTaskName] = useState(task.name);
+  const [modify_task_name, setModifyTaskName] = useState(false);
 
   // TODO: refactor this only for demo purposes
   const taskConfig = useMemo(() => {
@@ -77,9 +86,38 @@ export default function GameBox(props: {
   return (
     <div className="border border-solid border-black rounded-xl">
       <div className="flex h-12 items-center justify-start p-7 pt-12">
-        <h2 className="w-4/5 mr-auto text-3xl font-bold">{task.name}</h2>
+        {(modify_task_name && (
+          <>
+            <input
+              className="mr-auto text-3xl font-bold p-3 border border-black rounded-xl"
+              value={new_task_name}
+              onChange={(e) => setNewTaskName(e.target.value)}
+            />
+            <div
+              className="h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
+              onClick={() => {
+                const new_task: TaskJson = JSON.parse(JSON.stringify(task));
+                new_task.name = new_task_name;
+                modifyTaskApi(task, new_task, reloadData);
+                setModifyTaskName(false);
+              }}
+            >
+              <Check />
+            </div>
+          </>
+        )) || (
+          <>
+            <h2 className="mr-auto text-3xl font-bold p-3">{task.name}</h2>
+            <div
+              className="h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
+              onClick={() => setModifyTaskName(true)}
+            >
+              <Pen />
+            </div>
+          </>
+        )}
         <div
-          className="ml-auto h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
+          className="h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
           onClick={() =>
             createTaskApi(
               task.name + " - copia",
@@ -147,7 +185,6 @@ export default function GameBox(props: {
       <AddRuleToTaskModal
         modal={modal}
         task={task}
-        // rules={[...rules, ...rules, ...rules, ...rules, ...rules]}
         rules={rules}
         reloadData={reloadData}
       />
