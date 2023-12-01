@@ -89,6 +89,7 @@ export default function CreateRuleMenu(props: {
         value=""
         className="text-white p-2 w-full max-w-xs"
         style={{ backgroundColor: "#73B9F9" }}
+        onClick={(e) => e.stopPropagation()}
       >
         <option>{std_text}</option>
         {blocks.map((b) => (
@@ -116,6 +117,7 @@ export default function CreateRuleMenu(props: {
         value=""
         className="text-white p-2"
         style={{ backgroundColor: "#73B9F9" }}
+        onClick={(e) => e.stopPropagation()}
       >
         <option className="max-w-md">{std_text}</option>
         {options.map((x) => (
@@ -143,7 +145,17 @@ export default function CreateRuleMenu(props: {
         case "PARAM_INTEGER":
           if (t.label.type !== "PARAM_INTEGER") throw new Error();
 
-          if (t.value) elements.push(t.value);
+          if (t.value != null)
+            elements.push(
+              wrapNodeInClickableDiv(t.value, () => {
+                const new_b: Block = JSON.parse(JSON.stringify(b));
+                const new_t = new_b.text[t_index];
+                if (new_t.type !== "PARAM_INTEGER") throw new Error();
+                new_t.value = undefined;
+                new_b.text[t_index] = new_t;
+                valueIsChanged(new_b);
+              })
+            );
           else
             elements.push(
               getSelectOfStrings(
@@ -164,7 +176,17 @@ export default function CreateRuleMenu(props: {
         case "PARAM_STRING":
           if (t.label.type !== "PARAM_STRING") throw new Error();
 
-          if (t.value) elements.push(t.value);
+          if (t.value)
+            elements.push(
+              wrapNodeInClickableDiv(t.value, () => {
+                const new_b: Block = JSON.parse(JSON.stringify(b));
+                const new_t = new_b.text[t_index];
+                if (new_t.type !== "PARAM_STRING") throw new Error();
+                new_t.value = undefined;
+                new_b.text[t_index] = new_t;
+                valueIsChanged(new_b);
+              })
+            );
           else
             elements.push(
               getSelectOfStrings(t.label.values, "<stringa>", (value) => {
@@ -184,14 +206,24 @@ export default function CreateRuleMenu(props: {
           if (t.choice) {
             // * here i need to parse the block inside choice
             elements.push(
-              ...getBlockElements(t.choice, (new_choice) => {
-                const new_b: Block = JSON.parse(JSON.stringify(b));
-                const new_t = new_b.text[t_index];
-                if (new_t.type !== "PARAM_CLASS") throw new Error();
-                new_t.choice = new_choice;
-                new_b.text[t_index] = new_t;
-                valueIsChanged(new_b);
-              })
+              wrapNodeInClickableDiv(
+                getBlockElements(t.choice, (new_choice) => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_CLASS") throw new Error();
+                  new_t.choice = new_choice;
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                }),
+                () => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_CLASS") throw new Error();
+                  new_t.choice = undefined;
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                }
+              )
             );
           } else {
             const this_choice_blocks = (() => {
@@ -260,15 +292,26 @@ export default function CreateRuleMenu(props: {
       }
 
       elements.push(
-        ...getBlockElements(b, (new_b) => {
-          setArray((prev) => {
-            return [
-              ...prev.slice(0, b_index),
-              new_b,
-              ...prev.slice(b_index + 1, prev.length),
-            ];
-          });
-        })
+        wrapNodeInClickableDiv(
+          getBlockElements(b, (new_b) => {
+            setArray((prev) => {
+              return [
+                ...prev.slice(0, b_index),
+                new_b,
+                ...prev.slice(b_index + 1, prev.length),
+              ];
+            });
+          }),
+          () => {
+            setArray((prev) => {
+              return [
+                ...prev.slice(0, b_index),
+                null,
+                ...prev.slice(b_index + 1, prev.length),
+              ];
+            });
+          }
+        )
       );
 
       curr_b_index++;
@@ -285,6 +328,22 @@ export default function CreateRuleMenu(props: {
     );
 
     return [elements, plus_button];
+  }
+
+  function wrapNodeInClickableDiv(
+    n: React.ReactNode,
+    onClick: () => void
+  ): React.ReactNode {
+    return (
+      <span
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+      >
+        {n}
+      </span>
+    );
   }
 
   function resetFields() {
