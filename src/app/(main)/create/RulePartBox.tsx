@@ -1,6 +1,58 @@
 import Bin from "@/svg/Bin";
 import { Block, BlockScope, BlockType } from "@/types";
 import React from "react";
+import SelectOfStrings from "./SelectOfStrings";
+import SelectOfBlocks from "./SelectOfBlocks";
+
+function AddBlockButton(props: {
+  setArray: React.Dispatch<React.SetStateAction<(Block | null)[]>>;
+  type: BlockType;
+  scope: BlockScope;
+}) {
+  const { setArray, type, scope } = props;
+
+  return (
+    <button
+      className="rounded-full w-8 mx-2 aspect-square bg-sky-300 duration-100 ease-in-out hover:scale-105"
+      onClick={() => setArray((prev) => [...prev, null])}
+      key={`add-block-${type}-${scope}`}
+    >
+      +
+    </button>
+  );
+}
+
+/** when the element is hovered, a special effect is given, but not passed to the parents */
+function WrapNodeInClickableDiv(props: {
+  children: React.ReactNode;
+  onClick: () => void;
+}): React.ReactNode {
+  const { children, onClick } = props;
+
+  return (
+    <span
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      // * on hover, add class
+      onMouseOver={(e) => {
+        e.stopPropagation();
+        const target = e.currentTarget;
+        const className = "bg-red-400 rounded py-1";
+        target.className = className;
+      }}
+      // * when hover ends, remove class
+      onMouseOut={(e) => {
+        e.stopPropagation();
+        const target = e.currentTarget;
+        target.className = "";
+      }}
+    >
+      {children}
+    </span>
+  );
+}
 
 export default function RulePartBox(props: {
   title: string;
@@ -21,112 +73,6 @@ export default function RulePartBox(props: {
     return blocks.filter((b) => b.type === type && b.scope === scope);
   }
 
-  function getBlockString(b: Block): string {
-    let s = "";
-    for (const t of b.text)
-      switch (t.type) {
-        case "TEXT":
-          if (t.label.type !== "TEXT") throw new Error();
-          s += t.label.value + " ";
-          break;
-        case "PARAM_INTEGER":
-          s += "<numero> ";
-          break;
-        case "PARAM_STRING":
-          s += "<stringa> ";
-          break;
-        case "PARAM_CLASS":
-          s += "<tipo> ";
-          break;
-      }
-    return s.trim();
-  }
-
-  function getSelectOfBlocks(
-    blocks: Block[],
-    std_text: string,
-    onChange: (value: string) => void
-  ) {
-    if (!blocks.length) return;
-
-    return (
-      <select
-        onChange={(event) => {
-          const value = event.target.value;
-          onChange(value);
-        }}
-        value=""
-        className="text-white p-2 w-full max-w-xs"
-        style={{ backgroundColor: "#73B9F9" }}
-        onClick={(e) => e.stopPropagation()}
-        onMouseOver={(e) => e.stopPropagation()}
-      >
-        <option>{std_text}</option>
-        {blocks.map((b) => (
-          <option key={b.name} value={b.name}>
-            {getBlockString(b)}
-          </option>
-        ))}
-      </select>
-    );
-  }
-
-  function getSelectOfStrings(
-    options: string[],
-    std_text: string,
-    onChange: (value: string) => void
-  ) {
-    if (!blocks.length) return;
-
-    return (
-      <select
-        onChange={(event) => {
-          const value = event.target.value;
-          onChange(value);
-        }}
-        value=""
-        className="text-white p-2"
-        style={{ backgroundColor: "#73B9F9" }}
-        onClick={(e) => e.stopPropagation()}
-        onMouseOver={(e) => e.stopPropagation()}
-      >
-        <option className="max-w-md">{std_text}</option>
-        {options.map((x) => (
-          <option key={x} value={x}>
-            {x}
-          </option>
-        ))}
-      </select>
-    );
-  }
-
-  function wrapNodeInClickableDiv(
-    n: React.ReactNode,
-    onClick: () => void
-  ): React.ReactNode {
-    return (
-      <span
-        onClick={(e) => {
-          e.stopPropagation();
-          onClick();
-        }}
-        onMouseOver={(e) => {
-          e.stopPropagation();
-          const target = e.currentTarget;
-          const className = "bg-red-400 rounded py-1";
-          target.className = className;
-        }}
-        onMouseOut={(e) => {
-          e.stopPropagation();
-          const target = e.currentTarget;
-          target.className = "";
-        }}
-      >
-        {n}
-      </span>
-    );
-  }
-
   function getBlockElements(b: Block, valueIsChanged: (new_b: Block) => void) {
     const elements: React.ReactNode[] = [];
 
@@ -145,29 +91,34 @@ export default function RulePartBox(props: {
 
           if (t.value != null)
             elements.push(
-              wrapNodeInClickableDiv(t.value, () => {
-                const new_b: Block = JSON.parse(JSON.stringify(b));
-                const new_t = new_b.text[t_index];
-                if (new_t.type !== "PARAM_INTEGER") throw new Error();
-                new_t.value = undefined;
-                new_b.text[t_index] = new_t;
-                valueIsChanged(new_b);
-              })
+              <WrapNodeInClickableDiv
+                onClick={() => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_INTEGER") throw new Error();
+                  new_t.value = undefined;
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                }}
+              >
+                {t.value}
+              </WrapNodeInClickableDiv>
             );
           else
             elements.push(
-              getSelectOfStrings(
-                t.label.values.map((x) => `${x}`),
-                "<numero>",
-                (value) => {
+              <SelectOfStrings
+                blocks={blocks}
+                std_text="<numero>"
+                options={t.label.values.map((x) => `${x}`)}
+                onChange={(value) => {
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_INTEGER") throw new Error();
                   new_t.value = Number(value);
                   new_b.text[t_index] = new_t;
                   valueIsChanged(new_b);
-                }
-              )
+                }}
+              />
             );
 
           break;
@@ -176,25 +127,34 @@ export default function RulePartBox(props: {
 
           if (t.value)
             elements.push(
-              wrapNodeInClickableDiv(t.value, () => {
-                const new_b: Block = JSON.parse(JSON.stringify(b));
-                const new_t = new_b.text[t_index];
-                if (new_t.type !== "PARAM_STRING") throw new Error();
-                new_t.value = undefined;
-                new_b.text[t_index] = new_t;
-                valueIsChanged(new_b);
-              })
+              <WrapNodeInClickableDiv
+                onClick={() => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_STRING") throw new Error();
+                  new_t.value = undefined;
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                }}
+              >
+                {t.value}
+              </WrapNodeInClickableDiv>
             );
           else
             elements.push(
-              getSelectOfStrings(t.label.values, "<stringa>", (value) => {
-                const new_b: Block = JSON.parse(JSON.stringify(b));
-                const new_t = new_b.text[t_index];
-                if (new_t.type !== "PARAM_STRING") throw new Error();
-                new_t.value = value;
-                new_b.text[t_index] = new_t;
-                valueIsChanged(new_b);
-              })
+              <SelectOfStrings
+                blocks={blocks}
+                std_text="<stringa>"
+                options={t.label.values}
+                onChange={(value) => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_STRING") throw new Error();
+                  new_t.value = value;
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                }}
+              />
             );
 
           break;
@@ -204,24 +164,25 @@ export default function RulePartBox(props: {
           if (t.choice) {
             // * here i need to parse the block inside choice
             elements.push(
-              wrapNodeInClickableDiv(
-                getBlockElements(t.choice, (new_choice) => {
-                  const new_b: Block = JSON.parse(JSON.stringify(b));
-                  const new_t = new_b.text[t_index];
-                  if (new_t.type !== "PARAM_CLASS") throw new Error();
-                  new_t.choice = new_choice;
-                  new_b.text[t_index] = new_t;
-                  valueIsChanged(new_b);
-                }),
-                () => {
+              <WrapNodeInClickableDiv
+                onClick={() => {
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_CLASS") throw new Error();
                   new_t.choice = undefined;
                   new_b.text[t_index] = new_t;
                   valueIsChanged(new_b);
-                }
-              )
+                }}
+              >
+                {getBlockElements(t.choice, (new_choice) => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_CLASS") throw new Error();
+                  new_t.choice = new_choice;
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                })}
+              </WrapNodeInClickableDiv>
             );
           } else {
             const this_choice_blocks = (() => {
@@ -231,14 +192,18 @@ export default function RulePartBox(props: {
             })();
 
             elements.push(
-              getSelectOfBlocks(this_choice_blocks, "<tipo>", (value) => {
-                const new_b: Block = JSON.parse(JSON.stringify(b));
-                const new_t = new_b.text[t_index];
-                if (new_t.type !== "PARAM_CLASS") throw new Error();
-                new_t.choice = findBlock(value);
-                new_b.text[t_index] = new_t;
-                valueIsChanged(new_b);
-              })
+              <SelectOfBlocks
+                blocks={this_choice_blocks}
+                std_text="<tipo>"
+                onChange={(value) => {
+                  const new_b: Block = JSON.parse(JSON.stringify(b));
+                  const new_t = new_b.text[t_index];
+                  if (new_t.type !== "PARAM_CLASS") throw new Error();
+                  new_t.choice = findBlock(value);
+                  new_b.text[t_index] = new_t;
+                  valueIsChanged(new_b);
+                }}
+              />
             );
           }
 
@@ -256,25 +221,48 @@ export default function RulePartBox(props: {
     type: BlockType,
     scope: BlockScope
   ): React.ReactNode[] {
+    function modifyBlockOfArray(b_index: number) {
+      return (new_b: Block) => {
+        setArray((prev) => {
+          return [
+            ...prev.slice(0, b_index),
+            new_b,
+            ...prev.slice(b_index + 1, prev.length),
+          ];
+        });
+      };
+    }
+
+    function resetBlock(b_index: number) {
+      return () => {
+        setArray((prev) => {
+          return [
+            ...prev.slice(0, b_index),
+            null,
+            ...prev.slice(b_index + 1, prev.length),
+          ];
+        });
+      };
+    }
+
     if (!array.length) {
       setArray([null]);
       return [];
     }
 
     const elements: React.ReactNode[] = [];
-
     let curr_b_index = 0;
     for (const b of array) {
       const b_index = curr_b_index;
       if (b_index) elements.push(" & ");
 
       if (!b) {
-        // * new block
+        // * b is a new block, so let the user select it
         elements.push(
-          getSelectOfBlocks(
-            getBlocksByScope(type, scope),
-            "accade cosa?",
-            (value) => {
+          <SelectOfBlocks
+            blocks={getBlocksByScope(type, scope)}
+            std_text="accade cosa?"
+            onChange={(value) => {
               const new_block = findBlock(value);
               if (!new_block) return;
               setArray((prev) => {
@@ -282,55 +270,36 @@ export default function RulePartBox(props: {
                 new_arr[b_index] = new_block;
                 return new_arr;
               });
-            }
-          )
+            }}
+          />
         );
         curr_b_index++;
         continue;
       }
 
       elements.push(
-        wrapNodeInClickableDiv(
-          getBlockElements(b, (new_b) => {
-            setArray((prev) => {
-              return [
-                ...prev.slice(0, b_index),
-                new_b,
-                ...prev.slice(b_index + 1, prev.length),
-              ];
-            });
-          }),
-          () => {
-            setArray((prev) => {
-              return [
-                ...prev.slice(0, b_index),
-                null,
-                ...prev.slice(b_index + 1, prev.length),
-              ];
-            });
-          }
-        )
+        <WrapNodeInClickableDiv onClick={resetBlock(b_index)}>
+          {getBlockElements(b, modifyBlockOfArray(b_index))}
+        </WrapNodeInClickableDiv>
       );
 
       curr_b_index++;
     }
 
-    const plus_button = (
-      <button
-        className="rounded-full w-8 mx-2 aspect-square bg-sky-300 duration-100 ease-in-out hover:scale-105"
-        onClick={() => setArray((prev) => [...prev, null])}
-        key={`add-block-${type}-${scope}`}
-      >
-        +
-      </button>
-    );
-
-    return [elements, plus_button];
+    return [
+      elements,
+      <AddBlockButton
+        key={`add-block-button-${type}-${scope}`}
+        setArray={setArray}
+        type={type}
+        scope={scope}
+      />,
+    ];
   }
 
   return (
     <div className="w-1/3">
-      <h2 className="text-2xl py-5 flex items-center gap-3">
+      <h2 className="text-2xl py-5 flex items-center gap-10">
         {title}
         <div
           onClick={() => {
