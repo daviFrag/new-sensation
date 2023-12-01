@@ -399,7 +399,7 @@ export default function CreateRuleMenu(props: {
       <div className="w-11/12 ml-auto flex justify-end gap-10 mt-20">
         <button
           onClick={() => resetFields()}
-          className="text-white p-5 rounded text-xl my-5 uppercase duration-100 ease-in-out hover:scale-105"
+          className="text-white p-5 rounded-xl text-xl my-5 uppercase duration-100 ease-in-out hover:scale-105"
           style={{ backgroundColor: "#D73E3E" }}
         >
           Annulla
@@ -434,7 +434,7 @@ export default function CreateRuleMenu(props: {
               Swal.fire("Errore nel creare la regola", message, "error");
             }
           }}
-          className="text-white bg-sky-500 p-5 rounded text-2xl my-5 uppercase duration-100 ease-in-out hover:scale-105"
+          className="text-white bg-sky-500 p-5 rounded-xl text-2xl my-5 uppercase duration-100 ease-in-out hover:scale-105"
           style={{ backgroundColor: "#146AB9" }}
         >
           {confirm_button_text}
