@@ -93,6 +93,7 @@ export default function RulePartBox(props: {
             elements.push(
               <WrapNodeInClickableDiv
                 onClick={() => {
+                  // * reset choice
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_INTEGER") throw new Error();
@@ -111,6 +112,7 @@ export default function RulePartBox(props: {
                 std_text="<numero>"
                 options={t.label.values.map((x) => `${x}`)}
                 onChange={(value) => {
+                  // * select choice
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_INTEGER") throw new Error();
@@ -129,6 +131,7 @@ export default function RulePartBox(props: {
             elements.push(
               <WrapNodeInClickableDiv
                 onClick={() => {
+                  // * reset choice
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_STRING") throw new Error();
@@ -147,6 +150,7 @@ export default function RulePartBox(props: {
                 std_text="<stringa>"
                 options={t.label.values}
                 onChange={(value) => {
+                  // * select choice
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_STRING") throw new Error();
@@ -166,6 +170,7 @@ export default function RulePartBox(props: {
             elements.push(
               <WrapNodeInClickableDiv
                 onClick={() => {
+                  // * reset choice
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_CLASS") throw new Error();
@@ -175,6 +180,7 @@ export default function RulePartBox(props: {
                 }}
               >
                 {getBlockElements(t.choice, (new_choice) => {
+                  // * select choice
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_CLASS") throw new Error();
@@ -186,8 +192,10 @@ export default function RulePartBox(props: {
             );
           } else {
             const this_choice_blocks = (() => {
+              // * if a logic block accepts all blocks as choice, we give all of them to the select
               if (b.type === "LOGIC" && t.label.values.includes("Block"))
                 return blocks.filter((b) => b.type === "STATE");
+
               return t.label.values.map((x) => findBlock(x)!);
             })();
 
@@ -196,6 +204,7 @@ export default function RulePartBox(props: {
                 blocks={this_choice_blocks}
                 std_text="<tipo>"
                 onChange={(value) => {
+                  // * select choice
                   const new_b: Block = JSON.parse(JSON.stringify(b));
                   const new_t = new_b.text[t_index];
                   if (new_t.type !== "PARAM_CLASS") throw new Error();
