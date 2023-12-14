@@ -35,7 +35,7 @@ frontend-container-build:
     - prod
     - main
   artifacts:
-    expire_in: 1 weekfronten
+    expire_in: 1 week
     
 deploy-dev:
   stage: deploy
