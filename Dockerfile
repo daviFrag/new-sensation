@@ -24,5 +24,8 @@ RUN npm run build
 
 FROM gcr.io/distroless/nodejs20-debian12:nonroot
 COPY --from=builder /app/.next/standalone/ /app
+COPY --from=builder /app/.next/static/ /app/.next/static/
+COPY --from=builder /app/public /app/public
+
 WORKDIR /app
 CMD ["server.js"]
