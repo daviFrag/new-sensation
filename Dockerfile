@@ -5,7 +5,6 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-
 EXPOSE 3000
 
 COPY package.json package-lock.json*  ./
@@ -15,7 +14,6 @@ RUN \
 	else echo "Lockfile not found." && exit 1; \
 	fi
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
@@ -24,14 +22,7 @@ COPY . .
 
 RUN npm run build
 
-
-FROM nginxinc/nginx-unprivileged as prod-stage
-
-COPY frontend.conf /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/
-
-COPY --from=builder /app/out /app
-
-EXPOSE 8080
-
-CMD ["nginx", "-g", "daemon off;"]
+FROM gcr.io/distroless/nodejs20-debian12:nonroot
+COPY --from=builder /app/.next/standalone/ /app
+WORKDIR /app
+CMD ["server.js"]
