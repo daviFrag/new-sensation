@@ -5,7 +5,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-EXPOSE 3000
+
 
 COPY package.json package-lock.json*  ./
 
@@ -17,6 +17,10 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+ARG NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -24,8 +28,11 @@ RUN npm run build
 
 FROM gcr.io/distroless/nodejs20-debian12:nonroot
 COPY --from=builder /app/.next/standalone/ /app
-COPY --from=builder /app/.next/static/ /app/.next/static/
 COPY --from=builder /app/public /app/public
-
+COPY --from=builder /app/.next/static /app/.next/static
+ENV HOSTNAME "0.0.0.0"
+# nonroot user id
+USER 65532 
+EXPOSE 3000
 WORKDIR /app
 CMD ["server.js"]
