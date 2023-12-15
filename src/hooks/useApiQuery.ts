@@ -50,7 +50,8 @@ const error_response: apiQueryError = {
 
 export default function useApiQuery<T>(
   query_key: string,
-  queryFn: (query_key: string) => Promise<ApiResponse<T>>
+  queryFn: (query_key: string, access_token?: string) => Promise<ApiResponse<T>>,
+  access_token?: string
 ): apiQueryResponse<T> {
   const router = useRouter();
   const query_client = useQueryClient();
@@ -58,7 +59,7 @@ export default function useApiQuery<T>(
     data,
     isLoading: is_loading,
     fetchStatus: fetch_status,
-  } = useQuery([query_key], () => queryFn(query_key), {
+  } = useQuery([query_key], () => queryFn(query_key, access_token), {
     staleTime: Infinity,
     cacheTime: Infinity,
   });

@@ -4,4 +4,5 @@ export const links = {
   elements: "I miei elementi di gioco",
   games: "I miei giochi",
   tutorial: "Come funziona",
+  vocabularies: "Gestisci vocabolari"
 } as const;
