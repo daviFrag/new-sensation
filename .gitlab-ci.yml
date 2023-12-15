@@ -20,6 +20,7 @@ variables:
   DOCKER_DRIVER: overlay
   CONTAINER_FRONTEND_IMAGE: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
   CONTAINER_FRONTEND_IMAGE_LATEST: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-latest
+  BACKEND_URL: https://backend.smartergame.smartcommunitylab.it/
 
 frontend-container-build:
   stage: build
@@ -27,7 +28,7 @@ frontend-container-build:
     name: $CI_COMMIT_REF_NAME
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
-    - docker build -t $CONTAINER_FRONTEND_IMAGE -t $CONTAINER_FRONTEND_IMAGE_LATEST .
+    - docker build --build-arg NEXT_PUBLIC_BACKEND_URL=$BACKEND_URL -t $CONTAINER_FRONTEND_IMAGE -t $CONTAINER_FRONTEND_IMAGE_LATEST .
     - docker push $CONTAINER_FRONTEND_IMAGE
     - docker push $CONTAINER_FRONTEND_IMAGE_LATEST
   only:
