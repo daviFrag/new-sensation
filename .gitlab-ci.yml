@@ -18,8 +18,8 @@ include:
 variables:
   SECURE_LOG_LEVEL: info
   DOCKER_DRIVER: overlay
-  CONTAINER_BACKEND_IMAGE: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
-  CONTAINER_BACKEND_IMAGE_LATEST: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-latest
+  CONTAINER_FRONTEND_IMAGE: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+  CONTAINER_FRONTEND_IMAGE_LATEST: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-latest
 
 frontend-container-build:
   stage: build
@@ -27,9 +27,9 @@ frontend-container-build:
     name: $CI_COMMIT_REF_NAME
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
-    - docker build -t $CONTAINER_BACKEND_IMAGE -t $CONTAINER_BACKEND_IMAGE_LATEST .
-    - docker push $CONTAINER_BACKEND_IMAGE
-    - docker push $CONTAINER_BACKEND_IMAGE_LATEST
+    - docker build -t $CONTAINER_FRONTEND_IMAGE -t $CONTAINER_FRONTEND_IMAGE_LATEST .
+    - docker push $CONTAINER_FRONTEND_IMAGE
+    - docker push $CONTAINER_FRONTEND_IMAGE_LATEST
   only:
     - dev
     - prod
@@ -46,7 +46,7 @@ deploy-dev:
     name: dslab
   script:
     - echo "deploy frontend"
-    - kubectl -n smartergame-dev set image deployments/smartergame-frontend smartergame-frontend=$CONTAINER_BACKEND_IMAGE --record=true
+    - kubectl -n smartergame-dev set image deployments/smartergame-frontend smartergame-frontend=$CONTAINER_FRONTEND_IMAGE --record=true
     - kubectl -n smartergame-dev rollout status deployment smartergame-frontend
   only:
     - dev
@@ -60,7 +60,7 @@ deploy-prod:
     name: dslab
   script:
     - echo "deploy frontend"
-    - kubectl -n smartergame-prod set image deployments/smartergame-frontend smartergame-frontend=$CONTAINER_BACKEND_IMAGE --record=true
+    - kubectl -n smartergame-prod set image deployments/smartergame-frontend smartergame-frontend=$CONTAINER_FRONTEND_IMAGE --record=true
     - kubectl -n smartergame-prod rollout status deployment smartergame-frontend
   only:
     - prod
@@ -69,7 +69,7 @@ container_scanning:
   dependencies:
     - frontend-container-build
   variables:
-    CS_IMAGE: $CONTAINER_BACKEND_IMAGE
+    CS_IMAGE: $CONTAINER_FRONTEND_IMAGE
     CS_DOCKERFILE_PATH: Dockerfile
     GIT_STRATEGY: fetch
   artifacts:
