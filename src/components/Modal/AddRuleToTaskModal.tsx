@@ -1,3 +1,4 @@
+import { useCustomUserContext } from "@/app/context/userStore";
 import { Rule, TaskJson } from "@/types";
 import { modifyTaskApi } from "@/utils/callKnownApi";
 import { convertRuleToString } from "@/utils/convertRuleToString";
@@ -7,10 +8,10 @@ export function AddRuleToTaskModal(props: {
   modal: React.RefObject<HTMLDialogElement>;
   task: TaskJson;
   rules: Rule[];
-  access_token?: string;
   reloadData: () => void;
 }) {
-  const { modal, rules, task, reloadData, access_token } = props;
+  const { modal, rules, task, reloadData } = props;
+  const {accessToken} = useCustomUserContext();
   const closeModal = () => modal.current?.close();
 
   return (
@@ -32,7 +33,7 @@ export function AddRuleToTaskModal(props: {
                 const new_rules = [...new_task.rules.map((rr) => rr.id), r.id!];
                 // @ts-ignore
                 new_task.rules = new_rules;
-                modifyTaskApi(task, new_task, access_token, reloadData);
+                modifyTaskApi(task, new_task, accessToken, reloadData);
                 closeModal();
               }}
             >

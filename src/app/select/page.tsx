@@ -1,31 +1,19 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import RedirectButton from "./RedirectButton";
-import { links } from "@/utils/links";
-import { useRouter } from "next/navigation";
-import {
-  deleteLocalStorageUserWithJwt,
-  getLocalStorageUserWithJwt,
-} from "@/services/auth/localStorageService";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { links, linksPermissions } from "@/utils/links";
 import { Logout } from "@/components/Icons";
+import { useCustomUserContext } from "../context/userStore";
+import { withPageAuthorized } from "@/components/AuthValidation";
 
-export default withPageAuthRequired(function Start() {
-  const router = useRouter();
-
-  // TODO auth
-  // const username = getLocalStorageUserWithJwt().user.username;
-  // ? use client not working, problems with localstorage and pre rendering
-  const [username, setUsername] = useState("");
-  useEffect(() => {
-    setUsername(getLocalStorageUserWithJwt().user?.username);
-  }, []);
+export default withPageAuthorized(function Start() {
+  const { user } = useCustomUserContext()
 
   return (
     <>
-      <h2 className="text-white">Buongiorno {username}</h2>
-      {Object.keys(links).map((link) => (
+      <h2 className="text-white">Buongiorno {user.nickname}</h2>
+      {Object.keys(links).filter((link) => user?.permissions?.includes(linksPermissions[link as keyof typeof linksPermissions])).map((link) => (
         <RedirectButton
           text={links[link as keyof typeof links]}
           redirect_link={link}
@@ -35,11 +23,7 @@ export default withPageAuthRequired(function Start() {
 
       <button
         className="absolute bottom-0 right-0 m-10 w-20 aspect-square bg-orange-100 hover:bg-orange-200 hover:scale-110 ease-in-out duration-100 rounded-xl p-2"
-        onClick={() => {
-          // TODO auth
-          deleteLocalStorageUserWithJwt();
-          router.push("/");
-        }}
+        
       >
         <Logout color="black" />
       </button>

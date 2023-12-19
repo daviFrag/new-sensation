@@ -13,18 +13,20 @@ import {
   convertVocabularyMetadataToVocabularyAndBlocks,
 } from "@/utils/fromApitoAppTypes";
 
-export function useVocabularyApiQuery(access_token?: string): apiQueryResponse<{
+export function useVocabularyApiQuery(): apiQueryResponse<{
   vocabularies_metadata: VocabularyMetadata[];
   vocabularies: Vocabulary[];
   blocks: Block[];
 }> {
-  const res = useApiQuery("vocabularies", apiGet<VocabularyMetadata[]>, access_token);
+  const res = useApiQuery("vocabularies", apiGet<VocabularyMetadata[]>);
   const {
     data: vocabularies_metadata,
     is_loading,
     is_error,
     invalidateQuery,
   } = res;
+
+  
 
   if (is_loading) return res;
   if (is_error) return res;
@@ -48,10 +50,9 @@ export function useVocabularyApiQuery(access_token?: string): apiQueryResponse<{
 }
 
 export function useRulesApiQuery(
-  v: VocabularyMetadata[],
-  access_token?: string
+  v: VocabularyMetadata[]
 ): apiQueryResponse<Rule[]> {
-  const res = useApiQuery("rules", apiGet<RuleJson[]>, access_token);
+  const res = useApiQuery("rules", apiGet<RuleJson[]>);
   const { data: rules_json, is_loading, is_error, invalidateQuery } = res;
 
   if (is_loading) return res;
@@ -81,6 +82,6 @@ export function useRulesApiQuery(
   };
 }
 
-export function useTasksApiQuery(access_token?: string): apiQueryResponse<TaskJson[]> {
-  return useApiQuery("tasks", apiGet<TaskJson[]>, access_token);
+export function useTasksApiQuery(): apiQueryResponse<TaskJson[]> {
+  return useApiQuery("tasks", apiGet<TaskJson[]>);
 }

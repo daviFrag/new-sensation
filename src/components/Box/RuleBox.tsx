@@ -4,15 +4,16 @@ import { convertRuleToString } from "@/utils/convertRuleToString";
 import { convertRuleJsonToRule } from "@/utils/fromApitoAppTypes";
 import React from "react";
 import { Bin } from "../Icons";
+import { useCustomUserContext } from "@/app/context/userStore";
 
 export function RuleBox(props: {
   task: TaskJson;
   rule: RuleJson;
   vocabularies_metadata: VocabularyMetadata[];
-  access_token?: string;
   reloadData: () => void;
 }) {
-  const { task, rule, vocabularies_metadata, access_token, reloadData } = props;
+  const { task, rule, vocabularies_metadata, reloadData } = props;
+  const {accessToken} = useCustomUserContext();
 
   const getRuleName = () => {
     const res = convertRuleJsonToRule(rule, vocabularies_metadata);
@@ -38,7 +39,7 @@ export function RuleBox(props: {
         onClick={() => {
           const new_task: TaskJson = JSON.parse(JSON.stringify(task));
           new_task.rules = new_task.rules.filter((r) => r.id !== rule.id);
-          modifyTaskApi(task, new_task, access_token, reloadData);
+          modifyTaskApi(task, new_task, accessToken, reloadData);
         }}
       >
         <Bin />

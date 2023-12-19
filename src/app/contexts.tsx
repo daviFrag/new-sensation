@@ -10,9 +10,8 @@ export default function Contexts(props: { children: React.ReactNode }) {
   return (
     <UserProvider>
       <QueryClientProvider client={query_client}>
-        {props.children}
+          {props.children}
       </QueryClientProvider>
     </UserProvider>
-    
   );
 }

@@ -7,22 +7,23 @@ import Swal from "sweetalert2";
 import waitForConfirmSwal from "@/utils/waitForConfirmSwal";
 import { AddRuleToTaskModal } from "../Modal";
 import { GameBoxTopRow, RuleBox } from ".";
+import { useCustomUserContext } from "@/app/context/userStore";
 
 export function GameBox(props: {
   task: TaskJson;
   rules: Rule[];
   vocabularies_metadata: VocabularyMetadata[];
-  access_token?: string;
   reloadData: () => void;
 }) {
-  const { task, rules, vocabularies_metadata, reloadData, access_token } = props;
+  const { task, rules, vocabularies_metadata, reloadData } = props;
   const task_instances_url = `tasks/${task.id}/instances`;
   const modal = useRef<HTMLDialogElement>(null);
+  const {accessToken} = useCustomUserContext();
 
   // * only running instances
   const [instances, setInstances] = useState<TaskInfo[]>();
   const resetInstances = () =>
-    apiGet<TaskInfo[]>(task_instances_url, access_token).then((res) => {
+    apiGet<TaskInfo[]>(task_instances_url, accessToken).then((res) => {
       if (res.status === "success")
         setInstances(res.data?.filter((x) => x.status === "RUNNING"));
     });
@@ -51,7 +52,7 @@ export function GameBox(props: {
 
   function createNewInstance() {
     wrapApiCallInWaitingSwal(
-      () => apiPost(task_instances_url, taskConfig, access_token),
+      () => apiPost(task_instances_url, taskConfig, accessToken),
       () => {
         Swal.fire("Gioco attivato", "", "success");
         resetInstances();
@@ -63,7 +64,7 @@ export function GameBox(props: {
     if (!instances) return;
 
     const promises = instances.map((i) =>
-      apiDelete(task_instances_url + `/${i.instanceId}`, access_token)
+      apiDelete(task_instances_url + `/${i.instanceId}`, accessToken)
     );
 
     Promise.all(promises).then(() => {
@@ -74,7 +75,7 @@ export function GameBox(props: {
 
   return (
     <div className="border border-solid border-black rounded-xl mb-5">
-      <GameBoxTopRow task={task} access_token={access_token} reloadData={reloadData} />
+      <GameBoxTopRow task={task} reloadData={reloadData} />
 
       <div className="text-2xl p-7">
         <Toggle
@@ -104,7 +105,6 @@ export function GameBox(props: {
           task={task}
           rule={r}
           vocabularies_metadata={vocabularies_metadata}
-          access_token={access_token}
           reloadData={reloadData}
         />
       ))}
@@ -128,7 +128,6 @@ export function GameBox(props: {
         task={task}
         rules={rules}
         reloadData={reloadData}
-        access_token={access_token}
       />
     </div>
   );

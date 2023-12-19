@@ -1,3 +1,4 @@
+import { useCustomUserContext } from "@/app/context/userStore";
 import { createTaskApi } from "@/utils/callKnownApi";
 import React from "react";
 
@@ -29,9 +30,9 @@ function InputField(props: {
 export function CreateGameModal(props: {
   rules_ids: string[];
   modal: React.RefObject<HTMLDialogElement>;
-  access_token?: string;
 }) {
-  const { rules_ids, modal, access_token } = props;
+  const { rules_ids, modal } = props;
+  const {accessToken} = useCustomUserContext();
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,7 +45,7 @@ export function CreateGameModal(props: {
     // TODO check if the fields name are correct
     const form_result = { name, classrooms, students };
 
-    createTaskApi(name, rules_ids, access_token);
+    createTaskApi(name, rules_ids, accessToken);
 
     modal.current?.close();
   }

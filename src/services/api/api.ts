@@ -33,7 +33,7 @@ async function apiCall<T>(
   access_token?: string
 ): Promise<ApiResponse<T>> {
   try {
-    const url = `${backend_url}${uri}`;
+    const url = uri.includes("http") ? uri : `${backend_url}${uri}`;
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",

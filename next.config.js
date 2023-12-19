@@ -23,6 +23,10 @@ const nextConfig = {
 		];
 	},
 
+	env: {
+		DEPLOY_URL: process.env.AUTH0_BASE_URL
+	}
+
 	// Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
 	// trailingSlash: true,
 

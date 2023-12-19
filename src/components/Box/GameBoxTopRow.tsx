@@ -6,13 +6,14 @@ import {
 } from "@/utils/callKnownApi";
 import React, { useState } from "react";
 import { Check, X_Check, Pen, Copy, Bin } from "../Icons";
+import { useCustomUserContext } from "@/app/context/userStore";
 
 export function GameBoxTopRow(props: {
   task: TaskJson;
-  access_token?: string;
   reloadData: () => void;
 }) {
-  const { task, access_token, reloadData } = props;
+  const { task, reloadData } = props;
+  const {accessToken} = useCustomUserContext();
 
   const [new_task_name, setNewTaskName] = useState(task.name);
   const [modify_task_name, setModifyTaskName] = useState(false);
@@ -31,7 +32,7 @@ export function GameBoxTopRow(props: {
             onClick={() => {
               const new_task: TaskJson = JSON.parse(JSON.stringify(task));
               new_task.name = new_task_name;
-              modifyTaskApi(task, new_task, access_token, reloadData);
+              modifyTaskApi(task, new_task, accessToken, reloadData);
               setModifyTaskName(false);
             }}
           >
@@ -64,7 +65,7 @@ export function GameBoxTopRow(props: {
           createTaskApi(
             task.name + " - copia",
             task.rules.map((r) => r.id),
-            access_token,
+            accessToken,
             reloadData
           )
         }
@@ -73,7 +74,7 @@ export function GameBoxTopRow(props: {
       </div>
       <div
         className="h-20 p-3 cursor-pointer duration-75 ease-in-out hover:scale-110"
-        onClick={() => deleteTaskApi(task, access_token, reloadData)}
+        onClick={() => deleteTaskApi(task, accessToken, reloadData)}
       >
         <Bin />
       </div>
