@@ -10,8 +10,8 @@ export const links = {
 export const linksPermissions = {
   create: "create:rules",
   rules: "read:rules",
-  elements: "read:elements",
-  games: "delete:games",
-  tutorial: "read:tutorial",
+  elements: "read:rules",
+  games: "delete:tasks",
+  tutorial: "read:rules",
   vocabularies: "update:vocabularies"
 } as const
