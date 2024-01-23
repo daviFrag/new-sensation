@@ -84,7 +84,8 @@ export function createTaskApi(
   name: string,
   rules_id: string[],
   access_token?: string,
-  reloadData?: () => void
+  reloadData?: () => void,
+  onSuccessCallback?: () => void
 ) {
   const new_task: CreateTaskJson = {
     name,
@@ -94,7 +95,12 @@ export function createTaskApi(
   wrapApiCallInWaitingSwal(
     () => apiPost<TaskJson>("tasks", new_task, access_token),
     (res) => {
-      Swal.fire("Gioco creato", res.data?.name, "success");
+      if (!onSuccessCallback) {
+        Swal.fire("Gioco creato", res.data?.name, "success");
+      }
+
+      onSuccessCallback?.();
+      
       if (reloadData) reloadData();
     }
   );

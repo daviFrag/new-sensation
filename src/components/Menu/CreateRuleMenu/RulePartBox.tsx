@@ -151,6 +151,7 @@ export default function RulePartBox(props: {
           if (t.value != null)
             elements.push(
               <WrapNodeInClickableDiv
+                key={t_index}
                 onClick={() => resetBlockChoice(b, t_index, valueIsChanged)}
               >
                 {t.value}
@@ -159,6 +160,7 @@ export default function RulePartBox(props: {
           else
             elements.push(
               <SelectOfStrings
+                key={t_index}
                 blocks={blocks}
                 std_text="<numero>"
                 options={t.label.values.map((x) => `${x}`)}
@@ -175,6 +177,7 @@ export default function RulePartBox(props: {
           if (t.value)
             elements.push(
               <WrapNodeInClickableDiv
+                key={t_index}
                 onClick={() => resetBlockChoice(b, t_index, valueIsChanged)}
               >
                 {t.value}
@@ -183,6 +186,7 @@ export default function RulePartBox(props: {
           else
             elements.push(
               <SelectOfStrings
+                key={t_index}
                 blocks={blocks}
                 std_text="<stringa>"
                 options={t.label.values}
@@ -200,6 +204,7 @@ export default function RulePartBox(props: {
             // * here i need to parse the block inside choice
             elements.push(
               <WrapNodeInClickableDiv
+                key={t_index}
                 onClick={() => resetBlockChoice(b, t_index, valueIsChanged)}
               >
                 {getBlockElements(t.choice, (new_choice) =>
@@ -218,6 +223,7 @@ export default function RulePartBox(props: {
 
             elements.push(
               <SelectOfBlocks
+                key={t_index}
                 blocks={this_choice_blocks}
                 std_text="<tipo>"
                 onChange={(value) =>
@@ -280,6 +286,7 @@ export default function RulePartBox(props: {
         // * b is a new block, so let the user select it
         elements.push(
           <SelectOfBlocks
+            key={b_index}
             blocks={getBlocksByScope(type, scope)}
             std_text="accade cosa?"
             onChange={(value) => {
@@ -298,7 +305,7 @@ export default function RulePartBox(props: {
       }
 
       elements.push(
-        <WrapNodeInClickableDiv onClick={resetBlock(b_index)}>
+        <WrapNodeInClickableDiv key={b_index} onClick={resetBlock(b_index)}>
           {getBlockElements(b, modifyBlockOfArray(b_index))}
         </WrapNodeInClickableDiv>
       );

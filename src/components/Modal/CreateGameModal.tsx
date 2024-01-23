@@ -1,5 +1,6 @@
 import { useCustomUserContext } from "@/app/context/userStore";
 import { createTaskApi } from "@/utils/callKnownApi";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function InputField(props: {
@@ -33,6 +34,7 @@ export function CreateGameModal(props: {
 }) {
   const { rules_ids, modal } = props;
   const {accessToken} = useCustomUserContext();
+  const router = useRouter()
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,7 +47,7 @@ export function CreateGameModal(props: {
     // TODO check if the fields name are correct
     const form_result = { name, classrooms, students };
 
-    createTaskApi(name, rules_ids, accessToken);
+    createTaskApi(name, rules_ids, accessToken, undefined, () => router.push("/games"));
 
     modal.current?.close();
   }

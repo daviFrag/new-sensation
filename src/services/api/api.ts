@@ -44,8 +44,6 @@ async function apiCall<T>(
       headers.Authorization = `Bearer ${access_token}`;
     }
 
-    console.log(headers)
-
     const body = data ? JSON.stringify(data) : undefined;
     const response = await fetch(url, {
       method,

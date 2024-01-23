@@ -58,7 +58,7 @@ function BadgeRow({
       <TdCell>{badge.description}</TdCell>
       <TdCell>
         <div className="w-10 h-10 relative mx-auto">
-          <Image src={badge.image} alt={badge.name} layout="fill" />
+          <Image src={badge.image} alt={badge.name} fill/>
         </div>
       </TdCell>
       <td>
