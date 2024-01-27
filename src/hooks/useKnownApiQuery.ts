@@ -26,6 +26,8 @@ export function useVocabularyApiQuery(): apiQueryResponse<{
     invalidateQuery,
   } = res;
 
+  
+
   if (is_loading) return res;
   if (is_error) return res;
 

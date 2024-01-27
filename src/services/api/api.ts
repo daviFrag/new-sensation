@@ -1,4 +1,3 @@
-import { getLocalStorageUserWithJwt } from "../auth/localStorageService";
 import backend_url from "./backend_url";
 
 export interface ApiResult<T> {
@@ -31,24 +30,31 @@ async function apiCall<T>(
   uri: string,
   method = "get",
   data?: any,
-  requires_auth = true
+  access_token?: string,
+  headers?: Record<string, string>
 ): Promise<ApiResponse<T>> {
   try {
-    const url = `${backend_url}${uri}`;
+    const url = uri.includes("http") ? uri : `${backend_url}${uri}`;
 
-    const token = requires_auth
-      ? getLocalStorageUserWithJwt().access_token
-      : "";
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
+    if (!headers) {
+      headers = {
+        "Content-Type": "application/json",
+      };
+    }
 
-    // TODO auth
-    /* if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    } */
+    if (access_token) {
+      headers.Authorization = `Bearer ${access_token}`;
+    }
 
-    const body = data ? JSON.stringify(data) : undefined;
+    let body;
+    if (!data) {
+      body = undefined;
+    } else if (data instanceof FormData) {
+      body = data;
+    } else {
+      body = JSON.stringify(data);
+    }
+
     const response = await fetch(url, {
       method,
       headers,
@@ -88,8 +94,8 @@ async function apiCall<T>(
  * @param {object} data - The data to send to the server.
  * @returns A promise that resolves to a generic type T.
  */
-export function apiPost<T>(uri: string, data: object, requires_auth = true) {
-  return apiCall<T>(uri, "post", data, requires_auth);
+export function apiPost<T>(uri: string, data: any, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "post", data, access_token, headers);
 }
 
 /**
@@ -101,8 +107,8 @@ export function apiPost<T>(uri: string, data: object, requires_auth = true) {
  * @param {string} uri - The uri to call.
  * @returns A promise that resolves to a generic type T.
  */
-export function apiGet<T>(uri: string, requires_auth = true) {
-  return apiCall<T>(uri, "get", null, requires_auth);
+export function apiGet<T>(uri: string, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "get", null, access_token, headers);
 }
 
 /**
@@ -114,8 +120,8 @@ export function apiGet<T>(uri: string, requires_auth = true) {
  * @returns A function that takes a uri and returns a promise that resolves to the response of the api
  * call.
  */
-export function apiDelete<T>(uri: string, requires_auth = true) {
-  return apiCall<T>(uri, "delete", null, requires_auth);
+export function apiDelete<T>(uri: string, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "delete", null, access_token, headers);
 }
 
 /**
@@ -127,6 +133,6 @@ export function apiDelete<T>(uri: string, requires_auth = true) {
  * @param {object} data - The data to send to the server.
  * @returns A promise that resolves to a generic type T.
  */
-export function apiPut<T>(uri: string, data: object) {
-  return apiCall<T>(uri, "put", data);
+export function apiPut<T>(uri: string, data: any, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "put", data, access_token, headers);
 }

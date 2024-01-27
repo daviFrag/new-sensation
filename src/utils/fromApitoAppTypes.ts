@@ -63,8 +63,7 @@ export function convertBlockJsonToBlock(
   vv: VocabularyMetadata[]
 ): { status: "success"; block: Block } | { status: "error"; msg: string } {
   const v = vv.find(
-    (x) =>
-      x.id === b.vocabulary || x.id === (b.vocabulary as VocabularyMetadata).id
+    (x) => x.id === b.vocabulary
   );
 
   if (!v) {

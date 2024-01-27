@@ -1,7 +1,7 @@
 export type CreateVocabularyMetadata = {
   name: string;
-  vocabularyUrl: string;
-  rootPackageName: string;
+  currentJarVersion: string;
+  allJarVersions: string[];
 };
 
 export type VocabularyMetadata = CreateVocabularyMetadata & {
