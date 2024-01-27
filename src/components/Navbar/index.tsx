@@ -21,8 +21,8 @@ export default function Navbar({ text }: { text: string }) {
         >
           <Hamburger />
         </button>
-        {!showMenu && <h1 className="ml-10 uppercase">{text}</h1>}
-        <h2 className="ml-auto">Smarter: the Rulebook</h2>
+        {!showMenu && <h1 className="ml-10 uppercase lg:text-4xl md:text-2xl text-[75%]">{text}</h1>}
+        <h2 className="ml-auto lg:text-4xl md:text-3xl text-[0px]">Smarter: the Rulebook</h2>
       </header>
 
       <div className="h-32 w-full" />

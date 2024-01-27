@@ -7,8 +7,9 @@ export function NoElementMenu(props: {
   text: string;
   url?: string;
   button_text?: string;
+  ButtonComponent?: () => JSX.Element;
 }) {
-  const { Svg, svg_dimension, title, text, url, button_text } = props;
+  const { Svg, svg_dimension, title, text, url, button_text, ButtonComponent } = props;
 
   return (
     <div className="flex flex-col items-center w-1/2 mt-0 mx-auto">
@@ -17,7 +18,7 @@ export function NoElementMenu(props: {
       >
         <Svg />
       </div>
-      <h2 className="font-bold text-5xl mb-10">{title}</h2>
+      <h2 className="font-bold text-5xl mb-10 text-center">{title}</h2>
       <p className="text-3xl mb-10 text-center">{text}</p>
       {url && (
         <a href={url}>
@@ -25,6 +26,9 @@ export function NoElementMenu(props: {
             {button_text}
           </button>
         </a>
+      )}
+      {ButtonComponent && (
+        <ButtonComponent />
       )}
     </div>
   );

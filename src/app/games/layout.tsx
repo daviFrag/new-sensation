@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react";
-import { links } from "@/utils/links";
+import { links, linksPermissions } from "@/utils/links";
 import Navbar from "@/components/Navbar";
 import { withPageAuthorized } from "@/components/AuthValidation";
 
@@ -13,5 +13,8 @@ export default withPageAuthorized(function layout({ children }: { children: Reac
     </div>
   );
 },{
-  returnTo: "/games"
+  returnTo: "/games",
+  permissions: [
+    linksPermissions.games
+  ]
 })

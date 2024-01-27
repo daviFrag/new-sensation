@@ -30,21 +30,31 @@ async function apiCall<T>(
   uri: string,
   method = "get",
   data?: any,
-  access_token?: string
+  access_token?: string,
+  headers?: Record<string, string>
 ): Promise<ApiResponse<T>> {
   try {
     const url = uri.includes("http") ? uri : `${backend_url}${uri}`;
 
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
+    if (!headers) {
+      headers = {
+        "Content-Type": "application/json",
+      };
+    }
 
-    // TODO auth
     if (access_token) {
       headers.Authorization = `Bearer ${access_token}`;
     }
 
-    const body = data ? JSON.stringify(data) : undefined;
+    let body;
+    if (!data) {
+      body = undefined;
+    } else if (data instanceof FormData) {
+      body = data;
+    } else {
+      body = JSON.stringify(data);
+    }
+
     const response = await fetch(url, {
       method,
       headers,
@@ -84,8 +94,8 @@ async function apiCall<T>(
  * @param {object} data - The data to send to the server.
  * @returns A promise that resolves to a generic type T.
  */
-export function apiPost<T>(uri: string, data: object, access_token?: string) {
-  return apiCall<T>(uri, "post", data, access_token);
+export function apiPost<T>(uri: string, data: any, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "post", data, access_token, headers);
 }
 
 /**
@@ -97,8 +107,8 @@ export function apiPost<T>(uri: string, data: object, access_token?: string) {
  * @param {string} uri - The uri to call.
  * @returns A promise that resolves to a generic type T.
  */
-export function apiGet<T>(uri: string, access_token?: string) {
-  return apiCall<T>(uri, "get", null, access_token);
+export function apiGet<T>(uri: string, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "get", null, access_token, headers);
 }
 
 /**
@@ -110,8 +120,8 @@ export function apiGet<T>(uri: string, access_token?: string) {
  * @returns A function that takes a uri and returns a promise that resolves to the response of the api
  * call.
  */
-export function apiDelete<T>(uri: string, access_token?: string) {
-  return apiCall<T>(uri, "delete", null, access_token);
+export function apiDelete<T>(uri: string, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "delete", null, access_token, headers);
 }
 
 /**
@@ -123,6 +133,6 @@ export function apiDelete<T>(uri: string, access_token?: string) {
  * @param {object} data - The data to send to the server.
  * @returns A promise that resolves to a generic type T.
  */
-export function apiPut<T>(uri: string, data: object, access_token?: string) {
-  return apiCall<T>(uri, "put", data, access_token);
+export function apiPut<T>(uri: string, data: any, access_token?: string, headers?: Record<string, string>) {
+  return apiCall<T>(uri, "put", data, access_token, headers);
 }
