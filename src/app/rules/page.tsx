@@ -16,7 +16,7 @@ import VocabularyFilter from "@/components/VocabularyFilter";
 import { useRulesApiQuery, useVocabularyApiQuery } from "@/hooks/useKnownApiQuery";
 import { useCustomUserContext } from "../context/userStore";
 
-export function RulesLoaded(props: {
+function RulesLoaded(props: {
   rules: Rule[];
   vocabularies: Vocabulary[];
   blocks: Block[];
