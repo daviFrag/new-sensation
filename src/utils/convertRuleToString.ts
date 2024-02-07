@@ -27,7 +27,7 @@ function convertBlockToString(b: Block | undefined): string {
 }
 
 export function convertRuleToString(rule: Rule): string {
-  let s = "QUANDO ";
+  let s = "APPENA ";
   s += convertBlockToString(rule.when);
 
   s += " MENTRE ";

@@ -37,8 +37,8 @@ function CreateLoaded(props: {
       {(!filtered_blocks?.length && (
         <NoElementMenu
           Svg={Attention}
-          title="Nessun blocco disponibile"
-          text="Nessun blocco disponibile da alcun vocabolario. Seleziona un vocabolario"
+          title="Nessuna risorsa disponibile"
+          text="Seleziona un vocabolario"
           svg_dimension="small"
         />
       )) || (
