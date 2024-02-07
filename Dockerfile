@@ -39,7 +39,7 @@ RUN export AUTH0_BASE_URL=${AUTH0_BASE_URL} && \
 	export AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET} && \
 	export AUTH0_AUDIENCE=${AUTH0_AUDIENCE} && \
 	export AUTH0_SCOPE=${AUTH0_SCOPE} && \
-    npm run build
+	npm run build
 
 FROM gcr.io/distroless/nodejs20-debian12:nonroot
 COPY --from=builder /app/.next/standalone/ /app

@@ -40,7 +40,7 @@ export function makeRuleNested(
   const new_while_arr = makeArrayNested(while_arr, and_block);
   const new_when_arr = makeArrayNested(when_arr, and_block);
 
-  if (!new_while_arr || !new_when_arr) throw new Error("Quando o Mentre vuoto");
+  if (!new_while_arr || !new_when_arr) throw new Error("Stato o evento vuoto");
 
   const new_sequential_object: Rule = {
     id: sequetial_object.id,
