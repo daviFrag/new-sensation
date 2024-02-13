@@ -34,7 +34,7 @@ export function convertRuleToString(rule: Rule): string {
   s += convertBlockToString(rule.while);
 
   s += " ALLORA ";
-  s += rule.do.map((b) => convertBlockToString(b)).join(" & ");
+  s += rule.do.map((b) => convertBlockToString(b)).join(" E ");
 
   return s;
 }

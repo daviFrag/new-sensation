@@ -280,7 +280,7 @@ export default function RulePartBox(props: {
     let curr_b_index = 0;
     for (const b of array) {
       const b_index = curr_b_index;
-      if (b_index) elements.push(" & ");
+      if (b_index) elements.push(" E ");
 
       if (!b) {
         // * b is a new block, so let the user select it
