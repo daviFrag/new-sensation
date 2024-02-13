@@ -62,8 +62,9 @@ export default function RulePartBox(props: {
   setArray: React.Dispatch<React.SetStateAction<(Block | null)[]>>;
   type: BlockType;
   scope: BlockScope;
+  single?: boolean;
 }) {
-  const { title, text, blocks, array, setArray, type, scope } = props;
+  const { title, text, blocks, array, setArray, type, scope, single } = props;
 
   function findBlock(name: string): Block | undefined {
     return blocks.find((b) => b.name === name);
@@ -315,12 +316,12 @@ export default function RulePartBox(props: {
 
     return [
       elements,
-      <AddBlockButton
+      single ? <></> : <AddBlockButton
         key={`add-block-button-${type}-${scope}`}
         setArray={setArray}
         type={type}
         scope={scope}
-      />,
+      />
     ];
   }
 

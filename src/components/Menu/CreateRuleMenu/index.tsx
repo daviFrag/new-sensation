@@ -101,6 +101,7 @@ export function CreateRuleMenu(props: {
           setArray={setWhenArray}
           type="STATE"
           scope="WHEN"
+          single={true}
         />
         <RulePartBox
           title="Stato"
