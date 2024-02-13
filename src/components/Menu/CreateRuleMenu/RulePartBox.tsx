@@ -277,6 +277,12 @@ export default function RulePartBox(props: {
       return [];
     }
 
+    const placeHolders = {
+      WHEN: "Accade cosa?",
+      WHILE: "Quale circostanza sta occorrendo?",
+      ACTION: "Che cosa deve avvenire?"
+    }
+
     const elements: React.ReactNode[] = [];
     let curr_b_index = 0;
     for (const b of array) {
@@ -289,7 +295,7 @@ export default function RulePartBox(props: {
           <SelectOfBlocks
             key={b_index}
             blocks={getBlocksByScope(type, scope)}
-            std_text="accade cosa?"
+            std_text={placeHolders[scope]}
             onChange={(value) => {
               const new_block = findBlock(value);
               if (!new_block) return;
