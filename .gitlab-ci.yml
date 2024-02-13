@@ -21,13 +21,10 @@ variables:
   CONTAINER_FRONTEND_IMAGE: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
   CONTAINER_FRONTEND_IMAGE_LATEST: smartcommunitylab/smartergame-frontend:$CI_COMMIT_REF_NAME-latest
   BACKEND_URL: https://backend.smartergame.smartcommunitylab.it/
-  SECRET: $AUTH0_SECRET
-  CLIENT_ID: $AUTH0_CLIENT_ID
-  CLIENT_SECRET: $AUTH0_CLIENT_SECRET
-  SCOPE: "openid profile email"
-  AUDIENCE: https://smarter.com
-  ISSUER_BASE_URL: https://smarter.eu.auth0.com
-  BASE_URL: https://frontend.smartergame.smartcommunitylab.it/
+  AUTH0_SECRET: "$AUTH0_SECRET"
+  AUTH0_CLIENT_ID: "$AUTH0_CLIENT_ID"
+  AUTH0_CLIENT_SECRET: "$AUTH0_CLIENT_SECRET"
+  AUTH0_BASE_URL: https://frontend.smartergame.smartcommunitylab.it
 
 frontend-container-build:
   stage: build
@@ -35,7 +32,14 @@ frontend-container-build:
     name: $CI_COMMIT_REF_NAME
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
-    - docker build --build-arg NEXT_PUBLIC_BACKEND_URL=$BACKEND_URL --build-arg AUTH0_SECRET=$SECRET --build-arg AUTH0_CLIENT_ID=$CLIENT_ID --build-arg AUTH0_CLIENT_SECRET=$CLIENT_SECRET --build-arg AUTH0_SCOPE=$SCOPE --build-arg AUTH0_AUDIENCE=$AUDIENCE --build-arg AUTH0_ISSUER_BASE_URL=$ISSUER_BASE_URL --build-arg AUTH0_BASE_URL=$BASE_URL -t $CONTAINER_FRONTEND_IMAGE -t $CONTAINER_FRONTEND_IMAGE_LATEST .
+    - docker build 
+        --build-arg NEXT_PUBLIC_BACKEND_URL=$BACKEND_URL 
+        --build-arg AUTH0_SECRET=$AUTH0_SECRET
+        --build-arg AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID
+        --build-arg AUTH0_CLIENT_SECRET=$AUTH0_CLIENT_SECRET
+        --build-arg AUTH0_BASE_URL=$AUTH0_BASE_URL
+        -t $CONTAINER_FRONTEND_IMAGE 
+        -t $CONTAINER_FRONTEND_IMAGE_LATEST .
     - docker push $CONTAINER_FRONTEND_IMAGE
     - docker push $CONTAINER_FRONTEND_IMAGE_LATEST
   only:

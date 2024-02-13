@@ -95,7 +95,7 @@ export function CreateRuleMenu(props: {
       <div className="flex gap-10">
         <RulePartBox
           title="Evento"
-          text="QUANDO"
+          text="APPENA"
           blocks={blocks}
           array={whenArray}
           setArray={setWhenArray}
