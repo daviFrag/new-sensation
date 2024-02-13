@@ -8,7 +8,6 @@ export function Logout({ color }: { color: "black" | "white" }) {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke={color === "black" ? "#0E599D" : "white"}
-      className="w-6 h-6"
     >
       <path
         strokeLinecap="round"
