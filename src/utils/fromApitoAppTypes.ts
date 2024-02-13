@@ -118,7 +118,7 @@ export function convertBlockJsonToBlock(
 
   const block: Block = {
     name: b.name,
-    vocabulary: (b.vocabulary as VocabularyMetadata).name,
+    vocabulary: v.name, // (b.vocabulary as VocabularyMetadata)
     type: v.blockMetadata[b.name].type,
     scope: v.blockMetadata[b.name].scope,
     value: b.value,
