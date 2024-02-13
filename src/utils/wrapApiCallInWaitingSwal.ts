@@ -12,7 +12,7 @@ export default function wrapApiCallInWaitingSwal<T>(
       console.error(response.message);
       Swal.fire({
         icon: 'error',
-        title: "Qualcosa e' andato storto",
+        title: "Qualcosa &eacute; andato storto",
         html: `${response.message}`,
       });
     } else {
