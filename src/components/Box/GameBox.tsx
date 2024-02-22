@@ -8,6 +8,7 @@ import waitForConfirmSwal from "@/utils/waitForConfirmSwal";
 import { AddRuleToTaskModal } from "../Modal";
 import { GameBoxTopRow, RuleBox } from ".";
 import { useCustomUserContext } from "@/app/context/userStore";
+import GamificationMode from "./GamificationMode";
 
 export function GameBox(props: {
   task: TaskJson;
@@ -18,7 +19,7 @@ export function GameBox(props: {
   const { task, rules, vocabularies_metadata, reloadData } = props;
   const task_instances_url = `tasks/${task.id}/instances`;
   const modal = useRef<HTMLDialogElement>(null);
-  const {accessToken} = useCustomUserContext();
+  const { accessToken } = useCustomUserContext();
 
   // * only running instances
   const [instances, setInstances] = useState<TaskInfo[]>();
@@ -129,6 +130,8 @@ export function GameBox(props: {
         rules={rules}
         reloadData={reloadData}
       />
+
+      <GamificationMode />
     </div>
   );
 }
