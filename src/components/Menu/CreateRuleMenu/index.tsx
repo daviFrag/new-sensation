@@ -9,6 +9,29 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import RulePartBox from "./RulePartBox";
 
+function checkBlocks(blocks: (Block | null)[], metas: VocabularyMetadata[]) {
+  for (const block of blocks) {
+    if (!block) continue;
+
+    const meta = metas.findLast(m => m.name === block.vocabulary)?.blockMetadata[block.name]
+
+    const blockParams = block.text.filter(t => t.type.includes("PARAM"));
+
+    if (meta?.params.length !== blockParams.length) {
+      throw new Error("Qualche primitiva non ha tutte le specifiche compilate!")
+    }
+
+    blockParams.forEach(param => {
+      if ((param.type === "PARAM_INTEGER" || param.type === "PARAM_STRING") && param.value === null) {
+        throw new Error("Qualche primitiva non ha tutte le specifiche compilate!")
+      }
+      if (param.type === "PARAM_CLASS" && param.choice === undefined) {
+        throw new Error("Qualche primitiva non ha tutte le specifiche compilate!")
+      }
+    })
+  }
+}
+
 export function CreateRuleMenu(props: {
   blocks: Block[];
   confirm_button_text: string;
@@ -66,6 +89,7 @@ export function CreateRuleMenu(props: {
     };
 
     try {
+      checkBlocks([...whenArray, ...whileArray, ...doArray], vocabularies_metadata);
       const rule = makeRuleNested(
         JSON.parse(JSON.stringify(rule_unnested)),
         blocks,
