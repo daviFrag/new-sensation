@@ -72,7 +72,7 @@ export default function useApiQuery<T>(
         return redirect("/api/auth/login?returnTo=" + (window.location.href ?? "/"));
       }
       Swal.fire({
-        title: "Qualcosa e' andato storto",
+        title: "Qualcosa &eacute; andato storto",
         html: data.message,
         icon: 'error',
         allowOutsideClick: false,

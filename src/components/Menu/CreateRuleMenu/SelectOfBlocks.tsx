@@ -38,7 +38,7 @@ export default function SelectOfBlocks(props: {
         onChange(value);
       }}
       value=""
-      className="text-white p-2 w-full max-w-xs"
+      className="text-white p-2 w-full max-w-xs text-sm"
       style={{ backgroundColor: "#73B9F9" }}
       onClick={(e) => e.stopPropagation()}
       onMouseOver={(e) => e.stopPropagation()}

@@ -118,7 +118,7 @@ export function convertBlockJsonToBlock(
 
   const block: Block = {
     name: b.name,
-    vocabulary: (b.vocabulary as VocabularyMetadata).name,
+    vocabulary: v.name, // (b.vocabulary as VocabularyMetadata)
     type: v.blockMetadata[b.name].type,
     scope: v.blockMetadata[b.name].scope,
     value: b.value,
@@ -179,23 +179,39 @@ export function convertRuleJsonToRule(
   v: VocabularyMetadata[]
 ): { status: "success"; rule: Rule } | { status: "error"; msg: string } {
   const condition_block = rule_json.condition;
-
-  if (condition_block.name != andBlockName) {
-    const msg = `Rule Condition is not starting with ${andBlockName} (starting with ${condition_block.name})`;
-    console.error(msg);
-    return { status: "error", msg };
-  }
-
-  const whenRes = convertBlockJsonToBlock(condition_block.params[0], v);
-  if (whenRes.status !== "success") return whenRes;
-  const whileRes = convertBlockJsonToBlock(condition_block.params[1], v);
-  if (whileRes.status !== "success") return whileRes;
   const doBlocks: Block[] = [];
   for (const b of rule_json.actions) {
     const res = convertBlockJsonToBlock(b, v);
     if (res.status !== "success") return res;
     doBlocks.push(res.block);
   }
+
+  if (condition_block.name != andBlockName) {
+    const whenRes = convertBlockJsonToBlock(condition_block, v);
+    if (whenRes.status !== "success") return whenRes;
+
+    return {
+      status: "success",
+      rule: {
+        id: rule_json.id,
+        name: rule_json.name,
+        vocabularies: rule_json.vocabularies.map((rv) => {
+          if (typeof rv === "string")
+            return v.find((vv) => vv.id === rv)?.name ?? "";
+          return rv.name;
+        }),
+        when: whenRes.block,
+        while: undefined,
+        do: doBlocks,
+        scope: "SELECTOR",
+      },
+    }
+  }
+
+  const whenRes = convertBlockJsonToBlock(condition_block.params[0], v);
+  if (whenRes.status !== "success") return whenRes;
+  const whileRes = convertBlockJsonToBlock(condition_block.params[1], v);
+  if (whileRes.status !== "success") return whileRes;
 
   return {
     status: "success",
@@ -233,27 +249,32 @@ export function convertRuleToRuleJson(
   vocabularies.push(
     findIdOfVocabulary(rule.when.vocabulary, vocabularies_metadata)
   );
-  vocabularies.push(
-    findIdOfVocabulary(rule.while.vocabulary, vocabularies_metadata)
-  );
+  if (rule.while) {
+    vocabularies.push(
+      findIdOfVocabulary(rule.while.vocabulary, vocabularies_metadata)
+    );
+  }
+  
   for (const b of rule.do)
     vocabularies.push(findIdOfVocabulary(b.vocabulary, vocabularies_metadata));
 
   const createRuleJson: CreateRuleJson = {
     name: rule.name,
     vocabularies,
-    condition: {
-      name: andBlockName,
-      vocabulary: findIdOfVocabulary(
-        andBlock.vocabulary,
-        vocabularies_metadata
-      ),
-      params: [
-        convertBlockToBlockJson(rule.when, vocabularies_metadata),
-        convertBlockToBlockJson(rule.while, vocabularies_metadata),
-      ],
-      value: "",
-    },
+    condition: !rule.while ? 
+      convertBlockToBlockJson(rule.when, vocabularies_metadata) : 
+      {
+        name: andBlockName,
+        vocabulary: findIdOfVocabulary(
+          andBlock.vocabulary,
+          vocabularies_metadata
+        ),
+        params: [
+          convertBlockToBlockJson(rule.when, vocabularies_metadata),
+          convertBlockToBlockJson(rule.while, vocabularies_metadata),
+        ],
+        value: "",
+      },
     actions: rule.do.map((b) =>
       convertBlockToBlockJson(b, vocabularies_metadata)
     ),

@@ -187,7 +187,7 @@ function RulesLoaded(props: {
                   starting_values={{
                     id: r.id,
                     name: r.name,
-                    whileArray: [r.while],
+                    whileArray: r.while ? [r.while] : [],
                     whenArray: [r.when],
                     doArray: r.do,
                   }}

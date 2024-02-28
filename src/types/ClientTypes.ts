@@ -37,7 +37,7 @@ export type Rule = {
   name: string;
   vocabularies: Vocabulary[];
   when: Block;
-  while: Block;
+  while?: Block;
   do: Block[];
   scope: "SELECTOR";
 };

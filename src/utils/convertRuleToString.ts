@@ -30,11 +30,13 @@ export function convertRuleToString(rule: Rule): string {
   let s = "APPENA ";
   s += convertBlockToString(rule.when);
 
-  s += " MENTRE ";
-  s += convertBlockToString(rule.while);
+  if (rule.while) {
+    s += " MENTRE ";
+    s += convertBlockToString(rule.while);
+  }
 
   s += " ALLORA ";
-  s += rule.do.map((b) => convertBlockToString(b)).join(" & ");
+  s += rule.do.map((b) => convertBlockToString(b)).join(" E ");
 
   return s;
 }
