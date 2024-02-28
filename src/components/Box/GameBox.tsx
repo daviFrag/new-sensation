@@ -17,6 +17,7 @@ export function GameBox(props: {
 }) {
   const { task, rules, vocabularies_metadata, reloadData } = props;
   const task_instances_url = `tasks/${task.id}/instances`;
+  const [smarterId, setSmarterId] = useState("");
   const modal = useRef<HTMLDialogElement>(null);
   const {accessToken} = useCustomUserContext();
 
@@ -39,16 +40,16 @@ export function GameBox(props: {
     for (const v of vocabularies_metadata) {
       conf[v.name] = {
         SmarterStateReader: {
-          broker: "tcp://localhost:1883",
-          user: "admin",
-          password: "password",
-          smarter: "smarter_fbk_5",
+          broker: "ssl://ib05a168.ala.us-east-1.emqxsl.com:8883",
+          user: "smarter",
+          password: "melaC-melaV",
+          smarter: "smarter_fbk_" + smarterId,
         },
       };
     }
 
     return conf;
-  }, [vocabularies_metadata]);
+  }, [smarterId, vocabularies_metadata]);
 
   function createNewInstance() {
     wrapApiCallInWaitingSwal(
@@ -77,7 +78,7 @@ export function GameBox(props: {
     <div className="border border-solid border-black rounded-xl mb-5">
       <GameBoxTopRow task={task} reloadData={reloadData} />
 
-      <div className="text-2xl p-7">
+      <div className="flex justify-between text-2xl p-7">
         <Toggle
           checked={!!instances && instances.length > 0}
           disabled={!instances}
@@ -97,6 +98,20 @@ export function GameBox(props: {
             )
           }
         />
+        <div className="flex items-center gap-2">
+          <div>Inserisci ID smarter</div>
+          <select
+            defaultValue={1}
+            className="border border-black border-2 rounded-md p-2"
+            value={smarterId}
+            onChange={(e) => setSmarterId(e.currentTarget.value)}>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+          </select>
+        </div>
       </div>
 
       {task.rules.map((r) => (
